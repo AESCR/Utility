@@ -14,7 +14,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Common.Model\Common.Model.csproj" />
       <ProjectReference Include="..\Common.Utility\Common.Utility.csproj" />
     </ItemGroup>
 
