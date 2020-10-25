@@ -12,8 +12,5 @@ namespace Common.Utility.Excel.Model
         public string strHeaderText = String.Empty;
 
         #endregion Public Fields
-
-        //表头
-        //单元名
     }
 }

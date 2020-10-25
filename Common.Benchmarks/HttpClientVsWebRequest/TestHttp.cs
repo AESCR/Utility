@@ -13,7 +13,7 @@ namespace Common.Benchmarks.HttpClientVsWebRequest
     [MemoryDiagnoser]//要显示GC和内存分配
     public class TestHttp
     {
-        [Params("http://www.swcvc.net.cn/")]
+        [Params("http://121.36.213.19:8017/")]
         public string Url;
         private HttpClient2 httpHelper;
         private HttpClient httpClient;
