@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Text.RegularExpressions;
 
-namespace HD.Helper.Common
+namespace Common.Utility.BarCodeHelper
 {
     /// <summary>
     ///     条形码帮助类
