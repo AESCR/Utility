@@ -22,7 +22,7 @@ namespace Common.Utility.JwtBearer
         /// <summary>
         /// 获取当前用户信息 Json
         /// </summary>
-        public  string JwtUser
+        public JwtDyUser DyUser
         {
             get
             {
@@ -32,8 +32,7 @@ namespace Common.Utility.JwtBearer
 
                 var userClaim = claimsIdentity?.Claims.FirstOrDefault(c => c.Type == "user");
                 if (userClaim == null || string.IsNullOrEmpty(userClaim.Value)) return null;
-
-                return userClaim.Value;
+                return JsonConvert.DeserializeObject<JwtDyUser>(userClaim.Value);
             }
         }
 

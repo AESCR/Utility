@@ -3,17 +3,31 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using Newtonsoft.Json;
+ using Microsoft.IdentityModel.Tokens;
+ using Newtonsoft.Json;
 
 namespace Common.Utility.JwtBearer
 {
     public class AccessTokenGenerate : IAccessTokenGenerate
     {
         private readonly AccessTokenOptions _options;
-
+        private  JwtSecurityTokenHandler _tokenHandler;
+        private readonly TokenValidationParameters _validationParameters;
         public AccessTokenGenerate(AccessTokenOptions options)
         {
             _options = options;
+            _validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = options.SigningCredentials.Key,
+                ValidateIssuer = true,
+                ValidIssuer = options.Issuer,
+                ValidateAudience = true,
+                ValidAudience = options.Audience,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero,
+                RequireExpirationTime = true
+            };
         }
 
         /// <summary>
@@ -37,6 +51,7 @@ namespace Common.Utility.JwtBearer
                 expires,
                 signingCredentials
             );
+            _tokenHandler= new JwtSecurityTokenHandler();
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
             return new AccessToken(encodedJwt, "Bearer", expires);
         }
@@ -52,8 +67,28 @@ namespace Common.Utility.JwtBearer
             foreach (var claim in claims) claimList.Add(new Claim(claim.Key, claim.Value));
             return Generate(claimList);
         }
+        public  AccessToken Generate(JwtDyUser user)
+        {
+            var claimList = new List<Claim>();
+            claimList.Add(new Claim("user", JsonConvert.SerializeObject(user)));
+            return Generate(claimList);
+        }
 
-
+        public bool ValidateToken(string token,out JwtSecurityToken securityToken)
+        {
+            securityToken = null;
+            try
+            {
+                _tokenHandler.ValidateToken(token, _validationParameters, out var validatedToken);
+                securityToken= (JwtSecurityToken)validatedToken;
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+          
+        }
         private JwtSecurityToken GetJwtSecurityToken(IEnumerable<Claim> claims)
         {
             var now = DateTime.UtcNow;
@@ -73,14 +108,5 @@ namespace Common.Utility.JwtBearer
             return jwt;
         }
     }
-
-    public static class AccessTokenGenerateExtensions
-    {
-        public static AccessToken Generate(this IAccessTokenGenerate tokenGenerate, object user)
-        {
-            var claimList = new List<Claim>();
-            claimList.Add(new Claim("user", JsonConvert.SerializeObject(user)));
-            return tokenGenerate.Generate(claimList);
-        }
-    }
+   
 }

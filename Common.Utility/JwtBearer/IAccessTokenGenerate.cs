@@ -1,5 +1,6 @@
 ﻿﻿using System.Collections.Generic;
-using System.Security.Claims;
+ using System.IdentityModel.Tokens.Jwt;
+ using System.Security.Claims;
 
 namespace Common.Utility.JwtBearer
 {
@@ -18,5 +19,19 @@ namespace Common.Utility.JwtBearer
         /// <param name="claims"></param>
         /// <returns></returns>
         AccessToken Generate(IEnumerable<Claim> claims);
+
+        /// <summary>
+        ///     生成Token
+        /// </summary>
+        /// <param name="JwtDyUser"></param>
+        /// <returns></returns>
+        AccessToken Generate(JwtDyUser user);
+        /// <summary>
+        /// 验证前面
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="securityToken"></param>
+        /// <returns></returns>
+        bool ValidateToken(string token, out JwtSecurityToken securityToken);
     }
 }

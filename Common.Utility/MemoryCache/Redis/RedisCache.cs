@@ -41,6 +41,10 @@ namespace Common.Utility.MemoryCache.Redis
 
         private bool stringOk(string val)
         {
+            if (val==null)
+            {
+                return false;
+            }
             return val.ToLower() == "ok";
         }
 
@@ -63,7 +67,8 @@ namespace Common.Utility.MemoryCache.Redis
         /// 添加缓存 字符串
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="obj"></param>
+        /// <param name="val"></param>
+        /// <param name="timeSpan"></param>
         /// <param name="isOverride">是否覆盖</param>
         /// <returns></returns>
         public bool Add(string key, object val, TimeSpan timeSpan, bool isOverride = false)
@@ -71,12 +76,11 @@ namespace Common.Utility.MemoryCache.Redis
             if (string.IsNullOrWhiteSpace(key)) return false;
             if (val == null) return false;
             var str = SerializeObject(val);
-            var redisExistence = RedisExistence.Nx;
             if (isOverride)
             {
-                redisExistence = RedisExistence.Xx;
+                Remove(key);
             }
-            var result = _redisClient.Set(key, str, timeSpan, redisExistence);
+            var result = _redisClient.Set(key, str, timeSpan, RedisExistence.Nx);
             return stringOk(result);
         }
 
@@ -125,7 +129,7 @@ namespace Common.Utility.MemoryCache.Redis
             var redisExistence = RedisExistence.Nx;
             if (isOverride)
             {
-                redisExistence = RedisExistence.Xx;
+                Remove(key);
             }
             var result = _redisClient.Set(key, str, null, redisExistence);
             return stringOk(result);
@@ -324,8 +328,7 @@ namespace Common.Utility.MemoryCache.Redis
         public bool Replace(string key, object obj, TimeSpan timeSpan)
         {
             var str = SerializeObject(obj);
-            var result = _redisClient.Set(key, str);
-            _redisClient.ExpireAsync(key, timeSpan);
+            var result = _redisClient.Set(key, str,timeSpan,RedisExistence.Xx);
             return stringOk(result);
         }
 
@@ -339,7 +342,7 @@ namespace Common.Utility.MemoryCache.Redis
         public bool Replace(string key, object obj)
         {
             var str = SerializeObject(obj);
-            var result = _redisClient.Set(key, str);
+            var result = _redisClient.Set(key, str,null,RedisExistence.Xx);
             return stringOk(result);
         }
 

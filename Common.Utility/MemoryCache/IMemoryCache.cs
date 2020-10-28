@@ -12,7 +12,6 @@ namespace Common.Utility.Memory
         public static void RegisterMemoryCache(this ContainerBuilder @this, Action<MemoryOptions> option)
         {
             //内存注入
-            //services.AddMemoryCache();
             @this.RegisterType<Microsoft.Extensions.Caching.Memory.MemoryCache>().AsImplementedInterfaces()
                 .SingleInstance();
             @this.RegisterType<MemoryCache2>().AsImplementedInterfaces().SingleInstance();
@@ -29,7 +28,7 @@ namespace Common.Utility.Memory
     public interface IMemoryCache
     {
         /// <summary>
-        /// 是否是redis
+        /// 是否是Redis
         /// </summary>
         public bool IsRedis => !(this is IMemoryCache2) && this is IRedisCache;
         /// <summary>

@@ -56,12 +56,18 @@ namespace Common.Utility.JwtBearer
             });
             return build;
         }
-        public static void AddJwtAuth(this IServiceCollection services, Action<AccessTokenOptions> configAction)
-        {
+
+        /// <summary>
+        /// 自定义Jwt认证
+        /// </summary>
+        /// <param name="build"></param>
+        /// <param name="action"></param>
+        public static void AddJwtAuth(this AuthenticationBuilder build, Action<AccessTokenOptions> action)
+        {  
             var options = new AccessTokenOptions();
-            configAction(options);
-            services.AddSingleton(options);
-            services.AddSingleton<IAccessTokenGenerate>(new AccessTokenGenerate(options));
+            action(options);
+            build.Services.AddSingleton(options);
+            build.Services.AddSingleton<IAccessTokenGenerate>(new AccessTokenGenerate(options));
         }
     }
 }
