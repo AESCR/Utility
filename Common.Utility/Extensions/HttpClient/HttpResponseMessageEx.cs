@@ -3,6 +3,8 @@ using System.IO;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Common.Utility.Extensions.HttpClient
 {
@@ -22,8 +24,7 @@ namespace Common.Utility.Extensions.HttpClient
                 var s = reader.ReadToEnd();
                 reader.Close();
                 dataStream.Close();
-                JsonSerializerOptions o = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                var t = JsonSerializer.Deserialize<T>(s, o);
+                var t = JsonConvert.DeserializeObject<T>(s);
                 return t;
             }
             catch (Exception e)
@@ -45,8 +46,7 @@ namespace Common.Utility.Extensions.HttpClient
                 var s = reader.ReadToEnd();
                 reader.Close();
                 dataStream.Close();
-                JsonSerializerOptions o = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                var t = JsonSerializer.Deserialize<T>(s, o);
+                var t = JsonConvert.DeserializeObject<T>(s);
                 return t;
             }
             catch

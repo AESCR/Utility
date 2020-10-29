@@ -1,8 +1,9 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
-namespace Common.Utility.SystemExtensions
+namespace Common.Utility.Extensions.System
 {
     public static class DictionaryExtensions
     {
@@ -15,7 +16,11 @@ namespace Common.Utility.SystemExtensions
                 return null;
             }
             object value = dic.GetValue(key);
-            T result = JsonConvert.DeserializeObject<T>(value == null ? null : value.ToString());
+            if (isNullDefault&&value==null)
+            {
+                return default;
+            }
+            T result = JsonConvert.DeserializeObject<T>(value.ToString() ??"" );
             return result;
         }
 
@@ -189,7 +194,23 @@ namespace Common.Utility.SystemExtensions
                 dic.Add(key, value);
             }
         }
-
+        /// <summary>
+        /// 字典转IEnumerable<KeyValuePair<Tkey, TValue>>
+        /// </summary>
+        /// <param name="dic"></param>
+        /// <typeparam name="Tkey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <returns></returns>
+        public static IEnumerable<KeyValuePair<Tkey, TValue>> ToKeyValuePairCollection<Tkey,TValue>(this Dictionary<Tkey, TValue> dic)  
+        {
+            List<KeyValuePair<Tkey, TValue>> keyValuePairs=new List<KeyValuePair<Tkey, TValue>>();
+            foreach (Tkey key in dic.Keys)
+            {
+                KeyValuePair<Tkey, TValue> temp=new KeyValuePair<Tkey, TValue>(key,dic[key]);
+                keyValuePairs.Add(temp);
+            }
+            return keyValuePairs;
+        }
         #endregion Public Methods
     }
 }

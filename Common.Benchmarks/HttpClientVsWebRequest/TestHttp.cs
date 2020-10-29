@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using BenchmarkDotNet.Attributes;
 using Common.Utility.Extensions.HttpClient;
-using Common.Utility.Http;
+using Common.Utility.HttpRequest;
 
 namespace Common.Benchmarks.HttpClientVsWebRequest
 {

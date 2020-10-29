@@ -2,6 +2,8 @@
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Common.Utility.Extensions.System;
+using Newtonsoft.Json;
 
 namespace Common.Utility.Extensions.HttpClient
 {
@@ -32,33 +34,49 @@ namespace Common.Utility.Extensions.HttpClient
         public static Task<HttpResponseMessage> DoPost<T>(this global::System.Net.Http.HttpClient httpClient, string url, T postData,
             Dictionary<string, string> contentHeader = null) where T : class
         {
-            var jsonData = JsonSerializer.Serialize(postData);
+            var jsonData = JsonConvert.SerializeObject(postData);
             HttpContent httpContent = new StringContent(jsonData);
             if (contentHeader != null)
                 foreach (var headerKey in contentHeader.Keys)
                     httpContent.Headers.Add(headerKey, contentHeader[headerKey]);
-            //httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             var taskResponse = httpClient.PostAsync(url, httpContent);
             return taskResponse;
         }
-
+        /// <summary>
+        ///     Post请求 内容类型:application/json
+        /// </summary>
+        /// <param name="httpClient"></param>
+        /// <param name="url"> 请求url </param>
+        /// <param name="jsonData"> json内容 </param>
+        /// <param name="contentHeader">body header</param>
+        /// <returns>返回HttpResponseMessage</returns>
+        public static Task<HttpResponseMessage> DoPost(this global::System.Net.Http.HttpClient httpClient, string url, string jsonData,
+            Dictionary<string, string> contentHeader = null) 
+        {
+            HttpContent httpContent = new StringContent(jsonData);
+            if (contentHeader != null)
+                foreach (var headerKey in contentHeader.Keys)
+                    httpContent.Headers.Add(headerKey, contentHeader[headerKey]);
+            var taskResponse = httpClient.PostAsync(url, httpContent);
+            return taskResponse;
+        }
         /// <summary>
         ///     Post请求 内容类型:application/x-www-form-urlencoded
         /// </summary>
         /// <param name="httpClient"></param>
         /// <param name="url"> 请求url </param>
-        /// <param name="data"> 数据参数 </param>
+        /// <param name="formData"> 数据参数 </param>
         /// <param name="contentHeader"></param>
         /// <returns> 返回HttpResponseMessage 否则null </returns>
         /// <returns> </returns>
         public static Task<HttpResponseMessage> DoPost(this global::System.Net.Http.HttpClient httpClient, string url,
-            IEnumerable<KeyValuePair<string, string>> data, Dictionary<string, string> contentHeader = null)
+           Dictionary<string,string> formData, Dictionary<string, string> contentHeader = null)
         {
+            IEnumerable<KeyValuePair<string, string>> data = formData.ToKeyValuePairCollection();
             HttpContent httpContent = new FormUrlEncodedContent(data);
             if (contentHeader != null)
                 foreach (var headerKey in contentHeader.Keys)
                     httpContent.Headers.Add(headerKey, contentHeader[headerKey]);
-            //  httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
             var taskResponse = httpClient.PostAsync(url, httpContent);
             return taskResponse;
         }

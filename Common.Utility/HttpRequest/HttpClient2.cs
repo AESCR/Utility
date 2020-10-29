@@ -6,29 +6,39 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace Common.Utility.Http
+namespace Common.Utility.HttpRequest
 {
     /// <summary>
     /// 请求帮助类
     /// </summary>
     public class HttpClient2
     {
-        public static readonly HttpClient Instance;
+        public static readonly System.Net.Http.HttpClient Instance;
         static HttpClient2()
         {
-            Instance = new HttpClient();
+            /*HttpClientHandler handler = new HttpClientHandler()
+            {
+                Proxy = new WebProxy("http://36.35.95.107:8118",false),
+                PreAuthenticate = true,
+                UseDefaultCredentials = false,
+                AutomaticDecompression = DecompressionMethods.GZip,
+                UseCookies = false,
+                AllowAutoRedirect = true,
+                ClientCertificateOptions = ClientCertificateOption.Automatic
+            };*/
+            Instance = new System.Net.Http.HttpClient();
         }
         /// <summary>
         /// 不同url分配不同HttpClient
         /// </summary>
-        public static Dictionary<string, HttpClient> dictionary = new Dictionary<string, HttpClient>();
+        public static Dictionary<string, System.Net.Http.HttpClient> dictionary = new Dictionary<string, System.Net.Http.HttpClient>();
 
-        private HttpClient GetHttpClient(string url)
+        private System.Net.Http.HttpClient GetHttpClient(string url)
         {
             var uri = new Uri(url);
             var key = uri.Scheme + uri.Host;
             if (!dictionary.Keys.Contains(key))
-                dictionary.Add(key, new HttpClient());
+                dictionary.Add(key, new System.Net.Http.HttpClient());
             return dictionary[key];
         }
 
@@ -49,7 +59,7 @@ namespace Common.Utility.Http
             if (headers != null && headers.Any())
             {
                 //如果有headers认证等信息，则每个请求实例一个HttpClient
-                using (HttpClient http = new HttpClient())
+                using (System.Net.Http.HttpClient http = new System.Net.Http.HttpClient())
                 {
                     foreach (var item in headers)
                     {
@@ -89,7 +99,7 @@ namespace Common.Utility.Http
             if (headers != null && headers.Any())
             {
                 //如果有headers认证等信息，则每个请求实例一个HttpClient
-                using (HttpClient http = new HttpClient())
+                using (System.Net.Http.HttpClient http = new System.Net.Http.HttpClient())
                 {
                     foreach (var item in headers)
                     {
@@ -121,7 +131,7 @@ namespace Common.Utility.Http
             if (headers != null && headers.Any())
             {
                 //如果有headers认证等信息，则每个请求实例一个HttpClient
-                using (HttpClient http = new HttpClient())
+                using (System.Net.Http.HttpClient http = new System.Net.Http.HttpClient())
                 {
                     foreach (var item in headers)
                     {
@@ -154,14 +164,14 @@ namespace Common.Utility.Http
         /// Delete请求
         /// </summary>
         /// <param name="url">url地址</param>
-        /// <param name="authorization">webapi做用户认证</param>
+        /// <param name="headers"></param>
         /// <returns></returns>
         public async Task<HttpResponseMessage> DeleteAsync(string url, Dictionary<string, string> headers = null)
         {
             if (headers != null && headers.Any())
             {
                 //如果有headers认证等信息，则每个请求实例一个HttpClient
-                using (HttpClient http = new HttpClient())
+                using (System.Net.Http.HttpClient http = new System.Net.Http.HttpClient())
                 {
                     foreach (var item in headers)
                     {

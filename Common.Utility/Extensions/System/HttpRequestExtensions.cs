@@ -1,13 +1,12 @@
-using Microsoft.AspNetCore.Http;
 using System.Text;
 
-namespace Common.Utility.HttpRequestHelper
+namespace Common.Utility.Extensions.System
 {
     public static class HttpRequestExtensions
     {
         #region Public Methods
 
-        public static string GetAbsoluteUri(this HttpRequest request)
+        public static string GetAbsoluteUri(this Microsoft.AspNetCore.Http.HttpRequest request)
         {
             return new StringBuilder()
                 .Append(request.Scheme)
@@ -19,7 +18,7 @@ namespace Common.Utility.HttpRequestHelper
                 .ToString();
         }
 
-        public static string GetHostUri(this HttpRequest request)
+        public static string GetHostUri(this Microsoft.AspNetCore.Http.HttpRequest request)
         {
             return new StringBuilder()
                 .Append(request.Scheme)

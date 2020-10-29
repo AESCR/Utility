@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 
-namespace Common.Utility.Tools
+namespace Common.Utility.Utils
 {
     /// <summary>
     /// 网络请求封装类

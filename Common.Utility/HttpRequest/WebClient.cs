@@ -8,7 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
-namespace Common.Utility.Http
+namespace Common.Utility.HttpRequest
 {
     /// <summary>
     ///     下载数据参数

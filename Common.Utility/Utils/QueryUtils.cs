@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.NetworkInformation;
+using Common.Utility.Extensions.HttpClient;
+using Common.Utility.HttpRequest;
+using Common.Utility.Tools;
+using Newtonsoft.Json;
 
-namespace Common.Utility.Tools
+namespace Common.Utility.Utils
 {
     /// <summary>
     /// 查询工具
@@ -16,26 +21,29 @@ namespace Common.Utility.Tools
         /// </summary>
         /// <param name="ipAddress"></param>
         /// <returns></returns>
-        public string IPAddress(string ipAddress)
+        public static string IpAddress(string ipAddress)
         {
-            if (ValidUtils.IsIP(ipAddress))
+            return null;//TODO Ip查询
+        }
+        /// <summary>
+        /// 获取当前公网IP
+        /// </summary>
+        /// <returns></returns>
+        public static string PublicIp()
+        {
+            using (HttpClient client=new HttpClient())
             {
-                HttpClient client=new HttpClient();
                 try
                 {
-                    string response = client.GetStringAsync($"http://ip.taobao.com/service/getIpInfo.php?ip={ipAddress}").Result;
+                    string response = client.DoGet("http://www.3322.org/dyndns/getip").ReadString();
                     return response;
                 }
                 catch (Exception ex)
                 {
                     return String.Empty;
                 }
-               
             }
-
-            return String.Empty;
         }
-
         #endregion
 
         #region 主机信息查询
