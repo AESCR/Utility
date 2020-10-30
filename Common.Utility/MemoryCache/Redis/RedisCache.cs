@@ -36,7 +36,7 @@ namespace Common.Utility.MemoryCache.Redis
 
         private string SerializeObject(object value)
         {
-            return JsonConvert.SerializeObject(value);
+            return value!=null ? JsonConvert.SerializeObject(value) : String.Empty;
         }
 
         private bool stringOk(string val)
@@ -48,8 +48,9 @@ namespace Common.Utility.MemoryCache.Redis
             return val.ToLower() == "ok";
         }
 
-        private string[] getString(List<object> list)
+        private string[] GetString<T>(List<T> list) where T : class,new()
         {
+            if (list == null) throw new ArgumentNullException(nameof(list));
             int len = list.Count;
             string[] str = new string[len];
             for (int i = 0; i < len; i++)
@@ -71,42 +72,26 @@ namespace Common.Utility.MemoryCache.Redis
         /// <param name="timeSpan"></param>
         /// <param name="isOverride">是否覆盖</param>
         /// <returns></returns>
-        public bool Add(string key, object val, TimeSpan timeSpan, bool isOverride = false)
+        public bool Add<T>(string key, T val, TimeSpan timeSpan, bool isOverride = false) where T : class,new()
         {
             if (string.IsNullOrWhiteSpace(key)) return false;
             if (val == null) return false;
             var str = SerializeObject(val);
             if (isOverride)
             {
-                Remove(key);
+                Del(key);
             }
             var result = _redisClient.Set(key, str, timeSpan, RedisExistence.Nx);
             return stringOk(result);
         }
 
         /// <summary>
-        /// 添加缓存 不存在则添加 存在返回false
+        /// 添加缓存 
         /// </summary>
         /// <param name="key"></param>
         /// <param name="val"></param>
-        /// <param name="expires"></param>
         /// <returns></returns>
-        public bool Add(string key, object val, TimeSpan expires)
-        {
-            if (string.IsNullOrWhiteSpace(key)) return false;
-            if (val == null) return false;
-            var str = SerializeObject(val);
-            var result = Add(key, val, expires);
-            return result;
-        }
-
-        /// <summary>
-        /// 添加缓存 默认永久
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public bool Add(string key, object val)
+        public bool Add<T>(string key, T val) where T : class,new()
         {
             if (string.IsNullOrWhiteSpace(key)) return false;
             if (val == null) return false;
@@ -121,7 +106,7 @@ namespace Common.Utility.MemoryCache.Redis
         /// <param name="val"></param>
         /// <param name="isOverride"></param>
         /// <returns></returns>
-        public bool Add(string key, object val, bool isOverride = false)
+        public bool Add<T>(string key, T val, bool isOverride) where T : class,new()
         {
             if (string.IsNullOrWhiteSpace(key)) return false;
             if (val == null) return false;
@@ -129,7 +114,7 @@ namespace Common.Utility.MemoryCache.Redis
             var redisExistence = RedisExistence.Nx;
             if (isOverride)
             {
-                Remove(key);
+                Del(key);
             }
             var result = _redisClient.Set(key, str, null, redisExistence);
             return stringOk(result);
@@ -139,19 +124,20 @@ namespace Common.Utility.MemoryCache.Redis
         /// 设置一个Hash
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="obj"></param>
+        /// <param name="dic"></param>
         /// <param name="timeSpan"></param>
         /// <returns></returns>
-        public bool AddHash(string key, Dictionary<string, object> dic, TimeSpan timeSpan)
+        public bool AddHash<T>(string key, Dictionary<string, T> dic, TimeSpan timeSpan) where T : class,new()
         {
             if (string.IsNullOrWhiteSpace(key)) return false;
             if (dic == null) return false;
+            Dictionary<string, string> kJson=new Dictionary<string, string>();
             foreach (var oKey in dic.Keys)
             {
                 var obj = dic[oKey];
-                dic[oKey] = SerializeObject(obj);
+                kJson.Add(oKey,SerializeObject(obj));
             }
-            var result = _redisClient.HMSet(key, dic);
+            var result = _redisClient.HMSet(key, kJson);
             _redisClient.ExpireAsync(key, timeSpan);
             return stringOk(result);
         }
@@ -160,8 +146,15 @@ namespace Common.Utility.MemoryCache.Redis
         /// 设置一个Hash 缓存时间永久
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="obj"></param>
+        /// <param name="dic"></param>
+        /// <param name="timeSpan"></param>
         /// <returns></returns>
+        public bool AddHash(string key, Dictionary<string, string> dic, TimeSpan timeSpan)
+        {
+            var result= AddHash(key, dic);
+            _redisClient.ExpireAsync(key, timeSpan);
+            return result;
+        }
         public bool AddHash(string key, Dictionary<string, string> dic)
         {
             if (string.IsNullOrWhiteSpace(key)) return false;
@@ -174,18 +167,17 @@ namespace Common.Utility.MemoryCache.Redis
             var result = _redisClient.HMSet(key, dic);
             return stringOk(result);
         }
-
         /// <summary>
         /// 添加List
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="str"></param>
+        /// <param name="list"></param>
         /// <returns></returns>
-        public long AddList(string key, List<object> list)
+        public long AddList<T>(string key, List<T> list) where T : class,new()
         {
             if (string.IsNullOrWhiteSpace(key)) return 0;
             if (list == null) return 0;
-            var str = getString(list);
+            var str = GetString(list);
             var lg = _redisClient.RPush(key, str);
             return lg;
         }
@@ -194,10 +186,10 @@ namespace Common.Utility.MemoryCache.Redis
         /// 添加List
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="str"></param>
+        /// <param name="list"></param>
         /// <param name="timeSpan"></param>
         /// <returns></returns>
-        public long AddList(string key, List<object> list, TimeSpan timeSpan)
+        public long AddList<T>(string key, List<T> list, TimeSpan timeSpan) where T : class,new()
         {
             if (string.IsNullOrWhiteSpace(key)) return 0;
             if (list == null) return 0;
@@ -210,24 +202,26 @@ namespace Common.Utility.MemoryCache.Redis
         /// 添加集合
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="obj">集合列表</param>
+        /// <param name="obj"></param>
         /// <returns></returns>
-        public long AddSet(string key, object str)
+        public long AddSet<T>(string key, T obj) where T : class,new()
         {
-            return AddSet(key, new List<object>() { str });
+            if (string.IsNullOrWhiteSpace(key)) return 0;
+            var str= SerializeObject(obj);
+            return _redisClient.SAdd(key, str);
         }
 
         /// <summary>
         /// 添加集合
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="obj">集合列表</param>
+        /// <param name="list">集合列表</param>
         /// <returns></returns>
-        public long AddSet(string key, List<object> list)
+        public long AddSet<T>(string key, List<T> list) where T : class,new()
         {
             if (string.IsNullOrWhiteSpace(key)) return 0;
             if (list == null) return 0;
-            var str = getString(list);
+            var str = GetString(list);
             return _redisClient.SAdd(key, str);
         }
 
@@ -238,7 +232,7 @@ namespace Common.Utility.MemoryCache.Redis
         /// <param name="list"></param>
         /// <param name="timeSpan"></param>
         /// <returns></returns>
-        public long AddSet(string key, List<object> list, TimeSpan timeSpan)
+        public long AddSet<T>(string key, List<T> list, TimeSpan timeSpan) where T : class,new()
         {
             var result = AddSet(key, list);
             _redisClient.ExpireAsync(key, timeSpan);
@@ -267,11 +261,11 @@ namespace Common.Utility.MemoryCache.Redis
         /// <param name="score"></param>
         /// <param name="list"></param>
         /// <returns></returns>
-        public long AddSortedSet(string key, double[] score, List<object> list)
+        public long AddSortedSet<T>(string key, double[] score, List<T> list) where T : class,new()
         {
             if (string.IsNullOrWhiteSpace(key)) return 0;
             Tuple<double, string>[] obj = new Tuple<double, string>[score.Length];
-            string[] str = getString(list);
+            string[] str = GetString(list);
             for (int i = 0; i < score.Length; i++)
             {
                 Tuple<double, string> temp = new Tuple<double, string>(score[i], str[i]);
@@ -289,7 +283,7 @@ namespace Common.Utility.MemoryCache.Redis
         /// <param name="val"></param>
         /// <param name="timeSpan"></param>
         /// <returns></returns>
-        public long AddSortedSet(string key, double score, object val, TimeSpan timeSpan)
+        public long AddSortedSet<T>(string key, double score, T val, TimeSpan timeSpan) where T : class,new()
         {
             var lg = AddSortedSet(key, new double[] { score }, new List<object>() { val });
             _redisClient.ExpireAsync(key, timeSpan);
@@ -313,7 +307,7 @@ namespace Common.Utility.MemoryCache.Redis
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public bool Remove(string key)
+        public bool Del(string key)
         {
             return _redisClient.Del(key) > 0;
         }
@@ -325,7 +319,7 @@ namespace Common.Utility.MemoryCache.Redis
         /// <param name="obj"></param>
         /// <param name="timeSpan"></param>
         /// <returns></returns>
-        public bool Replace(string key, object obj, TimeSpan timeSpan)
+        public bool Replace<T>(string key, T obj, TimeSpan timeSpan) where T : class,new()
         {
             var str = SerializeObject(obj);
             var result = _redisClient.Set(key, str,timeSpan,RedisExistence.Xx);
@@ -339,7 +333,7 @@ namespace Common.Utility.MemoryCache.Redis
         /// <param name="obj"></param>
         /// <param name="timeSpan"></param>
         /// <returns></returns>
-        public bool Replace(string key, object obj)
+        public bool Replace<T>(string key, T obj) where T : class,new()
         {
             var str = SerializeObject(obj);
             var result = _redisClient.Set(key, str,null,RedisExistence.Xx);
@@ -347,12 +341,12 @@ namespace Common.Utility.MemoryCache.Redis
         }
 
         /// <summary>
-        /// 移除List
+        /// 移除List中的某个值
         /// </summary>
         /// <param name="key"></param>
         /// <param name="val"></param>
         /// <returns></returns>
-        public long RemoveList(string key, object val)
+        public long DelList<T>(string key, T val) where T : class,new()
         {
             string str = SerializeObject(val);
             return _redisClient.LRem(key, 0, str);
@@ -364,9 +358,9 @@ namespace Common.Utility.MemoryCache.Redis
         /// <param name="key"></param>
         /// <param name="members"></param>
         /// <returns></returns>
-        public long RemoveSet(string key, List<object> members)
+        public long DelSet<T>(string key, List<T> members) where T : class,new()
         {
-            string[] str = getString(members);
+            string[] str = GetString(members);
             return _redisClient.SRem(key, str);
         }
 
@@ -376,7 +370,7 @@ namespace Common.Utility.MemoryCache.Redis
         /// <param name="key"></param>
         /// <param name="members"></param>
         /// <returns></returns>
-        public long RemoveSet(string key, object members)
+        public long DelSet<T>(string key, T members) where T : class,new()
         {
             string str = SerializeObject(members);
             return _redisClient.SRem(key, str);
@@ -388,9 +382,9 @@ namespace Common.Utility.MemoryCache.Redis
         /// <param name="key"></param>
         /// <param name="members"></param>
         /// <returns></returns>
-        public long DelSortedSet(string key, List<object> members)
+        public long DelSortedSet<T>(string key, List<T> members) where T : class,new()
         {
-            string[] str = getString(members);
+            string[] str = GetString(members);
             return _redisClient.ZRem(key, str);
         }
 
@@ -400,9 +394,9 @@ namespace Common.Utility.MemoryCache.Redis
         /// <param name="key"></param>
         /// <param name="members"></param>
         /// <returns></returns>
-        public long DelSortedSet(string key, object members)
+        public long DelSortedSet<T>(string key, T members) where T : class,new()
         {
-            return DelSortedSet(key, new List<object>() { members });
+            return DelSortedSet(key, new List<T>() { members });
         }
 
         /// <summary>
