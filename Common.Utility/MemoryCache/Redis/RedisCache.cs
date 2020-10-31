@@ -17,12 +17,30 @@ namespace Common.Utility.MemoryCache.Redis
 
         #region Public Constructors
 
+        public RedisCache(string host="127.0.0.1",int port=6379,int dbIndex=0,string password="")
+        {
+            _redisClient = new RedisClient(host, port);
+            if (!string.IsNullOrWhiteSpace(password))
+            {
+                _redisClient.Connected += (s, e) =>
+                {
+                    _redisClient.Auth(password);
+                    _redisClient.Select(dbIndex);
+                };
+            }
+            _redisClient.ReconnectAttempts =3;//失败后重试3次
+            _redisClient.ReconnectWait = 200;//在抛出异常之前，连接将在200ms之间重试3次
+        }
         public RedisCache(MemoryOptions options)
         {
             _redisClient = new RedisClient(options.Host, options.Port);
             if (!string.IsNullOrWhiteSpace(options.Password))
             {
-                _redisClient.Connected += (s, e) => _redisClient.Auth(options.Password);
+                _redisClient.Connected += (s, e) =>
+                {
+                    _redisClient.Auth(options.Password);
+                    _redisClient.Select(options.DbIndex);
+                };
             }
             _redisClient.ReconnectAttempts = options.ReconnectAttempts;//失败后重试3次
             _redisClient.ReconnectWait = options.ReconnectWait;//在抛出异常之前，连接将在200ms之间重试3次
@@ -144,7 +162,7 @@ namespace Common.Utility.MemoryCache.Redis
         {
             if (string.IsNullOrWhiteSpace(key)) return false;
             if (dic == null) return false;
-            Dictionary<string, string> kJson = new Dictionary<string, string>();
+            Dictionary<string, object> kJson = new Dictionary<string, object>();
             foreach (var oKey in dic.Keys)
             {
                 var obj = dic[oKey];
@@ -154,33 +172,20 @@ namespace Common.Utility.MemoryCache.Redis
             _redisClient.ExpireAsync(key, timeSpan);
             return stringOk(result);
         }
-
-        /// <summary>
-        /// 设置一个Hash
-        /// </summary>
-        /// <param name="key"> </param>
-        /// <param name="dic"> </param>
-        /// <param name="timeSpan"> </param>
-        /// <returns> </returns>
-        public bool AddHash(string key, Dictionary<string, string> dic, TimeSpan timeSpan)
-        {
-            var result = AddHash(key, dic);
-            _redisClient.ExpireAsync(key, timeSpan);
-            return result;
-        }
-
-        public bool AddHash(string key, Dictionary<string, string> dic)
+        public bool AddHash<T>(string key, Dictionary<string, T> dic)
         {
             if (string.IsNullOrWhiteSpace(key)) return false;
             if (dic == null) return false;
+            Dictionary<string, object> kJson = new Dictionary<string, object>();
             foreach (var oKey in dic.Keys)
             {
                 var obj = dic[oKey];
-                dic[oKey] = SerializeObject(obj);
+                kJson.Add(oKey, SerializeObject(obj));
             }
-            var result = _redisClient.HMSet(key, dic);
+            var result = _redisClient.HMSet(key, kJson);
             return stringOk(result);
         }
+
 
         public bool AddHash<T>(string key, string field, T t)
         {

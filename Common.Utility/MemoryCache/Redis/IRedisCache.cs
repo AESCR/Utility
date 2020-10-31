@@ -18,9 +18,6 @@ namespace Common.Utility.MemoryCache.Redis
 
         bool Add<T>(string key, T val, TimeSpan timeSpan, bool isOverride);
 
-        bool AddHash(string key, Dictionary<string, string> dic);
-
-        bool AddHash(string key, Dictionary<string, string> dic, TimeSpan timeSpan);
 
         bool AddHash<T>(string key, Dictionary<string, T> dic, TimeSpan timeSpan);
 
@@ -35,6 +32,7 @@ namespace Common.Utility.MemoryCache.Redis
         long AddList<T>(string key, List<T> list, TimeSpan timeSpan);
 
         long AddSet<T>(string key, List<T> list);
+        bool AddHash<T>(string key, Dictionary<string, T> dic);
 
         long AddSet<T>(string key, List<T> list, TimeSpan timeSpan);
 

@@ -72,11 +72,19 @@ namespace Common.UnitTest.MemoryCache
             RandomName randomName=new RandomName();
             for (int i = 0; i < 100; i++)
             {
-                var x = redis.AddHash("LIST", random.GenerateCheckCodeNum(10), randomName.GetRandomName());
+                var x = redis.AddHash("Hash", random.GenerateCheckCodeNum(10), randomName.GetRandomName());
                 Assert.IsTrue(x);
+                var y= redis.AddList("List",new List<string>()
+                {
+                    randomName.GetRandomName(),
+                    randomName.GetRandomName(),
+                });
+                Assert.IsTrue(y>0);
+               
             }
-
-
+            Dictionary<string,string> dic=new Dictionary<string, string>();
+            dic.Add(random.GetRandomString(10),randomName.GetRandomName());
+            redis.AddHash("Hash_DIC", dic);
 
         }
     }
