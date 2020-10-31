@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
+using Common.Utility.SystemExtensions;
 
 namespace Common.Utility.MemoryCache.Model
 {
@@ -37,42 +38,30 @@ namespace Common.Utility.MemoryCache.Model
         /// <summary>
         /// 获取左边菜单
         /// </summary>
-        LeftMenu
+        LeftMenu,
+        /// <summary>
+        /// UserAgent
+        /// </summary>
+        UserAgent
     }
 
     public static class EnumExtensions
     {
-        #region Private Methods
-
-        private static string GetMd5Hash(MD5 md5Hash, string input)
-        {
-            byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
-            var sBuilder = new StringBuilder();
-            foreach (byte t in data)
-            {
-                sBuilder.Append(t.ToString("x2"));
-            }
-            return sBuilder.ToString();
-        }
-
-        private static string Md5(string value)
-        {
-            var result = string.Empty;
-            if (string.IsNullOrEmpty(value)) return result;
-            using (var md5 = MD5.Create())
-            {
-                result = GetMd5Hash(md5, value);
-            }
-            return result;
-        }
-
-        #endregion Private Methods
 
         #region Public Methods
 
         public static string GetMemoryKey(this MemoryEnum @this)
         {
-            return Md5(Enum.Parse(@this.GetType(), @this.ToString()).ToString());
+            string enumName = Enum.Parse(@this.GetType(), @this.ToString()).ToString();
+            if (string.IsNullOrWhiteSpace(enumName) != false) throw new ArgumentNullException(nameof(MemoryEnum));
+            using var md5 = MD5.Create();
+            byte[] data = md5.ComputeHash(Encoding.UTF8.GetBytes(enumName));
+            var sBuilder = new StringBuilder();
+            foreach (byte t in data)
+            {
+                sBuilder.Append(t.ToString("x2"));
+            }
+            return "System"+sBuilder.Append(enumName);
         }
 
         #endregion Public Methods
