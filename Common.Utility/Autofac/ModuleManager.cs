@@ -1,25 +1,42 @@
-﻿using System;
+﻿using Autofac;
+using System;
 using System.Linq;
 using System.Reflection;
-using Autofac;
 
 namespace Common.Utility.Autofac
 {
     public class ModuleManager
     {
-        public ContainerBuilder ContainerBuilder { get; private set; }
-        public IContainer Container { get; private set; }
-        private static Type StartupType { get; set; }
+        #region Public Constructors
+
         public ModuleManager()
         {
             ContainerBuilder = new ContainerBuilder();
         }
+
+        #endregion Public Constructors
+
+        #region Private Properties
+
+        private static Type StartupType { get; set; }
+
+        #endregion Private Properties
+
+        #region Public Properties
+
+        public IContainer Container { get; private set; }
+        public ContainerBuilder ContainerBuilder { get; private set; }
+
+        #endregion Public Properties
+
+        #region Public Methods
 
         public static ModuleManager Create<TModule>() where TModule : AppModule
         {
             StartupType = typeof(TModule);
             return new ModuleManager();
         }
+
         /// <summary>
         /// 初始化
         /// </summary>
@@ -35,5 +52,7 @@ namespace Common.Utility.Autofac
             }
             Container = ContainerBuilder.Build();
         }
+
+        #endregion Public Methods
     }
 }

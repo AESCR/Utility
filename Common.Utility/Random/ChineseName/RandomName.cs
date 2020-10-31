@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Random=System.Random;
 
 namespace Common.Utility.Random.ChineseName
 {
@@ -79,7 +78,7 @@ namespace Common.Utility.Random.ChineseName
         /// <summary>
         /// 随机姓名
         /// </summary>
-        /// <returns></returns>
+        /// <returns> </returns>
         public string GetRandomName()
         {
             string name = "";

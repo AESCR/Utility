@@ -3,7 +3,7 @@
 namespace Common.Utility
 {
     /// <summary>
-    ///     EnumFormula
+    /// EnumFormula
     /// </summary>
     public enum EnumFormula
     {
@@ -21,7 +21,7 @@ namespace Common.Utility
     }
 
     /// <summary>
-    ///     FormulaDeal
+    /// FormulaDeal
     /// </summary>
     public class FormulaDeal
     {

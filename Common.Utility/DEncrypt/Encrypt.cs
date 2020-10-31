@@ -6,7 +6,7 @@ using System.Text;
 namespace Common.Utility
 {
     /// <summary>
-    ///     ���ܽ���ʵ���ࡣ
+    /// ���ܽ���ʵ���ࡣ
     /// </summary>
     public class Encrypt
     {
@@ -22,10 +22,10 @@ namespace Common.Utility
         #region Public Methods
 
         /// <summary>
-        ///     ���ܡ�
+        /// ���ܡ�
         /// </summary>
-        /// <param name="m_Need_Encode_String"></param>
-        /// <returns></returns>
+        /// <param name="m_Need_Encode_String"> </param>
+        /// <returns> </returns>
         public static string Decode(string m_Need_Encode_String)
         {
             if (m_Need_Encode_String == null) throw new Exception("Error: \nԴ�ַ���Ϊ�գ���");
@@ -39,10 +39,10 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     ���ܡ�
+        /// ���ܡ�
         /// </summary>
-        /// <param name="m_Need_Encode_String"></param>
-        /// <returns></returns>
+        /// <param name="m_Need_Encode_String"> </param>
+        /// <returns> </returns>
         public static string Encode(string m_Need_Encode_String)
         {
             if (m_Need_Encode_String == null) throw new Exception("Error: \nԴ�ַ���Ϊ�գ���");
@@ -59,11 +59,11 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     32λMD5����
+        /// 32λMD5����
         /// </summary>
-        /// <param name="strText">Ҫ�����ַ���</param>
-        /// <param name="IsLower">�Ƿ���Сд��ʽ����</param>
-        /// <returns></returns>
+        /// <param name="strText"> Ҫ�����ַ��� </param>
+        /// <param name="IsLower"> �Ƿ���Сд��ʽ���� </param>
+        /// <returns> </returns>
         public static string MD5Encrypt(string strText, bool IsLower)
         {
             MD5 md5 = new MD5CryptoServiceProvider();

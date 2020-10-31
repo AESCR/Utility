@@ -11,24 +11,24 @@ using System.Text;
 namespace Common.Utility.HttpRequest
 {
     /// <summary>
-    ///     下载数据参数
+    /// 下载数据参数
     /// </summary>
     public class DownloadEventArgs : EventArgs
     {
         #region Public Properties
 
         /// <summary>
-        ///     已接收的字节数
+        /// 已接收的字节数
         /// </summary>
         public int BytesReceived { get; set; }
 
         /// <summary>
-        ///     当前缓冲区接收的数据
+        /// 当前缓冲区接收的数据
         /// </summary>
         public byte[] ReceivedData { get; set; }
 
         /// <summary>
-        ///     总字节数
+        /// 总字节数
         /// </summary>
         public int TotalBytes { get; set; }
 
@@ -36,7 +36,7 @@ namespace Common.Utility.HttpRequest
     }
 
     /// <summary>
-    ///     对文件和文本数据进行Multipart形式的编码
+    /// 对文件和文本数据进行Multipart形式的编码
     /// </summary>
     public class MultipartForm
     {
@@ -53,7 +53,7 @@ namespace Common.Utility.HttpRequest
         #region Public Constructors
 
         /// <summary>
-        ///     实例化
+        /// 实例化
         /// </summary>
         public MultipartForm()
         {
@@ -67,12 +67,12 @@ namespace Common.Utility.HttpRequest
         #region Public Properties
 
         /// <summary>
-        ///     获取此编码内容的类型
+        /// 获取此编码内容的类型
         /// </summary>
         public string ContentType => string.Format("multipart/form-data; boundary={0}", boundary);
 
         /// <summary>
-        ///     获取编码后的字节数组
+        /// 获取编码后的字节数组
         /// </summary>
         public byte[] FormData
         {
@@ -90,7 +90,7 @@ namespace Common.Utility.HttpRequest
         }
 
         /// <summary>
-        ///     获取或设置对字符串采用的编码类型
+        /// 获取或设置对字符串采用的编码类型
         /// </summary>
         public Encoding StringEncoding { set; get; }
 
@@ -99,10 +99,10 @@ namespace Common.Utility.HttpRequest
         #region Public Methods
 
         /// <summary>
-        ///     添加字符串
+        /// 添加字符串
         /// </summary>
-        /// <param name="name">文本域名称</param>
-        /// <param name="value">文本值</param>
+        /// <param name="name"> 文本域名称 </param>
+        /// <param name="value"> 文本值 </param>
         public void AddString(string name, string value)
         {
             var sb = new StringBuilder();
@@ -118,19 +118,19 @@ namespace Common.Utility.HttpRequest
     }
 
     /// <summary>
-    ///     上传数据参数
+    /// 上传数据参数
     /// </summary>
     public class UploadEventArgs : EventArgs
     {
         #region Public Properties
 
         /// <summary>
-        ///     已发送的字节数
+        /// 已发送的字节数
         /// </summary>
         public int BytesSent { get; set; }
 
         /// <summary>
-        ///     总字节数
+        /// 总字节数
         /// </summary>
         public int TotalBytes { get; set; }
 
@@ -138,7 +138,7 @@ namespace Common.Utility.HttpRequest
     }
 
     /// <summary>
-    ///     网络客户端帮助类
+    /// 网络客户端帮助类
     /// </summary>
     public class WebClient
     {
@@ -156,7 +156,7 @@ namespace Common.Utility.HttpRequest
         }
 
         /// <summary>
-        ///     创建WebClient的实例
+        /// 创建WebClient的实例
         /// </summary>
         public WebClient()
         {
@@ -177,12 +177,12 @@ namespace Common.Utility.HttpRequest
         #region Public Properties
 
         /// <summary>
-        ///     设置发送和接收的数据缓冲大小
+        /// 设置发送和接收的数据缓冲大小
         /// </summary>
         public int BufferSize { get; set; } = 15240;
 
         /// <summary>
-        ///     获取或设置与请求关联的Cookie容器
+        /// 获取或设置与请求关联的Cookie容器
         /// </summary>
         public CookieContainer CookieContainer
         {
@@ -191,27 +191,27 @@ namespace Common.Utility.HttpRequest
         }
 
         /// <summary>
-        ///     获取或设置请求与响应的文本编码方式
+        /// 获取或设置请求与响应的文本编码方式
         /// </summary>
         public Encoding Encoding { get; set; } = Encoding.Default;
 
         /// <summary>
-        ///     获取或设置代理
+        /// 获取或设置代理
         /// </summary>
         public WebProxy Proxy { get; set; }
 
         /// <summary>
-        ///     获取请求头集合
+        /// 获取请求头集合
         /// </summary>
         public WebHeaderCollection RequestHeaders { get; }
 
         /// <summary>
-        ///     获取或设置响应的html代码
+        /// 获取或设置响应的html代码
         /// </summary>
         public string RespHtml { get; set; } = "";
 
         /// <summary>
-        ///     获取响应头集合
+        /// 获取响应头集合
         /// </summary>
         public WebHeaderCollection ResponseHeaders { get; private set; }
 
@@ -220,10 +220,10 @@ namespace Common.Utility.HttpRequest
         #region Public Methods
 
         /// <summary>
-        ///     下载文件
+        /// 下载文件
         /// </summary>
-        /// <param name="url">文件URL地址</param>
-        /// <param name="filename">文件保存完整路径</param>
+        /// <param name="url"> 文件URL地址 </param>
+        /// <param name="filename"> 文件保存完整路径 </param>
         public void DownloadFile(string url, string filename)
         {
             FileStream fs = null;
@@ -241,10 +241,10 @@ namespace Common.Utility.HttpRequest
         }
 
         /// <summary>
-        ///     从指定URL下载数据
+        /// 从指定URL下载数据
         /// </summary>
-        /// <param name="url">网址</param>
-        /// <returns></returns>
+        /// <param name="url"> 网址 </param>
+        /// <returns> </returns>
         public byte[] GetData(string url)
         {
             var request = CreateRequest(url, "GET");
@@ -252,10 +252,10 @@ namespace Common.Utility.HttpRequest
         }
 
         /// <summary>
-        ///     获取网页源代码
+        /// 获取网页源代码
         /// </summary>
-        /// <param name="url">网址</param>
-        /// <returns></returns>
+        /// <param name="url"> 网址 </param>
+        /// <returns> </returns>
         public string GetHtml(string url)
         {
             var request = CreateRequest(url, "GET");
@@ -264,11 +264,11 @@ namespace Common.Utility.HttpRequest
         }
 
         /// <summary>
-        ///     向指定URL发送文本数据
+        /// 向指定URL发送文本数据
         /// </summary>
-        /// <param name="url">网址</param>
-        /// <param name="postData">urlencode编码的文本数据</param>
-        /// <returns></returns>
+        /// <param name="url"> 网址 </param>
+        /// <param name="postData"> urlencode编码的文本数据 </param>
+        /// <returns> </returns>
         public string Post(string url, string postData)
         {
             var data = Encoding.GetBytes(postData);
@@ -276,11 +276,11 @@ namespace Common.Utility.HttpRequest
         }
 
         /// <summary>
-        ///     向指定URL发送字节数据
+        /// 向指定URL发送字节数据
         /// </summary>
-        /// <param name="url">网址</param>
-        /// <param name="postData">发送的字节数组</param>
-        /// <returns></returns>
+        /// <param name="url"> 网址 </param>
+        /// <param name="postData"> 发送的字节数组 </param>
+        /// <returns> </returns>
         public string Post(string url, byte[] postData)
         {
             var request = CreateRequest(url, "POST");
@@ -293,11 +293,11 @@ namespace Common.Utility.HttpRequest
         }
 
         /// <summary>
-        ///     向指定网址发送mulitpart编码的数据
+        /// 向指定网址发送mulitpart编码的数据
         /// </summary>
-        /// <param name="url">网址</param>
-        /// <param name="mulitpartForm">mulitpart form data</param>
-        /// <returns></returns>
+        /// <param name="url"> 网址 </param>
+        /// <param name="mulitpartForm"> mulitpart form data </param>
+        /// <returns> </returns>
         public string Post(string url, MultipartForm mulitpartForm)
         {
             var request = CreateRequest(url, "POST");
@@ -314,7 +314,7 @@ namespace Common.Utility.HttpRequest
         #region Private Methods
 
         /// <summary>
-        ///     从磁盘加载Cookie
+        /// 从磁盘加载Cookie
         /// </summary>
         private static void LoadCookiesFromDisk()
         {
@@ -336,7 +336,7 @@ namespace Common.Utility.HttpRequest
         }
 
         /// <summary>
-        ///     将Cookie保存到磁盘
+        /// 将Cookie保存到磁盘
         /// </summary>
         private static void SaveCookiesToDisk()
         {
@@ -361,10 +361,10 @@ namespace Common.Utility.HttpRequest
         }
 
         /// <summary>
-        ///     创建HTTP请求
+        /// 创建HTTP请求
         /// </summary>
-        /// <param name="url">URL地址</param>
-        /// <returns></returns>
+        /// <param name="url"> URL地址 </param>
+        /// <returns> </returns>
         private HttpWebRequest CreateRequest(string url, string method)
         {
             var uri = new Uri(url);
@@ -389,10 +389,10 @@ namespace Common.Utility.HttpRequest
         }
 
         /// <summary>
-        ///     读取请求返回的数据
+        /// 读取请求返回的数据
         /// </summary>
-        /// <param name="request">请求对象</param>
-        /// <returns></returns>
+        /// <param name="request"> 请求对象 </param>
+        /// <returns> </returns>
         private byte[] GetData(HttpWebRequest request)
         {
             var response = (HttpWebResponse)request.GetResponse();
@@ -444,10 +444,10 @@ namespace Common.Utility.HttpRequest
         }
 
         /// <summary>
-        ///     发送请求数据
+        /// 发送请求数据
         /// </summary>
-        /// <param name="request">请求对象</param>
-        /// <param name="postData">请求发送的字节数组</param>
+        /// <param name="request"> 请求对象 </param>
+        /// <param name="postData"> 请求发送的字节数组 </param>
         private void PostData(HttpWebRequest request, byte[] postData)
         {
             var offset = 0;

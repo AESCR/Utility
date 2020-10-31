@@ -1,18 +1,25 @@
-﻿﻿using System;
+﻿using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
- using Microsoft.IdentityModel.Tokens;
- using Newtonsoft.Json;
 
 namespace Common.Utility.JwtBearer
 {
     public class AccessTokenGenerate : IAccessTokenGenerate
     {
+        #region Private Fields
+
         private readonly AccessTokenOptions _options;
-        private  JwtSecurityTokenHandler _tokenHandler;
         private readonly TokenValidationParameters _validationParameters;
+        private JwtSecurityTokenHandler _tokenHandler;
+
+        #endregion Private Fields
+
+        #region Public Constructors
+
         public AccessTokenGenerate(AccessTokenOptions options)
         {
             _options = options;
@@ -30,65 +37,10 @@ namespace Common.Utility.JwtBearer
             };
         }
 
-        /// <summary>
-        ///     生成Token
-        /// </summary>
-        /// <param name="claims"></param>
-        /// <returns></returns>
-        public AccessToken Generate(IEnumerable<Claim> claims)
-        {
-            var now = DateTime.UtcNow;
-            var expires = DateTime.UtcNow.AddMinutes(_options.Expires);
-            var issuer = _options.Issuer;
-            var audience = _options.Audience;
-            var signingCredentials = _options.SigningCredentials;
+        #endregion Public Constructors
 
-            var jwt = new JwtSecurityToken(
-                issuer,
-                audience,
-                claims.ToArray(),
-                now,
-                expires,
-                signingCredentials
-            );
-            _tokenHandler= new JwtSecurityTokenHandler();
-            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-            return new AccessToken(encodedJwt, "Bearer", expires);
-        }
+        #region Private Methods
 
-        /// <summary>
-        ///     生成Token
-        /// </summary>
-        /// <param name="claims"></param>
-        /// <returns></returns>
-        public AccessToken Generate(Dictionary<string, string> claims)
-        {
-            var claimList = new List<Claim>();
-            foreach (var claim in claims) claimList.Add(new Claim(claim.Key, claim.Value));
-            return Generate(claimList);
-        }
-        public  AccessToken Generate(JwtDyUser user)
-        {
-            var claimList = new List<Claim>();
-            claimList.Add(new Claim("user", JsonConvert.SerializeObject(user)));
-            return Generate(claimList);
-        }
-
-        public bool ValidateToken(string token,out JwtSecurityToken securityToken)
-        {
-            securityToken = null;
-            try
-            {
-                _tokenHandler.ValidateToken(token, _validationParameters, out var validatedToken);
-                securityToken= (JwtSecurityToken)validatedToken;
-                return true;
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
-          
-        }
         private JwtSecurityToken GetJwtSecurityToken(IEnumerable<Claim> claims)
         {
             var now = DateTime.UtcNow;
@@ -107,6 +59,76 @@ namespace Common.Utility.JwtBearer
             );
             return jwt;
         }
+
+        #endregion Private Methods
+
+        #region Public Methods
+
+        /// <summary>
+        /// 生成Token
+        /// </summary>
+        /// <param name="claims"> </param>
+        /// <returns> </returns>
+        public AccessToken Generate(IEnumerable<Claim> claims)
+        {
+            var now = DateTime.UtcNow;
+            var expires = DateTime.UtcNow.AddMinutes(_options.Expires);
+            var issuer = _options.Issuer;
+            var audience = _options.Audience;
+            var signingCredentials = _options.SigningCredentials;
+
+            var jwt = new JwtSecurityToken(
+                issuer,
+                audience,
+                claims.ToArray(),
+                now,
+                expires,
+                signingCredentials
+            );
+            _tokenHandler = new JwtSecurityTokenHandler();
+            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+            return new AccessToken(encodedJwt, "Bearer", expires);
+        }
+
+        /// <summary>
+        /// 生成Token
+        /// </summary>
+        /// <param name="claims"> </param>
+        /// <returns> </returns>
+        public AccessToken Generate(Dictionary<string, string> claims)
+        {
+            var claimList = new List<Claim>();
+            foreach (var claim in claims) claimList.Add(new Claim(claim.Key, claim.Value));
+            return Generate(claimList);
+        }
+
+        public AccessToken Generate(JwtDyUser user)
+        {
+            var claimList = new List<Claim>();
+            claimList.Add(new Claim("user", JsonConvert.SerializeObject(user)));
+            return Generate(claimList);
+        }
+
+        public AccessTokenOptions GetAccessTokenOptions()
+        {
+            return _options;
+        }
+
+        public bool ValidateToken(string token, out JwtSecurityToken securityToken)
+        {
+            securityToken = null;
+            try
+            {
+                _tokenHandler.ValidateToken(token, _validationParameters, out var validatedToken);
+                securityToken = (JwtSecurityToken)validatedToken;
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        #endregion Public Methods
     }
-   
 }

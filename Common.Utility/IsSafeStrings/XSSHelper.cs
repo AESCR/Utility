@@ -10,8 +10,8 @@ namespace Common.Utility.IsSafeStrings
         /// <summary>
         /// 过滤HTML标记
         /// </summary>
-        /// <param name="htmlstring"></param>
-        /// <returns></returns>
+        /// <param name="htmlstring"> </param>
+        /// <returns> </returns>
         public static string HtmlFilter(string htmlstring)
         {
             string result = Regex.Replace(htmlstring, @"<[^>]*>", String.Empty);
@@ -21,8 +21,8 @@ namespace Common.Utility.IsSafeStrings
         /// <summary>
         /// XSS过滤
         /// </summary>
-        /// <param name="html">html代码</param>
-        /// <returns>过滤结果</returns>
+        /// <param name="html"> html代码 </param>
+        /// <returns> 过滤结果 </returns>
         public static string XssFilter(string html)
         {
             string str = HtmlFilter(html);

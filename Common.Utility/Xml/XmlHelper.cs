@@ -5,24 +5,24 @@ using System.Xml;
 namespace Common.Utility
 {
     /// <summary>
-    ///     Xml的操作公共类
+    /// Xml的操作公共类
     /// </summary>
     public class XmlHelper
     {
         #region Private Fields
 
         /// <summary>
-        ///     XML文件的物理路径
+        /// XML文件的物理路径
         /// </summary>
         private readonly string _filePath = string.Empty;
 
         /// <summary>
-        ///     XML的根节点
+        /// XML的根节点
         /// </summary>
         private XmlElement _element;
 
         /// <summary>
-        ///     Xml文档
+        /// Xml文档
         /// </summary>
         private XmlDocument _xml;
 
@@ -31,9 +31,9 @@ namespace Common.Utility
         #region Public Constructors
 
         /// <summary>
-        ///     实例化XmlHelper对象
+        /// 实例化XmlHelper对象
         /// </summary>
-        /// <param name="xmlFilePath">Xml文件的相对路径</param>
+        /// <param name="xmlFilePath"> Xml文件的相对路径 </param>
         public XmlHelper(string xmlFilePath)
         {
             //获取XML文件的绝对路径
@@ -45,16 +45,16 @@ namespace Common.Utility
         #region Public Methods
 
         /// <summary>
-        ///     获取指定XPath表达式节点的属性值
+        /// 获取指定XPath表达式节点的属性值
         /// </summary>
-        /// <param name="xmlFilePath">Xml文件的相对路径</param>
+        /// <param name="xmlFilePath"> Xml文件的相对路径 </param>
         /// <param name="xPath">
-        ///     XPath表达式,
-        ///     范例1: @"Skill/First/SkillItem", 等效于 @"//Skill/First/SkillItem"
-        ///     范例2: @"Table[USERNAME='a']" , []表示筛选,USERNAME是Table下的一个子节点.
-        ///     范例3: @"ApplyPost/Item[@itemName='岗位编号']",@itemName是Item节点的属性.
+        /// XPath表达式,
+        /// 范例1: @"Skill/First/SkillItem", 等效于 @"//Skill/First/SkillItem"
+        /// 范例2: @"Table[USERNAME='a']" , []表示筛选,USERNAME是Table下的一个子节点.
+        /// 范例3: @"ApplyPost/Item[@itemName='岗位编号']",@itemName是Item节点的属性.
         /// </param>
-        /// <param name="attributeName">属性名</param>
+        /// <param name="attributeName"> 属性名 </param>
         public static string GetAttributeValue(string xmlFilePath, string xPath, string attributeName)
         {
             //创建根对象
@@ -65,14 +65,14 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     获取指定XPath表达式节点的值
+        /// 获取指定XPath表达式节点的值
         /// </summary>
-        /// <param name="xmlFilePath">Xml文件的相对路径</param>
+        /// <param name="xmlFilePath"> Xml文件的相对路径 </param>
         /// <param name="xPath">
-        ///     XPath表达式,
-        ///     范例1: @"Skill/First/SkillItem", 等效于 @"//Skill/First/SkillItem"
-        ///     范例2: @"Table[USERNAME='a']" , []表示筛选,USERNAME是Table下的一个子节点.
-        ///     范例3: @"ApplyPost/Item[@itemName='岗位编号']",@itemName是Item节点的属性.
+        /// XPath表达式,
+        /// 范例1: @"Skill/First/SkillItem", 等效于 @"//Skill/First/SkillItem"
+        /// 范例2: @"Table[USERNAME='a']" , []表示筛选,USERNAME是Table下的一个子节点.
+        /// 范例3: @"ApplyPost/Item[@itemName='岗位编号']",@itemName是Item节点的属性.
         /// </param>
         public static string GetValue(string xmlFilePath, string xPath)
         {
@@ -84,10 +84,10 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     1. 功能：新增节点。
-        ///     2. 使用条件：将任意节点插入到当前Xml文件中。
+        /// 1. 功能：新增节点。
+        /// 2. 使用条件：将任意节点插入到当前Xml文件中。
         /// </summary>
-        /// <param name="xmlNode">要插入的Xml节点</param>
+        /// <param name="xmlNode"> 要插入的Xml节点 </param>
         public void AppendNode(XmlNode xmlNode)
         {
             //创建XML的根节点
@@ -101,10 +101,10 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     1. 功能：新增节点。
-        ///     2. 使用条件：将DataSet中的第一条记录插入Xml文件中。
+        /// 1. 功能：新增节点。
+        /// 2. 使用条件：将DataSet中的第一条记录插入Xml文件中。
         /// </summary>
-        /// <param name="ds">DataSet的实例，该DataSet中应该只有一条记录</param>
+        /// <param name="ds"> DataSet的实例，该DataSet中应该只有一条记录 </param>
         public void AppendNode(DataSet ds)
         {
             //创建XmlDataDocument对象
@@ -118,15 +118,15 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     获取指定XPath表达式节点的属性值
+        /// 获取指定XPath表达式节点的属性值
         /// </summary>
         /// <param name="xPath">
-        ///     XPath表达式,
-        ///     范例1: @"Skill/First/SkillItem", 等效于 @"//Skill/First/SkillItem"
-        ///     范例2: @"Table[USERNAME='a']" , []表示筛选,USERNAME是Table下的一个子节点.
-        ///     范例3: @"ApplyPost/Item[@itemName='岗位编号']",@itemName是Item节点的属性.
+        /// XPath表达式,
+        /// 范例1: @"Skill/First/SkillItem", 等效于 @"//Skill/First/SkillItem"
+        /// 范例2: @"Table[USERNAME='a']" , []表示筛选,USERNAME是Table下的一个子节点.
+        /// 范例3: @"ApplyPost/Item[@itemName='岗位编号']",@itemName是Item节点的属性.
         /// </param>
-        /// <param name="attributeName">属性名</param>
+        /// <param name="attributeName"> 属性名 </param>
         public string GetAttributeValue(string xPath, string attributeName)
         {
             //创建XML的根节点
@@ -137,13 +137,13 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     获取指定XPath表达式的节点对象
+        /// 获取指定XPath表达式的节点对象
         /// </summary>
         /// <param name="xPath">
-        ///     XPath表达式,
-        ///     范例1: @"Skill/First/SkillItem", 等效于 @"//Skill/First/SkillItem"
-        ///     范例2: @"Table[USERNAME='a']" , []表示筛选,USERNAME是Table下的一个子节点.
-        ///     范例3: @"ApplyPost/Item[@itemName='岗位编号']",@itemName是Item节点的属性.
+        /// XPath表达式,
+        /// 范例1: @"Skill/First/SkillItem", 等效于 @"//Skill/First/SkillItem"
+        /// 范例2: @"Table[USERNAME='a']" , []表示筛选,USERNAME是Table下的一个子节点.
+        /// 范例3: @"ApplyPost/Item[@itemName='岗位编号']",@itemName是Item节点的属性.
         /// </param>
         public XmlNode GetNode(string xPath)
         {
@@ -155,13 +155,13 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     获取指定XPath表达式节点的值
+        /// 获取指定XPath表达式节点的值
         /// </summary>
         /// <param name="xPath">
-        ///     XPath表达式,
-        ///     范例1: @"Skill/First/SkillItem", 等效于 @"//Skill/First/SkillItem"
-        ///     范例2: @"Table[USERNAME='a']" , []表示筛选,USERNAME是Table下的一个子节点.
-        ///     范例3: @"ApplyPost/Item[@itemName='岗位编号']",@itemName是Item节点的属性.
+        /// XPath表达式,
+        /// 范例1: @"Skill/First/SkillItem", 等效于 @"//Skill/First/SkillItem"
+        /// 范例2: @"Table[USERNAME='a']" , []表示筛选,USERNAME是Table下的一个子节点.
+        /// 范例3: @"ApplyPost/Item[@itemName='岗位编号']",@itemName是Item节点的属性.
         /// </param>
         public string GetValue(string xPath)
         {
@@ -173,13 +173,13 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     删除指定XPath表达式的节点
+        /// 删除指定XPath表达式的节点
         /// </summary>
         /// <param name="xPath">
-        ///     XPath表达式,
-        ///     范例1: @"Skill/First/SkillItem", 等效于 @"//Skill/First/SkillItem"
-        ///     范例2: @"Table[USERNAME='a']" , []表示筛选,USERNAME是Table下的一个子节点.
-        ///     范例3: @"ApplyPost/Item[@itemName='岗位编号']",@itemName是Item节点的属性.
+        /// XPath表达式,
+        /// 范例1: @"Skill/First/SkillItem", 等效于 @"//Skill/First/SkillItem"
+        /// 范例2: @"Table[USERNAME='a']" , []表示筛选,USERNAME是Table下的一个子节点.
+        /// 范例3: @"ApplyPost/Item[@itemName='岗位编号']",@itemName是Item节点的属性.
         /// </param>
         public void RemoveNode(string xPath)
         {
@@ -194,7 +194,7 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     保存XML文件
+        /// 保存XML文件
         /// </summary>
         public void Save()
         {
@@ -210,9 +210,9 @@ namespace Common.Utility
         #region Private Methods
 
         /// <summary>
-        ///     创建根节点对象
+        /// 创建根节点对象
         /// </summary>
-        /// <param name="xmlFilePath">Xml文件的相对路径</param>
+        /// <param name="xmlFilePath"> Xml文件的相对路径 </param>
         private static XmlElement CreateRootElement(string xmlFilePath)
         {
             //定义变量，表示XML文件的绝对路径
@@ -231,7 +231,7 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     创建XML的根节点
+        /// 创建XML的根节点
         /// </summary>
         private void CreateXMLElement()
         {

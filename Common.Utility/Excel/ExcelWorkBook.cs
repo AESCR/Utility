@@ -1,12 +1,9 @@
 using Common.Utility.Excel.Model;
-using Common.Utility.SystemExtensions;
-using Microsoft.AspNetCore.Http;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Text;
@@ -15,11 +12,21 @@ namespace Common.Utility.Excel
 {
     public class ExcelWorkBook : IExcelWorkBook
     {
+        #region Private Fields
+
         private ExcelSetting _setting;
+
+        #endregion Private Fields
+
+        #region Public Constructors
+
         public ExcelWorkBook(ExcelSetting setting)
         {
             _setting = setting;
         }
+
+        #endregion Public Constructors
+
         #region Public Methods
 
         public DataTable ReadExcel(Stream stream, bool xlsx)
@@ -61,7 +68,6 @@ namespace Common.Utility.Excel
 
             return dt;
         }
-
 
         public byte[] WriteExcel(DataTable dtSource)
         {

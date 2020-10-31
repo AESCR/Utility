@@ -1,14 +1,32 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Linq;
 
 namespace Common.Utility.JwtBearer
 {
     public class JwtAuthorizeAttribute : AuthorizeAttribute, IAuthorizationFilter
     {
+        #region Private Methods
+
+        private static bool HasAllowAnonymous(AuthorizationFilterContext context)
+        {
+            var filters = context.Filters;
+            if (filters.OfType<IAllowAnonymousFilter>().Any()) return true;
+
+            // When doing endpoint routing, MVC does not add AllowAnonymousFilters for
+            // AllowAnonymousAttributes that were discovered on controllers and actions. To maintain
+            // compat with 2.x, we'll check for the presence of IAllowAnonymous in endpoint metadata.
+            var endpoint = context.HttpContext.GetEndpoint();
+            return endpoint?.Metadata?.GetMetadata<IAllowAnonymous>() != null;
+        }
+
+        #endregion Private Methods
+
+        #region Public Methods
+
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             var user = context.HttpContext.Items["User"];
@@ -25,16 +43,6 @@ namespace Common.Utility.JwtBearer
             }
         }
 
-        private static bool HasAllowAnonymous(AuthorizationFilterContext context)
-        {
-            var filters = context.Filters;
-            if (filters.OfType<IAllowAnonymousFilter>().Any()) return true;
-
-            // When doing endpoint routing, MVC does not add AllowAnonymousFilters for AllowAnonymousAttributes that
-            // were discovered on controllers and actions. To maintain compat with 2.x,
-            // we'll check for the presence of IAllowAnonymous in endpoint metadata.
-            var endpoint = context.HttpContext.GetEndpoint();
-            return endpoint?.Metadata?.GetMetadata<IAllowAnonymous>() != null;
-        }
+        #endregion Public Methods
     }
 }

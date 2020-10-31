@@ -10,18 +10,18 @@ using System.Text;
 namespace Common.Utility.NPOI
 {
     /// <summary>
-    ///     NPOI操作帮助类
+    /// NPOI操作帮助类
     /// </summary>
     public class NPOIHelper
     {
         #region Public Methods
 
         /// <summary>
-        ///     DataTable导出到Excel文件
+        /// DataTable导出到Excel文件
         /// </summary>
-        /// <param name="dtSource">源DataTable</param>
-        /// <param name="strHeaderText">表头文本</param>
-        /// <param name="strFileName">保存位置</param>
+        /// <param name="dtSource"> 源DataTable </param>
+        /// <param name="strHeaderText"> 表头文本 </param>
+        /// <param name="strFileName"> 保存位置 </param>
         public static void Export(DataTable dtSource, string strHeaderText, string strFileName)
         {
             using (var ms = Export(dtSource, strHeaderText))
@@ -36,10 +36,10 @@ namespace Common.Utility.NPOI
         }
 
         /// <summary>
-        ///     DataTable导出到Excel的MemoryStream
+        /// DataTable导出到Excel的MemoryStream
         /// </summary>
-        /// <param name="dtSource">源DataTable</param>
-        /// <param name="strHeaderText">表头文本</param>
+        /// <param name="dtSource"> 源DataTable </param>
+        /// <param name="strHeaderText"> 表头文本 </param>
         public static MemoryStream Export(DataTable dtSource, string strHeaderText)
         {
             HSSFWorkbook workbook = new HSSFWorkbook(); ;
@@ -194,12 +194,12 @@ namespace Common.Utility.NPOI
             ms.Position = 0;
             return ms;
         }
+
         /// <summary>
-        ///     读取excel
-        ///     默认第一行为标头
+        /// 读取excel 默认第一行为标头
         /// </summary>
-        /// <param name="strFileName">excel文档路径</param>
-        /// <returns></returns>
+        /// <param name="strFileName"> excel文档路径 </param>
+        /// <returns> </returns>
         public static DataTable Import(string strFileName)
         {
             var dt = new DataTable();

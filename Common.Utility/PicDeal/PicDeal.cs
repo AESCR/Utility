@@ -8,15 +8,11 @@ using System.IO;
 namespace Utilities
 {
     /// <summary>
-    ///     操作图片类, 生成缩略图,添加水印
+    /// 操作图片类, 生成缩略图,添加水印
     /// </summary>
     public class PicDeal
     {
         #region Internal Fields
-
-        internal static readonly string AllowExt = ".jpe|.jpeg|.jpg|.png|.tif|.tiff|.bmp";
-
-        #endregion Internal Fields
 
         #region Private Fields
 
@@ -24,7 +20,153 @@ namespace Utilities
 
         #endregion Private Fields
 
+        #region Internal Fields
+
+        internal static readonly string AllowExt = ".jpe|.jpeg|.jpg|.png|.tif|.tiff|.bmp";
+
+        #endregion Internal Fields
+
+        #endregion Internal Fields
+
+        #region Private Fields
+        #endregion Private Fields
+
         #region 生成缩略图
+
+        #region Public Methods
+
+        #region Private Methods
+
+        /// <summary>
+        /// 图片水印位置处理方法
+        /// </summary>
+        /// <param name="location"> 水印位置 </param>
+        /// <param name="img"> 需要添加水印的图片 </param>
+        /// <param name="waterimg"> 水印图片 </param>
+        private static ArrayList GetLocation(string location, Image img, Image waterimg)
+        {
+            var loca = new ArrayList();
+            var x = 0;
+            var y = 0;
+
+            if (location == "LT")
+            {
+                x = 10;
+                y = 10;
+            }
+            else if (location == "T")
+            {
+                x = img.Width / 2 - waterimg.Width / 2;
+                y = img.Height - waterimg.Height;
+            }
+            else if (location == "RT")
+            {
+                x = img.Width - waterimg.Width;
+                y = 10;
+            }
+            else if (location == "LC")
+            {
+                x = 10;
+                y = img.Height / 2 - waterimg.Height / 2;
+            }
+            else if (location == "C")
+            {
+                x = img.Width / 2 - waterimg.Width / 2;
+                y = img.Height / 2 - waterimg.Height / 2;
+            }
+            else if (location == "RC")
+            {
+                x = img.Width - waterimg.Width;
+                y = img.Height / 2 - waterimg.Height / 2;
+            }
+            else if (location == "LB")
+            {
+                x = 10;
+                y = img.Height - waterimg.Height;
+            }
+            else if (location == "B")
+            {
+                x = img.Width / 2 - waterimg.Width / 2;
+                y = img.Height - waterimg.Height;
+            }
+            else
+            {
+                x = img.Width - waterimg.Width;
+                y = img.Height - waterimg.Height;
+            }
+
+            loca.Add(x);
+            loca.Add(y);
+            return loca;
+        }
+
+        /// <summary>
+        /// 文字水印位置的方法
+        /// </summary>
+        /// <param name="location"> 位置代码 </param>
+        /// <param name="img"> 图片对象 </param>
+        /// <param name="width"> 宽(当水印类型为文字时,传过来的就是字体的大小) </param>
+        /// <param name="height"> 高(当水印类型为文字时,传过来的就是字符的长度) </param>
+        private static ArrayList GetLocation(string location, Image img, int width, int height)
+        {
+            #region
+
+            var loca = new ArrayList(); //定义数组存储位置
+            float x = 10;
+            float y = 10;
+
+            if (location == "LT")
+            {
+                loca.Add(x);
+                loca.Add(y);
+            }
+            else if (location == "T")
+            {
+                x = img.Width / 2 - width * height / 2;
+                loca.Add(x);
+                loca.Add(y);
+            }
+            else if (location == "RT")
+            {
+                x = img.Width - width * height;
+            }
+            else if (location == "LC")
+            {
+                y = img.Height / 2;
+            }
+            else if (location == "C")
+            {
+                x = img.Width / 2 - width * height / 2;
+                y = img.Height / 2;
+            }
+            else if (location == "RC")
+            {
+                x = img.Width - height;
+                y = img.Height / 2;
+            }
+            else if (location == "LB")
+            {
+                y = img.Height - width - 5;
+            }
+            else if (location == "B")
+            {
+                x = img.Width / 2 - width * height / 2;
+                y = img.Height - width - 5;
+            }
+            else
+            {
+                x = img.Width - width * height;
+                y = img.Height - width - 5;
+            }
+
+            loca.Add(x);
+            loca.Add(y);
+            return loca;
+
+            #endregion Private Methods
+        }
+
+        #endregion Public Methods
 
         #region Public Methods
 
@@ -62,11 +204,11 @@ namespace Utilities
         }
 
         /// <summary>
-        ///     图片水印处理方法
+        /// 图片水印处理方法
         /// </summary>
-        /// <param name="path">需要加载水印的图片路径（绝对路径）</param>
-        /// <param name="waterpath">水印图片（绝对路径）</param>
-        /// <param name="location">水印位置（传送正确的代码）</param>
+        /// <param name="path"> 需要加载水印的图片路径（绝对路径） </param>
+        /// <param name="waterpath"> 水印图片（绝对路径） </param>
+        /// <param name="location"> 水印位置（传送正确的代码） </param>
         public static string ImageWatermark(string path, string waterpath, string location)
         {
             var kz_name = Path.GetExtension(path);
@@ -95,13 +237,13 @@ namespace Utilities
         }
 
         /// <summary>
-        ///     文字水印处理方法
+        /// 文字水印处理方法
         /// </summary>
-        /// <param name="path">图片路径（绝对路径）</param>
-        /// <param name="size">字体大小</param>
-        /// <param name="letter">水印文字</param>
-        /// <param name="color">颜色</param>
-        /// <param name="location">水印位置</param>
+        /// <param name="path"> 图片路径（绝对路径） </param>
+        /// <param name="size"> 字体大小 </param>
+        /// <param name="letter"> 水印文字 </param>
+        /// <param name="color"> 颜色 </param>
+        /// <param name="location"> 水印位置 </param>
         public static string LetterWatermark(string path, int size, string letter, Color color, string location)
         {
             #region
@@ -132,13 +274,13 @@ namespace Utilities
         }
 
         /// <summary>
-        ///     生成缩略图
+        /// 生成缩略图
         /// </summary>
-        /// <param name="originalImagePath"></param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <param name="mode"></param>
-        /// <returns></returns>
+        /// <param name="originalImagePath"> </param>
+        /// <param name="width"> </param>
+        /// <param name="height"> </param>
+        /// <param name="mode"> </param>
+        /// <returns> </returns>
         public static bool MakeThumbnail(string originalImagePath, int width, int height, string mode)
         {
             var thumbnailPath = originalImagePath.Substring(0, originalImagePath.LastIndexOf('.')) + "s.jpg";
@@ -232,13 +374,13 @@ namespace Utilities
         #region 返回新图片尺寸
 
         /// <summary>
-        ///     生成缩略图
+        /// 生成缩略图
         /// </summary>
-        /// <param name="originalImagePath">源图路径（物理路径）</param>
-        /// <param name="thumbnailPath">缩略图路径（物理路径）</param>
-        /// <param name="width">缩略图宽度</param>
-        /// <param name="height">缩略图高度</param>
-        /// <param name="mode">生成缩略图的方式</param>
+        /// <param name="originalImagePath"> 源图路径（物理路径） </param>
+        /// <param name="thumbnailPath"> 缩略图路径（物理路径） </param>
+        /// <param name="width"> 缩略图宽度 </param>
+        /// <param name="height"> 缩略图高度 </param>
+        /// <param name="mode"> 生成缩略图的方式 </param>
         public static void MakeThumbnail(string originalImagePath, string thumbnailPath, int width, int height,
             string mode)
         {
@@ -321,13 +463,13 @@ namespace Utilities
         }
 
         /// <summary>
-        ///     返回新图片尺寸
+        /// 返回新图片尺寸
         /// </summary>
-        /// <param name="width">原始宽</param>
-        /// <param name="height">原始高</param>
-        /// <param name="maxWidth">新图片最大宽</param>
-        /// <param name="maxHeight">新图片最大高</param>
-        /// <returns></returns>
+        /// <param name="width"> 原始宽 </param>
+        /// <param name="height"> 原始高 </param>
+        /// <param name="maxWidth"> 新图片最大宽 </param>
+        /// <param name="maxHeight"> 新图片最大高 </param>
+        /// <returns> </returns>
         public static Size ResizeImage(int width, int height, int maxWidth, int maxHeight)
         {
             decimal MAX_WIDTH = maxWidth;
@@ -373,11 +515,11 @@ namespace Utilities
         #region 调整光暗
 
         /// <summary>
-        ///     拉伸图片
+        /// 拉伸图片
         /// </summary>
-        /// <param name="bmp">原始图片</param>
-        /// <param name="newW">新的宽度</param>
-        /// <param name="newH">新的高度</param>
+        /// <param name="bmp"> 原始图片 </param>
+        /// <param name="newW"> 新的宽度 </param>
+        /// <param name="newH"> 新的高度 </param>
         public static Bitmap ResizeImage(Bitmap bmp, int newW, int newH)
         {
             try
@@ -397,11 +539,11 @@ namespace Utilities
         }
 
         /// <summary>
-        ///     转换为黑白图片
+        /// 转换为黑白图片
         /// </summary>
-        /// <param name="mybt">要进行处理的图片</param>
-        /// <param name="width">图片的长度</param>
-        /// <param name="height">图片的高度</param>
+        /// <param name="mybt"> 要进行处理的图片 </param>
+        /// <param name="width"> 图片的长度 </param>
+        /// <param name="height"> 图片的高度 </param>
         public Bitmap BWPic(Bitmap mybm, int width, int height)
         {
             var bm = new Bitmap(width, height);
@@ -419,22 +561,22 @@ namespace Utilities
         }
 
         /// <summary>
-        ///     压缩到指定尺寸
+        /// 压缩到指定尺寸
         /// </summary>
-        /// <param name="oldfile">原文件</param>
-        /// <param name="newfile">新文件</param>
+        /// <param name="oldfile"> 原文件 </param>
+        /// <param name="newfile"> 新文件 </param>
         public bool Compress(string oldfile, string newfile)
         {
             return Compress(oldfile, newfile, 100, 125);
         }
 
         /// <summary>
-        ///     压缩指定尺寸，如果写的和图片大家一样表示大小不变，只是把图片压缩下一些
+        /// 压缩指定尺寸，如果写的和图片大家一样表示大小不变，只是把图片压缩下一些
         /// </summary>
-        /// <param name="oldfile">原文件</param>
-        /// <param name="newfile">新文件</param>
-        /// <param name="width">长</param>
-        /// <param name="height">高</param>
+        /// <param name="oldfile"> 原文件 </param>
+        /// <param name="newfile"> 新文件 </param>
+        /// <param name="width"> 长 </param>
+        /// <param name="height"> 高 </param>
         public bool Compress(string oldfile, string newfile, int width, int height)
         {
             try
@@ -476,11 +618,11 @@ namespace Utilities
         }
 
         /// <summary>
-        ///     浮雕处理
+        /// 浮雕处理
         /// </summary>
-        /// <param name="oldBitmap">原始图片</param>
-        /// <param name="Width">原始图片的长度</param>
-        /// <param name="Height">原始图片的高度</param>
+        /// <param name="oldBitmap"> 原始图片 </param>
+        /// <param name="Width"> 原始图片的长度 </param>
+        /// <param name="Height"> 原始图片的高度 </param>
         public Bitmap FD(Bitmap oldBitmap, int Width, int Height)
         {
             var newBitmap = new Bitmap(Width, Height);
@@ -507,11 +649,11 @@ namespace Utilities
         }
 
         /// <summary>
-        ///     滤色处理
+        /// 滤色处理
         /// </summary>
-        /// <param name="mybm">原始图片</param>
-        /// <param name="width">原始图片的长度</param>
-        /// <param name="height">原始图片的高度</param>
+        /// <param name="mybm"> 原始图片 </param>
+        /// <param name="width"> 原始图片的长度 </param>
+        /// <param name="height"> 原始图片的高度 </param>
         public Bitmap FilPic(Bitmap mybm, int width, int height)
         {
             var bm = new Bitmap(width, height); //初始化一个记录滤色效果的图片对象
@@ -529,10 +671,10 @@ namespace Utilities
         }
 
         /// <summary>
-        ///     获取图片中的各帧
+        /// 获取图片中的各帧
         /// </summary>
-        /// <param name="pPath">图片路径</param>
-        /// <param name="pSavePath">保存路径</param>
+        /// <param name="pPath"> 图片路径 </param>
+        /// <param name="pSavePath"> 保存路径 </param>
         public void GetFrames(string pPath, string pSavedPath)
         {
             var gif = Image.FromFile(pPath);
@@ -552,12 +694,12 @@ namespace Utilities
         }
 
         /// <summary>
-        ///     调整光暗
+        /// 调整光暗
         /// </summary>
-        /// <param name="mybm">原始图片</param>
-        /// <param name="width">原始图片的长度</param>
-        /// <param name="height">原始图片的高度</param>
-        /// <param name="val">增加或减少的光暗值</param>
+        /// <param name="mybm"> 原始图片 </param>
+        /// <param name="width"> 原始图片的长度 </param>
+        /// <param name="height"> 原始图片的高度 </param>
+        /// <param name="val"> 增加或减少的光暗值 </param>
         public Bitmap LDPic(Bitmap mybm, int width, int height, int val)
         {
             var bm = new Bitmap(width, height); //初始化一个记录经过处理后的图片对象
@@ -581,11 +723,11 @@ namespace Utilities
         #region 反色处理
 
         /// <summary>
-        ///     反色处理
+        /// 反色处理
         /// </summary>
-        /// <param name="mybm">原始图片</param>
-        /// <param name="width">原始图片的长度</param>
-        /// <param name="height">原始图片的高度</param>
+        /// <param name="mybm"> 原始图片 </param>
+        /// <param name="width"> 原始图片的长度 </param>
+        /// <param name="height"> 原始图片的高度 </param>
         public Bitmap RePic(Bitmap mybm, int width, int height)
         {
             var bm = new Bitmap(width, height); //初始化一个记录处理后的图片的对象
@@ -618,11 +760,11 @@ namespace Utilities
         #region 左右翻转
 
         /// <summary>
-        ///     左右翻转
+        /// 左右翻转
         /// </summary>
-        /// <param name="mybm">原始图片</param>
-        /// <param name="width">原始图片的长度</param>
-        /// <param name="height">原始图片的高度</param>
+        /// <param name="mybm"> 原始图片 </param>
+        /// <param name="width"> 原始图片的长度 </param>
+        /// <param name="height"> 原始图片的高度 </param>
         public Bitmap RevPicLR(Bitmap mybm, int width, int height)
         {
             var bm = new Bitmap(width, height);
@@ -643,11 +785,11 @@ namespace Utilities
         #region 上下翻转
 
         /// <summary>
-        ///     上下翻转
+        /// 上下翻转
         /// </summary>
-        /// <param name="mybm">原始图片</param>
-        /// <param name="width">原始图片的长度</param>
-        /// <param name="height">原始图片的高度</param>
+        /// <param name="mybm"> 原始图片 </param>
+        /// <param name="width"> 原始图片的长度 </param>
+        /// <param name="height"> 原始图片的高度 </param>
         public Bitmap RevPicUD(Bitmap mybm, int width, int height)
         {
             var bm = new Bitmap(width, height);
@@ -665,6 +807,8 @@ namespace Utilities
 
         #endregion 上下翻转
 
+        #endregion 上下翻转
+
         #endregion
 
         #region 图片灰度化
@@ -679,140 +823,9 @@ namespace Utilities
         #region 图片水印
 
         #region Private Methods
-
-        /// <summary>
-        ///     图片水印位置处理方法
-        /// </summary>
-        /// <param name="location">水印位置</param>
-        /// <param name="img">需要添加水印的图片</param>
-        /// <param name="waterimg">水印图片</param>
-        private static ArrayList GetLocation(string location, Image img, Image waterimg)
-        {
-            var loca = new ArrayList();
-            var x = 0;
-            var y = 0;
-
-            if (location == "LT")
-            {
-                x = 10;
-                y = 10;
-            }
-            else if (location == "T")
-            {
-                x = img.Width / 2 - waterimg.Width / 2;
-                y = img.Height - waterimg.Height;
-            }
-            else if (location == "RT")
-            {
-                x = img.Width - waterimg.Width;
-                y = 10;
-            }
-            else if (location == "LC")
-            {
-                x = 10;
-                y = img.Height / 2 - waterimg.Height / 2;
-            }
-            else if (location == "C")
-            {
-                x = img.Width / 2 - waterimg.Width / 2;
-                y = img.Height / 2 - waterimg.Height / 2;
-            }
-            else if (location == "RC")
-            {
-                x = img.Width - waterimg.Width;
-                y = img.Height / 2 - waterimg.Height / 2;
-            }
-            else if (location == "LB")
-            {
-                x = 10;
-                y = img.Height - waterimg.Height;
-            }
-            else if (location == "B")
-            {
-                x = img.Width / 2 - waterimg.Width / 2;
-                y = img.Height - waterimg.Height;
-            }
-            else
-            {
-                x = img.Width - waterimg.Width;
-                y = img.Height - waterimg.Height;
-            }
-
-            loca.Add(x);
-            loca.Add(y);
-            return loca;
-        }
-
         #endregion
 
         #region 文字水印
-
-        /// <summary>
-        ///     文字水印位置的方法
-        /// </summary>
-        /// <param name="location">位置代码</param>
-        /// <param name="img">图片对象</param>
-        /// <param name="width">宽(当水印类型为文字时,传过来的就是字体的大小)</param>
-        /// <param name="height">高(当水印类型为文字时,传过来的就是字符的长度)</param>
-        private static ArrayList GetLocation(string location, Image img, int width, int height)
-        {
-            #region
-
-            var loca = new ArrayList(); //定义数组存储位置
-            float x = 10;
-            float y = 10;
-
-            if (location == "LT")
-            {
-                loca.Add(x);
-                loca.Add(y);
-            }
-            else if (location == "T")
-            {
-                x = img.Width / 2 - width * height / 2;
-                loca.Add(x);
-                loca.Add(y);
-            }
-            else if (location == "RT")
-            {
-                x = img.Width - width * height;
-            }
-            else if (location == "LC")
-            {
-                y = img.Height / 2;
-            }
-            else if (location == "C")
-            {
-                x = img.Width / 2 - width * height / 2;
-                y = img.Height / 2;
-            }
-            else if (location == "RC")
-            {
-                x = img.Width - height;
-                y = img.Height / 2;
-            }
-            else if (location == "LB")
-            {
-                y = img.Height - width - 5;
-            }
-            else if (location == "B")
-            {
-                x = img.Width / 2 - width * height / 2;
-                y = img.Height - width - 5;
-            }
-            else
-            {
-                x = img.Width - width * height;
-                y = img.Height - width - 5;
-            }
-
-            loca.Add(x);
-            loca.Add(y);
-            return loca;
-
-            #endregion
-        }
-
         #endregion Private Methods
 
         #endregion

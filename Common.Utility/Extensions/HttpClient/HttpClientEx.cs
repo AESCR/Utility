@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Common.Utility.Extensions.System;
+﻿using Common.Utility.Extensions.System;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Common.Utility.Extensions.HttpClient
 {
@@ -12,11 +11,11 @@ namespace Common.Utility.Extensions.HttpClient
         #region Public Methods
 
         /// <summary>
-        ///     Get请求
+        /// Get请求
         /// </summary>
-        /// <param name="httpClient"></param>
+        /// <param name="httpClient"> </param>
         /// <param name="url"> 请求url </param>
-        /// <returns>返回HttpResponseMessage 否则null </returns>
+        /// <returns> 返回HttpResponseMessage 否则null </returns>
         public static Task<HttpResponseMessage> DoGet(this global::System.Net.Http.HttpClient httpClient, string url)
         {
             var taskResponse = httpClient.GetAsync(url);
@@ -24,13 +23,13 @@ namespace Common.Utility.Extensions.HttpClient
         }
 
         /// <summary>
-        ///     Post请求 内容类型:application/json
+        /// Post请求 内容类型:application/json
         /// </summary>
-        /// <param name="httpClient"></param>
+        /// <param name="httpClient"> </param>
         /// <param name="url"> 请求url </param>
         /// <param name="postData"> json内容 </param>
-        /// <param name="contentHeader">body header</param>
-        /// <returns>返回HttpResponseMessage</returns>
+        /// <param name="contentHeader"> body header </param>
+        /// <returns> 返回HttpResponseMessage </returns>
         public static Task<HttpResponseMessage> DoPost<T>(this global::System.Net.Http.HttpClient httpClient, string url, T postData,
             Dictionary<string, string> contentHeader = null) where T : class
         {
@@ -42,16 +41,17 @@ namespace Common.Utility.Extensions.HttpClient
             var taskResponse = httpClient.PostAsync(url, httpContent);
             return taskResponse;
         }
+
         /// <summary>
-        ///     Post请求 内容类型:application/json
+        /// Post请求 内容类型:application/json
         /// </summary>
-        /// <param name="httpClient"></param>
+        /// <param name="httpClient"> </param>
         /// <param name="url"> 请求url </param>
         /// <param name="jsonData"> json内容 </param>
-        /// <param name="contentHeader">body header</param>
-        /// <returns>返回HttpResponseMessage</returns>
+        /// <param name="contentHeader"> body header </param>
+        /// <returns> 返回HttpResponseMessage </returns>
         public static Task<HttpResponseMessage> DoPost(this global::System.Net.Http.HttpClient httpClient, string url, string jsonData,
-            Dictionary<string, string> contentHeader = null) 
+            Dictionary<string, string> contentHeader = null)
         {
             HttpContent httpContent = new StringContent(jsonData);
             if (contentHeader != null)
@@ -60,17 +60,18 @@ namespace Common.Utility.Extensions.HttpClient
             var taskResponse = httpClient.PostAsync(url, httpContent);
             return taskResponse;
         }
+
         /// <summary>
-        ///     Post请求 内容类型:application/x-www-form-urlencoded
+        /// Post请求 内容类型:application/x-www-form-urlencoded
         /// </summary>
-        /// <param name="httpClient"></param>
+        /// <param name="httpClient"> </param>
         /// <param name="url"> 请求url </param>
         /// <param name="formData"> 数据参数 </param>
-        /// <param name="contentHeader"></param>
+        /// <param name="contentHeader"> </param>
         /// <returns> 返回HttpResponseMessage 否则null </returns>
         /// <returns> </returns>
         public static Task<HttpResponseMessage> DoPost(this global::System.Net.Http.HttpClient httpClient, string url,
-           Dictionary<string,string> formData, Dictionary<string, string> contentHeader = null)
+           Dictionary<string, string> formData, Dictionary<string, string> contentHeader = null)
         {
             IEnumerable<KeyValuePair<string, string>> data = formData.ToKeyValuePairCollection();
             HttpContent httpContent = new FormUrlEncodedContent(data);
@@ -82,10 +83,10 @@ namespace Common.Utility.Extensions.HttpClient
         }
 
         /// <summary>
-        ///     Set UserAgent
+        /// Set UserAgent
         /// </summary>
-        /// <param name="this"></param>
-        /// <param name="userAgent"></param>
+        /// <param name="this"> </param>
+        /// <param name="userAgent"> </param>
         public static void UseUserAgent(this global::System.Net.Http.HttpClient @this, string userAgent = null)
         {
             @this.DefaultRequestHeaders.UserAgent.Clear();

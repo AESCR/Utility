@@ -1,4 +1,5 @@
 ﻿using BenchmarkDotNet.Running;
+using Common.Benchmarks.LogRedis;
 
 namespace Common.Benchmarks
 {
@@ -8,7 +9,9 @@ namespace Common.Benchmarks
 
         private static void Main(string[] args)
         {
-            var summary = BenchmarkRunner.Run(typeof(Program).Assembly);
+            BenchmarkRunner.Run(typeof(LogRedisTest).Assembly);
+
+            // BenchmarkRunner.Run(typeof(Program).Assembly);
         }
 
         #endregion Private Methods

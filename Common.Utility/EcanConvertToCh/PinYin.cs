@@ -7,10 +7,10 @@ namespace Common.Utility
         #region Public Methods
 
         /// <summary>
-        ///     取汉字拼音的首字母
+        /// 取汉字拼音的首字母
         /// </summary>
-        /// <param name="UnName">汉字</param>
-        /// <returns>首字母</returns>
+        /// <param name="UnName"> 汉字 </param>
+        /// <returns> 首字母 </returns>
         public static string GetCodstring(string UnName)
         {
             var i = 0;

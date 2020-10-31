@@ -2,8 +2,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 
 /// <summary>
-///     INI文件读写类。
-///     Copyright (C) Maticsoft
+/// INI文件读写类。 Copyright (C) Maticsoft
 /// </summary>
 public class INIFile
 {
@@ -25,7 +24,7 @@ public class INIFile
     #region Public Methods
 
     /// <summary>
-    ///     删除ini文件下所有段落
+    /// 删除ini文件下所有段落
     /// </summary>
     public void ClearAllSection()
     {
@@ -33,20 +32,20 @@ public class INIFile
     }
 
     /// <summary>
-    ///     删除ini文件下personal段落下的所有键
+    /// 删除ini文件下personal段落下的所有键
     /// </summary>
-    /// <param name="Section"></param>
+    /// <param name="Section"> </param>
     public void ClearSection(string Section)
     {
         IniWriteValue(Section, null, null);
     }
 
     /// <summary>
-    ///     读取INI文件
+    /// 读取INI文件
     /// </summary>
-    /// <param name="Section"></param>
-    /// <param name="Key"></param>
-    /// <returns></returns>
+    /// <param name="Section"> </param>
+    /// <param name="Key"> </param>
+    /// <returns> </returns>
     public string IniReadValue(string Section, string Key)
     {
         var temp = new StringBuilder(255);
@@ -62,11 +61,11 @@ public class INIFile
     }
 
     /// <summary>
-    ///     写INI文件
+    /// 写INI文件
     /// </summary>
-    /// <param name="Section"></param>
-    /// <param name="Key"></param>
-    /// <param name="Value"></param>
+    /// <param name="Section"> </param>
+    /// <param name="Key"> </param>
+    /// <param name="Value"> </param>
     public void IniWriteValue(string Section, string Key, string Value)
     {
         WritePrivateProfileString(Section, Key, Value, path);

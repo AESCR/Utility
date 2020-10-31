@@ -1,21 +1,27 @@
+using Newtonsoft.Json;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
-using Newtonsoft.Json;
 
 namespace Common.Utility.JwtBearer
 {
     /// <summary>
-    ///     当前会话对象
+    /// 当前会话对象
     /// </summary>
-    public  class NullDySession
+    public class NullDySession
     {
+        #region Private Constructors
+
         private NullDySession()
         {
         }
 
+        #endregion Private Constructors
+
+        #region Public Properties
+
         /// <summary>
-        ///     获取DySession实例
+        /// 获取DySession实例
         /// </summary>
         public static NullDySession Instance { get; } = new NullDySession();
 
@@ -36,6 +42,6 @@ namespace Common.Utility.JwtBearer
             }
         }
 
-      
+        #endregion Public Properties
     }
 }

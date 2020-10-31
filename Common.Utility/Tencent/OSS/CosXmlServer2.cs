@@ -39,8 +39,8 @@ namespace Common.Utility.Tencent.OSS
         /// <summary>
         /// 实例化 COS API 服务接口。
         /// </summary>
-        /// <param name="config">提供配置 SDK 接口。</param>
-        /// <param name="cosCredentialProvider">提供设置密钥信息接口。</param>
+        /// <param name="config"> 提供配置 SDK 接口。 </param>
+        /// <param name="cosCredentialProvider"> 提供设置密钥信息接口。 </param>
         public CosXmlServer2(CosXmlConfig config, QCloudCredentialProvider cosCredentialProvider, string bucket)
         {
             _qcloud = cosCredentialProvider;
@@ -75,16 +75,16 @@ namespace Common.Utility.Tencent.OSS
         }
 
         /// <summary>
-        ///  临时密钥 实例化 COS API 服务接口。
+        /// 临时密钥 实例化 COS API 服务接口。
         /// </summary>
-        /// <param name="appid">设置腾讯云账户的账户标识 APPID</param>
-        /// <param name="region">设置一个默认的存储桶地域</param>
-        /// <param name="tmpSecretId"></param>
-        /// <param name="tmpSecretKey"></param>
-        /// <param name="tmpToken"></param>
-        /// <param name="tmpExpireTime"></param>
-        /// <param name="https"></param>
-        /// <param name="showLogs"></param>
+        /// <param name="appid"> 设置腾讯云账户的账户标识 APPID </param>
+        /// <param name="region"> 设置一个默认的存储桶地域 </param>
+        /// <param name="tmpSecretId"> </param>
+        /// <param name="tmpSecretKey"> </param>
+        /// <param name="tmpToken"> </param>
+        /// <param name="tmpExpireTime"> </param>
+        /// <param name="https"> </param>
+        /// <param name="showLogs"> </param>
         public CosXmlServer2(string appid, string region, string tmpSecretId, string tmpSecretKey, string tmpToken, long tmpExpireTime, string bucket, bool https = true, bool showLogs = true)
         {
             _config = new CosXmlConfig.Builder()
@@ -107,8 +107,8 @@ namespace Common.Utility.Tencent.OSS
         /// <summary>
         /// 下载更新进度回调
         /// </summary>
-        /// <param name="completed"></param>
-        /// <param name="total"></param>
+        /// <param name="completed"> </param>
+        /// <param name="total"> </param>
         public delegate void DownLoadProgress(long completed, long total);
 
         public delegate void PutFail(CosClientException clientEx, CosServerException serverEx);
@@ -116,8 +116,8 @@ namespace Common.Utility.Tencent.OSS
         /// <summary>
         /// 上传更新进度回调
         /// </summary>
-        /// <param name="completed"></param>
-        /// <param name="total"></param>
+        /// <param name="completed"> </param>
+        /// <param name="total"> </param>
         public delegate void PutProgress(long completed, long total);
 
         public delegate void PutSuccess(CosResult CosResult);
@@ -129,10 +129,10 @@ namespace Common.Utility.Tencent.OSS
         /// <summary>
         /// 创建存储桶
         /// </summary>
-        /// <param name="bucket">存储桶名称    格式：BucketName-APPID</param>
-        /// <param name="signStartTimeSecond">签名有效期起始时间（Unix 时间戳），例如1557902800 </param>
-        /// <param name="durationSecond">签名有效期时长（单位为秒），例如签名有效时期为1分钟：60</param>
-        /// <returns></returns>
+        /// <param name="bucket"> 存储桶名称 格式：BucketName-APPID </param>
+        /// <param name="signStartTimeSecond"> 签名有效期起始时间（Unix 时间戳），例如1557902800 </param>
+        /// <param name="durationSecond"> 签名有效期时长（单位为秒），例如签名有效时期为1分钟：60 </param>
+        /// <returns> </returns>
         public CosResult CreateBucket(long signStartTimeSecond, long durationSecond)
         {
             try
@@ -155,9 +155,9 @@ namespace Common.Utility.Tencent.OSS
         /// <summary>
         /// 创建存储桶
         /// </summary>
-        /// <param name="bucket">存储桶名称    格式：BucketName-APPID</param>
-        /// <param name="durationSecond">设置签名有效时长</param>
-        /// <returns></returns>
+        /// <param name="bucket"> 存储桶名称 格式：BucketName-APPID </param>
+        /// <param name="durationSecond"> 设置签名有效时长 </param>
+        /// <returns> </returns>
         public CosResult CreateBucket(long durationSecond)
         {
             try
@@ -179,8 +179,8 @@ namespace Common.Utility.Tencent.OSS
         /// <summary>
         /// 删除存储桶
         /// </summary>
-        /// <param name="bucket">存储桶名</param>
-        /// <returns></returns>
+        /// <param name="bucket"> 存储桶名 </param>
+        /// <returns> </returns>
         public CosResult DeleteBucket(string bucket)
         {
             try
@@ -200,10 +200,10 @@ namespace Common.Utility.Tencent.OSS
         /// <summary>
         /// 删除存储桶
         /// </summary>
-        /// <param name="bucket">存储桶名</param>
-        /// <param name="signStartTimeSecond">签名有效期起始时间（Unix 时间戳），例如1557902800 </param>
-        /// <param name="durationSecond">签名有效期时长（单位为秒），例如签名有效时期为1分钟：60</param>
-        /// <returns></returns>
+        /// <param name="bucket"> 存储桶名 </param>
+        /// <param name="signStartTimeSecond"> 签名有效期起始时间（Unix 时间戳），例如1557902800 </param>
+        /// <param name="durationSecond"> 签名有效期时长（单位为秒），例如签名有效时期为1分钟：60 </param>
+        /// <returns> </returns>
         public CosResult DeleteBucket(long signStartTimeSecond, long durationSecond)
         {
             try
@@ -265,12 +265,12 @@ namespace Common.Utility.Tencent.OSS
         /// <summary>
         /// 下载对象
         /// </summary>
-        /// <param name="bucket">存储桶名</param>
-        /// <param name="key">Key</param>
-        /// <param name="localDir">下载路径</param>
-        /// <param name="localFileName">文件名称</param>
-        /// <param name="downLoadProgress">下载进度回调</param>
-        /// <returns></returns>
+        /// <param name="bucket"> 存储桶名 </param>
+        /// <param name="key"> Key </param>
+        /// <param name="localDir"> 下载路径 </param>
+        /// <param name="localFileName"> 文件名称 </param>
+        /// <param name="downLoadProgress"> 下载进度回调 </param>
+        /// <returns> </returns>
         public CosResult DownLoadObject(string key, string localDir, string localFileName, DownLoadProgress downLoadProgress)
         {
             try
@@ -297,7 +297,7 @@ namespace Common.Utility.Tencent.OSS
         /// <summary>
         /// 计算签名
         /// </summary>
-        /// <returns></returns>
+        /// <returns> </returns>
         public string GenerateSign(string method, string key = "", Dictionary<string, string> queryParameters = null, Dictionary<string, string> headers = null, long signDurationSecond = 60)
         {
             return _cosXml.GenerateSign(method, key, queryParameters, headers, signDurationSecond);
@@ -306,9 +306,9 @@ namespace Common.Utility.Tencent.OSS
         /// <summary>
         /// 查询对象列表
         /// </summary>
-        /// <param name="bucket">桶名</param>
-        /// <param name="prefix">获取 /xxx 下的对象</param>
-        /// <returns></returns>
+        /// <param name="bucket"> 桶名 </param>
+        /// <param name="prefix"> 获取 /xxx 下的对象 </param>
+        /// <returns> </returns>
         public CosResult GetBucket(string prefix = "")
         {
             try
@@ -335,7 +335,7 @@ namespace Common.Utility.Tencent.OSS
         /// <summary>
         /// 查询存储桶的访问控制列表。
         /// </summary>
-        /// <returns></returns>
+        /// <returns> </returns>
         public CosResult GetBucketAcl(string bucket)
         {
             try
@@ -357,16 +357,16 @@ namespace Common.Utility.Tencent.OSS
         /// <summary>
         /// 获取请求预签名 URL
         /// </summary>
-        /// <param name="appid">腾讯云账号 APPID</param>
-        /// <param name="bucket">存储桶</param>
-        /// <param name="region">存储桶所在地域</param>
-        /// <param name="method">HTTP 请求方法</param>
-        /// <param name="isHttps">true：HTTPS 请求，false：HTTP 请求</param>
-        /// <param name="key">HTTP 请求路径，即对象键</param>
-        /// <param name="headers">签名是否校验 header</param>
-        /// <param name="queryParameters">签名是否校验请求 url 中查询参数</param>
-        /// <param name="signDurationSecond">签名有效期时长（单位为秒），例如签名有效时期为1分钟：60</param>
-        /// <returns></returns>
+        /// <param name="appid"> 腾讯云账号 APPID </param>
+        /// <param name="bucket"> 存储桶 </param>
+        /// <param name="region"> 存储桶所在地域 </param>
+        /// <param name="method"> HTTP 请求方法 </param>
+        /// <param name="isHttps"> true：HTTPS 请求，false：HTTP 请求 </param>
+        /// <param name="key"> HTTP 请求路径，即对象键 </param>
+        /// <param name="headers"> 签名是否校验 header </param>
+        /// <param name="queryParameters"> 签名是否校验请求 url 中查询参数 </param>
+        /// <param name="signDurationSecond"> 签名有效期时长（单位为秒），例如签名有效时期为1分钟：60 </param>
+        /// <returns> </returns>
         public string GetGenerateSignUrL(string method, string appid, string region, string key, bool isHttps = true, Dictionary<string, string> headers = null, Dictionary<string, string> queryParameters = null, long signDurationSecond = 60)
         {
             PreSignatureStruct preSignatureStruct = new PreSignatureStruct
@@ -387,8 +387,8 @@ namespace Common.Utility.Tencent.OSS
         /// <summary>
         /// 获取请求预签名 URL
         /// </summary>
-        /// <param name="preSignatureStruct"></param>
-        /// <returns></returns>
+        /// <param name="preSignatureStruct"> </param>
+        /// <returns> </returns>
         public string GetGenerateSignUrL(PreSignatureStruct preSignatureStruct)
         {
             return _cosXml.GenerateSignURL(preSignatureStruct);
@@ -397,13 +397,13 @@ namespace Common.Utility.Tencent.OSS
         /// <summary>
         /// 获取请求预签名 URL
         /// </summary>
-        /// <param name="bucket">存储桶</param>
-        /// <param name="region">存储桶所在地域</param>
-        /// <param name="key">对象键（Object 的名称），对象在存储桶中的唯一标识，如果请求操作是对文件的，则为文件名，且为必须参数。如果操作是对于存储桶，则为空</param>
-        /// <param name="headers">签名是否校验 header</param>
-        /// <param name="queryParameters">签名是否校验请求 url 中查询参数</param>
-        /// <param name="signDurationSecond">签名有效期时长（单位为秒），例如签名有效时期为1分钟：60</param>
-        /// <returns></returns>
+        /// <param name="bucket"> 存储桶 </param>
+        /// <param name="region"> 存储桶所在地域 </param>
+        /// <param name="key"> 对象键（Object 的名称），对象在存储桶中的唯一标识，如果请求操作是对文件的，则为文件名，且为必须参数。如果操作是对于存储桶，则为空 </param>
+        /// <param name="headers"> 签名是否校验 header </param>
+        /// <param name="queryParameters"> 签名是否校验请求 url 中查询参数 </param>
+        /// <param name="signDurationSecond"> 签名有效期时长（单位为秒），例如签名有效时期为1分钟：60 </param>
+        /// <returns> </returns>
         public string GetGenerateSignUrL(string httpMethod, string region, string key = "", Dictionary<string, string> headers = null, Dictionary<string, string> queryParameters = null, long signDurationSecond = 60)
         {
             if (_config != null)
@@ -426,8 +426,8 @@ namespace Common.Utility.Tencent.OSS
         /// <summary>
         /// 获取对象 URL
         /// </summary>
-        /// <param name="cosRequest">上传结果</param>
-        /// <returns></returns>
+        /// <param name="cosRequest"> 上传结果 </param>
+        /// <returns> </returns>
         public string GetUrl(CosRequest cosRequest)
         {
             return _cosXml.GetAccessURL(cosRequest);
@@ -461,9 +461,9 @@ namespace Common.Utility.Tencent.OSS
         /// <summary>
         /// 判断对象是否存在
         /// </summary>
-        /// <param name="bucket"></param>
-        /// <param name="key"></param>
-        /// <returns></returns>
+        /// <param name="bucket"> </param>
+        /// <param name="key"> </param>
+        /// <returns> </returns>
         public CosResult HaveObject(string key)
         {
             try
@@ -484,11 +484,11 @@ namespace Common.Utility.Tencent.OSS
         /// <summary>
         /// 表单上传对象
         /// </summary>
-        /// <param name="bucket">存储桶</param>
-        /// <param name="key">对象键</param>
-        /// <param name="srcPath">本地文件</param>
-        /// <param name="putObjectProgress">回调上传进度</param>
-        /// <returns></returns>
+        /// <param name="bucket"> 存储桶 </param>
+        /// <param name="key"> 对象键 </param>
+        /// <param name="srcPath"> 本地文件 </param>
+        /// <param name="putObjectProgress"> 回调上传进度 </param>
+        /// <returns> </returns>
         public CosResult PostObject(string key, string srcPath, PutProgress putObjectProgress)
         {
             try
@@ -513,12 +513,12 @@ namespace Common.Utility.Tencent.OSS
         /// <summary>
         /// 上传大文件
         /// </summary>
-        /// <param name="bucket">存储桶</param>
-        /// <param name="key">对象键</param>
-        /// <param name="srcPath">本地路径</param>
-        /// <param name="putBigObjectProgress">上传进度回调</param>
-        /// <param name="putSuccess">上传成功</param>
-        /// <param name="putFail">上传失败</param>
+        /// <param name="bucket"> 存储桶 </param>
+        /// <param name="key"> 对象键 </param>
+        /// <param name="srcPath"> 本地路径 </param>
+        /// <param name="putBigObjectProgress"> 上传进度回调 </param>
+        /// <param name="putSuccess"> 上传成功 </param>
+        /// <param name="putFail"> 上传失败 </param>
         public void PutBigObject(string key, string srcPath, PutProgress putBigObjectProgress, PutSuccess putSuccess, PutFail putFail)
         {
             TransferManager transferManager = new TransferManager(_cosXml, new TransferConfig());
@@ -542,11 +542,11 @@ namespace Common.Utility.Tencent.OSS
         /// <summary>
         /// 设置存储桶ACL
         /// </summary>
-        /// <param name="bucket">存储桶</param>
-        /// <param name="cosAcl">读写权限</param>
-        /// <param name="ownerUin">根账号</param>
-        /// <param name="subUin">子账号</param>
-        /// <returns></returns>
+        /// <param name="bucket"> 存储桶 </param>
+        /// <param name="cosAcl"> 读写权限 </param>
+        /// <param name="ownerUin"> 根账号 </param>
+        /// <param name="subUin"> 子账号 </param>
+        /// <returns> </returns>
         public CosResult PutBucketAcl(CosACL cosAcl, string ownerUin, string subUin)
         {
             try
@@ -574,11 +574,11 @@ namespace Common.Utility.Tencent.OSS
         /// <summary>
         /// 上传一个对象到存储桶
         /// </summary>
-        /// <param name="bucket">存储桶名</param>
-        /// <param name="key">对象在存储桶中的位置 即称对象键</param>
-        /// <param name="data">文件字节</param>
-        /// <param name="putObjectProgress">滚动条进度</param>
-        /// <returns></returns>
+        /// <param name="bucket"> 存储桶名 </param>
+        /// <param name="key"> 对象在存储桶中的位置 即称对象键 </param>
+        /// <param name="data"> 文件字节 </param>
+        /// <param name="putObjectProgress"> 滚动条进度 </param>
+        /// <returns> </returns>
         public CosResult PutByteObject(string key, byte[] data, PutProgress putObjectProgress)
         {
             try
@@ -631,10 +631,10 @@ namespace Common.Utility.Tencent.OSS
         /// <summary>
         /// 上传一个文件
         /// </summary>
-        /// <param name="bucket"></param>
-        /// <param name="key"></param>
-        /// <param name="data"></param>
-        /// <returns></returns>
+        /// <param name="bucket"> </param>
+        /// <param name="key"> </param>
+        /// <param name="data"> </param>
+        /// <returns> </returns>
         public CosResult PutByteObject(string key, byte[] data)
         {
             try
@@ -655,19 +655,19 @@ namespace Common.Utility.Tencent.OSS
         /// <summary>
         /// 上传大文件成功回调
         /// </summary>
-        /// <param name="CosResult ">响应结果</param>
+        /// <param name="CosResult "> 响应结果 </param>
         /// <summary>
         /// 上传大文件失败错误
         /// </summary>
-        /// <param name="clientEx"></param>
-        /// <param name="serverEx"></param>
+        /// <param name="clientEx"> </param>
+        /// <param name="serverEx"> </param>
         /// <summary>
         /// 上传一个对象至存储桶
         /// </summary>
-        /// <param name="key">对象在存储桶中的位置 即称对象键</param>
-        /// <param name="srcPath">本地文件绝对路径</param>
-        /// <param name="putObjectProgress">滚动条进度</param>
-        /// <returns></returns>
+        /// <param name="key"> 对象在存储桶中的位置 即称对象键 </param>
+        /// <param name="srcPath"> 本地文件绝对路径 </param>
+        /// <param name="putObjectProgress"> 滚动条进度 </param>
+        /// <returns> </returns>
         public CosResult PutObject(string key, string srcPath, PutProgress putObjectProgress)
         {
             try
@@ -693,13 +693,13 @@ namespace Common.Utility.Tencent.OSS
         /// <summary>
         /// 上传一个对象至存储桶
         /// </summary>
-        /// <param name="bucket">存储桶名</param>
-        /// <param name="key">对象在存储桶中的位置 即称对象键</param>
-        /// <param name="srcPath">本地文件绝对路径</param>
-        /// <param name="signStartTimeSecond">签名有效期起始时间（Unix 时间戳），例如1557902800 </param>
-        /// <param name="durationSecond">签名有效期时长（单位为秒），例如签名有效时期为1分钟：60</param>
-        /// <param name="putObjectProgress">滚动条进度</param>
-        /// <returns></returns>
+        /// <param name="bucket"> 存储桶名 </param>
+        /// <param name="key"> 对象在存储桶中的位置 即称对象键 </param>
+        /// <param name="srcPath"> 本地文件绝对路径 </param>
+        /// <param name="signStartTimeSecond"> 签名有效期起始时间（Unix 时间戳），例如1557902800 </param>
+        /// <param name="durationSecond"> 签名有效期时长（单位为秒），例如签名有效时期为1分钟：60 </param>
+        /// <param name="putObjectProgress"> 滚动条进度 </param>
+        /// <returns> </returns>
         public CosResult PutObject(string key, string srcPath, long signStartTimeSecond, long durationSecond, PutProgress putObjectProgress)
         {
             try
@@ -724,9 +724,9 @@ namespace Common.Utility.Tencent.OSS
         /// <summary>
         /// 预签名 URL上传对象
         /// </summary>
-        /// <param name="requestSignUrl">上传预签名 URL</param>
-        /// <param name="srcPath">本地文件</param>
-        /// <param name="putObjectProgress">回调进度</param>
+        /// <param name="requestSignUrl"> 上传预签名 URL </param>
+        /// <param name="srcPath"> 本地文件 </param>
+        /// <param name="putObjectProgress"> 回调进度 </param>
         public CosResult PutObject2(string requestSignUrl, string srcPath, PutProgress putObjectProgress)
         {
             try
@@ -752,7 +752,7 @@ namespace Common.Utility.Tencent.OSS
         /// <summary>
         /// 获取所有存储桶
         /// </summary>
-        /// <returns></returns>
+        /// <returns> </returns>
         public CosResult ShowBucketList()
         {
             try

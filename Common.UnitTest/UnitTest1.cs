@@ -11,7 +11,7 @@ using System.Net.Http;
 using System.Text;
 using Common.Utility;
 using Common.Utility.Extensions.HttpClient;
-using Common.Utility.MemoryCache.Options;
+using Common.Utility.MemoryCache.Model;
 using Common.Utility.Random.ChineseName;
 using Common.Utility.Random.Num;
 using Microsoft.Extensions.Caching.Memory;

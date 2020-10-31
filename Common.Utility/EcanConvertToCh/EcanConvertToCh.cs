@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 namespace Common.Utility
 {
     /// <summary>
-    ///     汉字转拼音类
+    /// 汉字转拼音类
     /// </summary>
     public class EcanConvertToCh
     {
@@ -91,10 +91,10 @@ namespace Common.Utility
         #region Public Methods
 
         /// <summary>
-        ///     汉字转换成全拼的拼音
+        /// 汉字转换成全拼的拼音
         /// </summary>
-        /// <param name="Chstr">汉字字符串</param>
-        /// <returns>转换后的拼音字符串</returns>
+        /// <param name="Chstr"> 汉字字符串 </param>
+        /// <returns> 转换后的拼音字符串 </returns>
         public string convertCh(string Chstr)
         {
             var reg = new Regex("^[\u4e00-\u9fa5]$"); //验证是否输入汉字

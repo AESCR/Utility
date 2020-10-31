@@ -1,20 +1,19 @@
-using System;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace Common.Utility
 {
     /// <summary>
-    ///     �õ������ȫ�루��ϣ���ܣ���
+    /// �õ������ȫ�루��ϣ���ܣ���
     /// </summary>
     public class HashEncode
     {
         #region Public Methods
 
         /// <summary>
-        ///     �õ�һ�������ֵ
+        /// �õ�һ�������ֵ
         /// </summary>
-        /// <returns></returns>
+        /// <returns> </returns>
         public static string GetRandomValue()
         {
             var Seed = new System.Random();
@@ -23,9 +22,9 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     �õ������ϣ�����ַ���
+        /// �õ������ϣ�����ַ���
         /// </summary>
-        /// <returns></returns>
+        /// <returns> </returns>
         public static string GetSecurity()
         {
             var Security = HashEncoding(GetRandomValue());
@@ -33,10 +32,10 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     ��ϣ����һ���ַ���
+        /// ��ϣ����һ���ַ���
         /// </summary>
-        /// <param name="Security"></param>
-        /// <returns></returns>
+        /// <param name="Security"> </param>
+        /// <returns> </returns>
         public static string HashEncoding(string Security)
         {
             byte[] Value;

@@ -8,16 +8,18 @@ namespace Common.Utility.Random.Num
         #region Public Methods
 
         private readonly System.Random _ra;
+
         public RandomNum()
         {
-            _ra= new System.Random();
+            _ra = new System.Random();
         }
+
         /// <summary>
         /// 获取一个随机数
         /// </summary>
-        /// <param name="minValue"></param>
-        /// <param name="maxValue"></param>
-        /// <returns></returns>
+        /// <param name="minValue"> </param>
+        /// <param name="maxValue"> </param>
+        /// <returns> </returns>
         public int GetRandomNum(int minValue, int maxValue)
         {
             return _ra.Next(minValue, maxValue);
@@ -26,10 +28,10 @@ namespace Common.Utility.Random.Num
         /// <summary>
         /// 获取一组随机数 不重复
         /// </summary>
-        /// <param name="num">随机数个数</param>
-        /// <param name="minValue">最小值</param>
-        /// <param name="maxValue">最大值</param>
-        /// <returns></returns>
+        /// <param name="num"> 随机数个数 </param>
+        /// <param name="minValue"> 最小值 </param>
+        /// <param name="maxValue"> 最大值 </param>
+        /// <returns> </returns>
         public int[] GetRandomNums(int num, int minValue, int maxValue)
         {
             System.Random ra = new System.Random(unchecked((int)DateTime.Now.Ticks));
@@ -61,18 +63,29 @@ namespace Common.Utility.Random.Num
 
             return tmp;
         }
+
         /// <summary>
-        ///     生成一个0.0到1.0的随机小数
+        /// 生成具有唯一编号的字符串
         /// </summary>
-        public double GetRandomDouble()
+        /// <returns> The check code number. </returns>
+        /// <param name="codeCount"> Code count. Max 10 </param>
+        public string GenerateCheckCodeNum(int codeCount)
         {
-            return _ra.NextDouble();
+            codeCount = codeCount > 10 ? 10 : codeCount; // unable to return unique number list longer than 10
+            int[] arrInt = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            arrInt = arrInt.OrderBy(c => Guid.NewGuid()).ToArray(); // make the array in random order
+
+            var str = string.Empty;
+
+            for (var i = 0; i < codeCount; i++) str += arrInt[i];
+            return str;
         }
+
         /// <summary>
-        ///     对一个数组进行随机排序
+        /// 对一个数组进行随机排序
         /// </summary>
-        /// <typeparam name="T">数组的类型</typeparam>
-        /// <param name="arr">需要随机排序的数组</param>
+        /// <typeparam name="T"> 数组的类型 </typeparam>
+        /// <param name="arr"> 需要随机排序的数组 </param>
         public void GetRandomArray<T>(T[] arr)
         {
             //对数组进行随机排序的算法:随机选择两个位置，将两个位置上的值交换
@@ -96,22 +109,32 @@ namespace Common.Utility.Random.Num
                 arr[targetIndex2] = temp;
             }
         }
+
         /// <summary>
-        ///     生成一个指定范围的随机整数，该随机数范围包括最小值，但不包括最大值
+        /// 生成一个0.0到1.0的随机小数
         /// </summary>
-        /// <param name="minNum">最小值</param>
-        /// <param name="maxNum">最大值</param>
+        public double GetRandomDouble()
+        {
+            return _ra.NextDouble();
+        }
+
+        /// <summary>
+        /// 生成一个指定范围的随机整数，该随机数范围包括最小值，但不包括最大值
+        /// </summary>
+        /// <param name="minNum"> 最小值 </param>
+        /// <param name="maxNum"> 最大值 </param>
         public int GetRandomInt(int minNum, int maxNum)
         {
             return _ra.Next(minNum, maxNum);
         }
+
         /// <summary>
         /// 随机字符串
         /// </summary>
-        /// <param name="stringLength"></param>
-        /// <param name="randomString"></param>
-        /// <returns></returns>
-        public string GetRandomString(int stringLength,string randomString="0123456789ABCDEFGHIJKMLNOPQRSTUVWXYZ")
+        /// <param name="stringLength"> </param>
+        /// <param name="randomString"> </param>
+        /// <returns> </returns>
+        public string GetRandomString(int stringLength, string randomString = "0123456789ABCDEFGHIJKMLNOPQRSTUVWXYZ")
         {
             var returnValue = string.Empty;
             for (var i = 0; i < stringLength; i++)
@@ -120,22 +143,6 @@ namespace Common.Utility.Random.Num
                 returnValue += randomString[r];
             }
             return returnValue;
-        }
-        /// <summary>
-        ///   生成具有唯一编号的字符串
-        /// </summary>
-        /// <returns>The check code number.</returns>
-        /// <param name="codeCount">Code count. Max 10</param>
-        public string GenerateCheckCodeNum(int codeCount)
-        {
-            codeCount = codeCount > 10 ? 10 : codeCount; // unable to return unique number list longer than 10
-            int[] arrInt = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-            arrInt = arrInt.OrderBy(c => Guid.NewGuid()).ToArray(); // make the array in random order
-
-            var str = string.Empty;
-
-            for (var i = 0; i < codeCount; i++) str += arrInt[i];
-            return str;
         }
 
         #endregion Private Methods

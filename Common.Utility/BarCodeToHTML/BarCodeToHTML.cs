@@ -148,12 +148,12 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     获取12位39码的Html字符串
+        /// 获取12位39码的Html字符串
         /// </summary>
-        /// <param name="s">转换的字符串</param>
-        /// <param name="width">条码的宽度</param>
-        /// <param name="height">条码的高度</param>
-        /// <returns>html</returns>
+        /// <param name="s"> 转换的字符串 </param>
+        /// <param name="width"> 条码的宽度 </param>
+        /// <param name="height"> 条码的高度 </param>
+        /// <returns> html </returns>
         public static string Get39Html(string s, int width, int height)
         {
             var ht = new Hashtable();
@@ -320,8 +320,7 @@ namespace Common.Utility
 
             s += checkcode; //变成13位
 
-            // 000000000101左侧42个01010右侧35个校验7个101000000000
-            // 6        101左侧6位 01010右侧5位校验1位101000000000
+            // 000000000101左侧42个01010右侧35个校验7个101000000000 6 101左侧6位 01010右侧5位校验1位101000000000
 
             var result_bin = ""; //二进制串
             result_bin += "000000000101";
@@ -382,12 +381,12 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     获取EAN13码Html字符串
+        /// 获取EAN13码Html字符串
         /// </summary>
-        /// <param name="s">转换的字符串</param>
-        /// <param name="width">条码的宽度</param>
-        /// <param name="height">条码的高度</param>
-        /// <returns></returns>
+        /// <param name="s"> 转换的字符串 </param>
+        /// <param name="width"> 条码的宽度 </param>
+        /// <param name="height"> 条码的高度 </param>
+        /// <returns> </returns>
         public static string GetEAN13Html(string s, int width, int height)
         {
             var checkcode_input = -1; //输入的校验码
@@ -414,8 +413,7 @@ namespace Common.Utility
 
             s += checkcode; //变成13位
 
-            // 000000000101左侧42个01010右侧35个校验7个101000000000
-            // 6        101左侧6位 01010右侧5位校验1位101000000000
+            // 000000000101左侧42个01010右侧35个校验7个101000000000 6 101左侧6位 01010右侧5位校验1位101000000000
 
             var result_bin = ""; //二进制串
             result_bin += "000000000101";

@@ -1,29 +1,31 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace Utilities
 {
     /// <summary>
-    ///     系统操作相关的公共类
+    /// 系统操作相关的公共类
     /// </summary>
     public static class SysHelper
     {
         #region Public Properties
 
         /// <summary>
-        ///     获取当前应用程序域
+        /// 获取当前应用程序域
         /// </summary>
         public static AppDomain CurrentAppDomain => Thread.GetDomain();
 
         /// <summary>
-        ///     获取GUID值
+        /// 获取GUID值
         /// </summary>
         public static string NewGUID => Guid.NewGuid().ToString();
 
         /// <summary>
-        ///     获取换行字符
+        /// 获取换行字符
         /// </summary>
         public static string NewLine => Environment.NewLine;
 
@@ -32,16 +34,55 @@ namespace Utilities
         #region Public Methods
 
         /// <summary>
-        ///     获取指定调用层级的方法名
+        /// 获取程序集描述说明
         /// </summary>
-        /// <param name="level">调用的层数</param>
+        /// <returns> </returns>
+        public static string GetAssemblyDescription()
+        {
+            object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
+            if (attributes.Length == 0)
+            {
+                return "";
+            }
+            return ((AssemblyDescriptionAttribute)attributes[0]).Description;
+        }
+
+        /// <summary>
+        /// 获取程序集标题
+        /// </summary>
+        /// <returns> </returns>
+        public static string GetAssemblyTitle()
+        {
+            object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
+            if (attributes.Length > 0)
+            {
+                AssemblyTitleAttribute title = (AssemblyTitleAttribute)attributes[0];
+                if (!string.IsNullOrEmpty(title.Title))
+                    return title.Title;
+            }
+            return Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
+        }
+
+        /// <summary>
+        /// 获取程序集版本
+        /// </summary>
+        /// <returns> </returns>
+        public static string GetAssemblyVersion()
+        {
+            return Assembly.GetExecutingAssembly().GetName().Version?.ToString();
+        }
+
+        /// <summary>
+        /// 获取指定调用层级的方法名
+        /// </summary>
+        /// <param name="level"> 调用的层数 </param>
         public static string GetMethodName(int level)
         {
             //创建一个堆栈跟踪
             var trace = new StackTrace();
 
             //获取指定调用层级的方法名
-            return trace.GetFrame(level).GetMethod().Name;
+            return trace.GetFrame(level)?.GetMethod()?.Name;
         }
 
         #region Console
@@ -49,8 +90,8 @@ namespace Utilities
         /// <summary>
         /// 获取对象所使用的内存
         /// </summary>
-        /// <param name="this"></param>
-        /// <returns></returns>
+        /// <param name="this"> </param>
+        /// <returns> </returns>
         public static string GetMemory(object @this)
         {
             GCHandle handle = GCHandle.Alloc(@this, GCHandleType.WeakTrackResurrection);
@@ -60,6 +101,43 @@ namespace Utilities
             Console.WriteLine($"Memory地址:{result}");
             Console.WriteLine("------------------------------------------------------------");
             return result;
+        }
+
+        /// <summary>
+        /// 输出进程使用的内存
+        /// </summary>
+        /// <param name="this"> </param>
+        /// <returns> </returns>
+        public static double GetProcessUsedMemory(Process @this)
+        {
+            double usedMemory = @this.WorkingSet64 / 1024.0 / 1024.0;
+            Console.WriteLine($"----------进程名：{@this.ProcessName}------------");
+            Console.WriteLine($"进程Id：{@this.Id}所使用内存:{usedMemory}MB");
+            Console.WriteLine("------------------------------------------------------------");
+            return usedMemory;
+        }
+
+        /// <summary>
+        /// 获取程序信息
+        /// </summary>
+        public static void SystemInfo()
+        {
+            Console.WriteLine("进程的详细信息");
+            Process MyProcess = Process.GetCurrentProcess();
+            Console.WriteLine("进程映像名：" + MyProcess.ProcessName);
+            Console.WriteLine("进程ID：" + MyProcess.Id);
+            Console.WriteLine("启动线程数：" + MyProcess.Threads.Count.ToString());
+            Console.WriteLine("CPU占用时间：" + MyProcess.TotalProcessorTime.ToString());
+            Console.WriteLine("线程优先级：" + MyProcess.PriorityClass.ToString());
+            Console.WriteLine("启动时间：" + MyProcess.StartTime.ToLongTimeString());
+            Console.WriteLine("专用内存：" + (MyProcess.PrivateMemorySize / 1024).ToString() + "K");
+            Console.WriteLine("峰值虚拟内存：" + (MyProcess.PeakVirtualMemorySize / 1024).ToString() + "K");
+            Console.WriteLine("峰值分页内存：" + (MyProcess.PeakPagedMemorySize / 1024).ToString() + "K");
+            Console.WriteLine("分页系统内存：" + (MyProcess.PagedSystemMemorySize / 1024).ToString() + "K");
+            Console.WriteLine("分页内存：" + (MyProcess.PagedMemorySize / 1024).ToString() + "K");
+            Console.WriteLine("未分页系统内存：" + (MyProcess.NonpagedSystemMemorySize / 1024).ToString() + "K");
+            Console.WriteLine("物理内存：" + (MyProcess.WorkingSet / 1024).ToString() + "K");
+            Console.WriteLine("虚拟内存：" + (MyProcess.VirtualMemorySize / 1024).ToString() + "K");
         }
 
         public static bool WriteEqual(object obj1, object obj2)
@@ -79,7 +157,7 @@ namespace Utilities
         /// <summary>
         /// 输出对象基本信息
         /// </summary>
-        /// <param name="this"></param>
+        /// <param name="this"> </param>
         public static object WriteInfo(object @this)
         {
             var process = Process.GetCurrentProcess().Id;
@@ -92,43 +170,9 @@ namespace Utilities
             Console.WriteLine("------------------------------------------------------------");
             return @this;
         }
-        /// <summary>
-        /// 输出进程使用的内存
-        /// </summary>
-        /// <param name="this"></param>
-        /// <returns></returns>
-        public static double GetProcessUsedMemory(Process @this)
-        {
-            double usedMemory = @this.WorkingSet64 / 1024.0 / 1024.0;
-            Console.WriteLine($"----------进程名：{@this.ProcessName}------------");
-            Console.WriteLine($"进程Id：{@this.Id}所使用内存:{usedMemory}MB");
-            Console.WriteLine("------------------------------------------------------------");
-            return usedMemory;
-        }
-        /// <summary>
-        /// 获取程序信息
-        /// </summary>
-        public static void SystemInfo()
-        {
-            Console.WriteLine("进程的详细信息");
-            Process MyProcess = Process.GetCurrentProcess();
-            Console.WriteLine("进程映像名：" + MyProcess.ProcessName);
-            Console.WriteLine("进程ID："+MyProcess.Id);
-            Console.WriteLine("启动线程数："+MyProcess.Threads.Count.ToString());
-            Console.WriteLine("CPU占用时间："+MyProcess.TotalProcessorTime.ToString());
-            Console.WriteLine("线程优先级："+MyProcess.PriorityClass.ToString());
-            Console.WriteLine("启动时间："+MyProcess.StartTime.ToLongTimeString());
-            Console.WriteLine("专用内存："+(MyProcess.PrivateMemorySize/1024).ToString()+"K");
-            Console.WriteLine("峰值虚拟内存："+(MyProcess.PeakVirtualMemorySize/1024).ToString()+"K");
-            Console.WriteLine("峰值分页内存："+(MyProcess.PeakPagedMemorySize/1024).ToString()+"K");
-            Console.WriteLine("分页系统内存："+(MyProcess.PagedSystemMemorySize/1024).ToString()+"K");
-            Console.WriteLine("分页内存："+(MyProcess.PagedMemorySize/1024).ToString()+"K");
-            Console.WriteLine("未分页系统内存："+(MyProcess.NonpagedSystemMemorySize/1024).ToString()+"K");
-            Console.WriteLine("物理内存："+(MyProcess.WorkingSet/1024).ToString()+"K");
-            Console.WriteLine("虚拟内存："+(MyProcess.VirtualMemorySize/1024).ToString()+"K");
-        }
 
-        #endregion
+        #endregion Console
+
         #endregion Public Methods
     }
 }

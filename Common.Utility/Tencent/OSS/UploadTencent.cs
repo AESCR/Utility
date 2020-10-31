@@ -38,8 +38,8 @@ namespace Common.Utility.Tencent.OSS
         /// <summary>
         /// 删除文件
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
+        /// <param name="name"> </param>
+        /// <returns> </returns>
         public bool DeleteFile(string name)
         {
             return CosXmlServer.DeleteObject(name) != null;
@@ -58,10 +58,10 @@ namespace Common.Utility.Tencent.OSS
         /// <summary>
         /// 上传文件
         /// </summary>
-        /// <param name="data">文件字节</param>
-        /// <param name="name">上传后的文件名称 包含地址 </param>
-        /// <param name="path">上传的地址</param>
-        /// <param name="progress">进度条</param>
+        /// <param name="data"> 文件字节 </param>
+        /// <param name="name"> 上传后的文件名称 包含地址 </param>
+        /// <param name="path"> 上传的地址 </param>
+        /// <param name="progress"> 进度条 </param>
         public bool UploadFile(byte[] data, string name, string path = "", CosXmlServer2.PutProgress progress = null)
         {
             path = path + "/" + name;
@@ -72,9 +72,9 @@ namespace Common.Utility.Tencent.OSS
         /// <summary>
         /// 批量上传
         /// </summary>
-        /// <param name="dataList"></param>
-        /// <param name="nameList"></param>
-        /// <returns></returns>
+        /// <param name="dataList"> </param>
+        /// <param name="nameList"> </param>
+        /// <returns> </returns>
 
         public bool UploadFiles(List<byte[]> dataList, List<string> nameList, string path = "")
         {

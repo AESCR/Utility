@@ -3,18 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
-using AutoMapper;
 
 namespace Common.Utility.Extensions.AutoMapper
 {
     public static class AutoMapperExtension
     {
+        #region Public Methods
+
         /// <summary>
         /// 将List转换为Datatable
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        /// <returns></returns>
+        /// <typeparam name="T"> </typeparam>
+        /// <param name="list"> </param>
+        /// <returns> </returns>
         public static DataTable MapToTable<T>(this IEnumerable list)
         {
             if (list == null)
@@ -39,5 +40,6 @@ namespace Common.Utility.Extensions.AutoMapper
             return dt;
         }
 
+        #endregion Public Methods
     }
 }

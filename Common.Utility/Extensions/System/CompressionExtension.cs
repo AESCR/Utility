@@ -15,26 +15,26 @@ namespace Common.Utility.SystemExtensions
         #region Public Methods
 
         /// <summary>
-        ///     A string extension method that compress the given string to GZip byte array.
+        /// A string extension method that compress the given string to GZip byte array.
         /// </summary>
-        /// <param name="this">The stringToCompress to act on.</param>
-        /// <returns>The string compressed into a GZip byte array.</returns>
+        /// <param name="this"> The stringToCompress to act on. </param>
+        /// <returns> The string compressed into a GZip byte array. </returns>
         public static byte[] CompressGZip([NotNull] this string @this)
             => @this.CompressGZip(Encoding.UTF8);
 
         /// <summary>
-        ///     A string extension method that compress the given string to GZip byte array.
+        /// A string extension method that compress the given string to GZip byte array.
         /// </summary>
-        /// <param name="this">The stringToCompress to act on.</param>
-        /// <param name="encoding">The encoding.</param>
-        /// <returns>The string compressed into a GZip byte array.</returns>
+        /// <param name="this"> The stringToCompress to act on. </param>
+        /// <param name="encoding"> The encoding. </param>
+        /// <returns> The string compressed into a GZip byte array. </returns>
         public static byte[] CompressGZip([NotNull] this string @this, Encoding encoding) => encoding.GetBytes(@this).CompressGZip();
 
         /// <summary>
-        ///     A byteArray extension method that compress the given byte array to GZip byte array.
+        /// A byteArray extension method that compress the given byte array to GZip byte array.
         /// </summary>
-        /// <param name="bytes">The stringToCompress to act on.</param>
-        /// <returns>The string compressed into a GZip byte array.</returns>
+        /// <param name="bytes"> The stringToCompress to act on. </param>
+        /// <returns> The string compressed into a GZip byte array. </returns>
         public static byte[] CompressGZip([NotNull] this byte[] bytes)
         {
             using (var memoryStream = new MemoryStream())
@@ -98,9 +98,9 @@ namespace Common.Utility.SystemExtensions
         }
 
         /// <summary>
-        ///     A FileInfo extension method that creates a zip file.
+        /// A FileInfo extension method that creates a zip file.
         /// </summary>
-        /// <param name="this">The @this to act on.</param>
+        /// <param name="this"> The @this to act on. </param>
         public static void CreateGZip([NotNull] this FileInfo @this)
         {
             using (var originalFileStream = @this.OpenRead())
@@ -116,10 +116,10 @@ namespace Common.Utility.SystemExtensions
         }
 
         /// <summary>
-        ///     A FileInfo extension method that creates a zip file.
+        /// A FileInfo extension method that creates a zip file.
         /// </summary>
-        /// <param name="this">The @this to act on.</param>
-        /// <param name="destination">Destination for the zip.</param>
+        /// <param name="this"> The @this to act on. </param>
+        /// <param name="destination"> Destination for the zip. </param>
         public static void CreateGZip([NotNull] this FileInfo @this, string destination)
         {
             using (var originalFileStream = @this.OpenRead())
@@ -135,10 +135,10 @@ namespace Common.Utility.SystemExtensions
         }
 
         /// <summary>
-        ///     A FileInfo extension method that creates a zip file.
+        /// A FileInfo extension method that creates a zip file.
         /// </summary>
-        /// <param name="this">The @this to act on.</param>
-        /// <param name="destination">Destination for the zip.</param>
+        /// <param name="this"> The @this to act on. </param>
+        /// <param name="destination"> Destination for the zip. </param>
         public static void CreateGZip([NotNull] this FileInfo @this, FileInfo destination)
         {
             using (var originalFileStream = @this.OpenRead())
@@ -154,14 +154,12 @@ namespace Common.Utility.SystemExtensions
         }
 
         /// <summary>
-        ///     Creates a zip archive that contains the files and directories from the specified
-        ///     directory.
+        /// Creates a zip archive that contains the files and directories from the specified directory.
         /// </summary>
-        /// <param name="this">The @this to act on.</param>
+        /// <param name="this"> The @this to act on. </param>
         /// <param name="destinationArchiveFileName">
-        ///     The path of the archive to be created, specified as a
-        ///     relative or absolute path. A relative path is interpreted as relative to the current working
-        ///     directory.
+        /// The path of the archive to be created, specified as a relative or absolute path. A
+        /// relative path is interpreted as relative to the current working directory.
         /// </param>
         public static void CreateZipFile([NotNull] this DirectoryInfo @this, string destinationArchiveFileName)
         {
@@ -169,23 +167,21 @@ namespace Common.Utility.SystemExtensions
         }
 
         /// <summary>
-        ///     Creates a zip archive that contains the files and directories from the specified
-        ///     directory, uses the specified compression level, and optionally includes the base directory.
+        /// Creates a zip archive that contains the files and directories from the specified
+        /// directory, uses the specified compression level, and optionally includes the base directory.
         /// </summary>
-        /// <param name="this">The @this to act on.</param>
+        /// <param name="this"> The @this to act on. </param>
         /// <param name="destinationArchiveFileName">
-        ///     The path of the archive to be created, specified as a
-        ///     relative or absolute path. A relative path is interpreted as relative to the current working
-        ///     directory.
+        /// The path of the archive to be created, specified as a relative or absolute path. A
+        /// relative path is interpreted as relative to the current working directory.
         /// </param>
         /// <param name="compressionLevel">
-        ///     One of the enumeration values that indicates whether to
-        ///     emphasize speed or compression effectiveness when creating the entry.
+        /// One of the enumeration values that indicates whether to emphasize speed or compression
+        /// effectiveness when creating the entry.
         /// </param>
         /// <param name="includeBaseDirectory">
-        ///     true to include the directory name from
-        ///     sourceDirectoryName at the root of the archive; false to include only the contents of the
-        ///     directory.
+        /// true to include the directory name from sourceDirectoryName at the root of the archive;
+        /// false to include only the contents of the directory.
         /// </param>
         public static void CreateZipFile([NotNull] this DirectoryInfo @this, string destinationArchiveFileName, CompressionLevel compressionLevel, bool includeBaseDirectory)
         {
@@ -193,29 +189,30 @@ namespace Common.Utility.SystemExtensions
         }
 
         /// <summary>
-        ///     Creates a zip archive that contains the files and directories from the specified directory, uses the specified
-        ///     compression level and character encoding for entry names, and optionally includes the base directory.
+        /// Creates a zip archive that contains the files and directories from the specified
+        /// directory, uses the specified compression level and character encoding for entry names,
+        /// and optionally includes the base directory.
         /// </summary>
         /// <param name="this">
-        ///     The path to the directory to be archived, specified as a relative or absolute path. A relative path
-        ///     is interpreted as relative to the current working directory.
+        /// The path to the directory to be archived, specified as a relative or absolute path. A
+        /// relative path is interpreted as relative to the current working directory.
         /// </param>
         /// <param name="destinationArchiveFileName">
-        ///     The path of the archive to be created, specified as a relative or absolute
-        ///     path. A relative path is interpreted as relative to the current working directory.
+        /// The path of the archive to be created, specified as a relative or absolute path. A
+        /// relative path is interpreted as relative to the current working directory.
         /// </param>
         /// <param name="compressionLevel">
-        ///     One of the enumeration values that indicates whether to emphasize speed or compression
-        ///     effectiveness when creating the entry.
+        /// One of the enumeration values that indicates whether to emphasize speed or compression
+        /// effectiveness when creating the entry.
         /// </param>
         /// <param name="includeBaseDirectory">
-        ///     true to include the directory name from sourceDirectoryName at the root of the
-        ///     archive; false to include only the contents of the directory.
+        /// true to include the directory name from sourceDirectoryName at the root of the archive;
+        /// false to include only the contents of the directory.
         /// </param>
         /// <param name="entryNameEncoding">
-        ///     The encoding to use when reading or writing entry names in this archive. Specify a
-        ///     value for this parameter only when an encoding is required for interoperability with zip archive tools and
-        ///     libraries that do not support UTF-8 encoding for entry names.
+        /// The encoding to use when reading or writing entry names in this archive. Specify a value
+        /// for this parameter only when an encoding is required for interoperability with zip
+        /// archive tools and libraries that do not support UTF-8 encoding for entry names.
         /// </param>
         public static void CreateZipFile([NotNull] this DirectoryInfo @this, string destinationArchiveFileName, CompressionLevel compressionLevel, bool includeBaseDirectory, Encoding entryNameEncoding)
         {
@@ -223,14 +220,12 @@ namespace Common.Utility.SystemExtensions
         }
 
         /// <summary>
-        ///     Creates a zip archive that contains the files and directories from the specified
-        ///     directory.
+        /// Creates a zip archive that contains the files and directories from the specified directory.
         /// </summary>
-        /// <param name="this">The @this to act on.</param>
+        /// <param name="this"> The @this to act on. </param>
         /// <param name="destinationArchiveFile">
-        ///     The path of the archive to be created, specified as a
-        ///     relative or absolute path. A relative path is interpreted as relative to the current working
-        ///     directory.
+        /// The path of the archive to be created, specified as a relative or absolute path. A
+        /// relative path is interpreted as relative to the current working directory.
         /// </param>
         public static void CreateZipFile([NotNull] this DirectoryInfo @this, FileInfo destinationArchiveFile)
         {
@@ -238,23 +233,21 @@ namespace Common.Utility.SystemExtensions
         }
 
         /// <summary>
-        ///     Creates a zip archive that contains the files and directories from the specified
-        ///     directory, uses the specified compression level, and optionally includes the base directory.
+        /// Creates a zip archive that contains the files and directories from the specified
+        /// directory, uses the specified compression level, and optionally includes the base directory.
         /// </summary>
-        /// <param name="this">The @this to act on.</param>
+        /// <param name="this"> The @this to act on. </param>
         /// <param name="destinationArchiveFile">
-        ///     The path of the archive to be created, specified as a
-        ///     relative or absolute path. A relative path is interpreted as relative to the current working
-        ///     directory.
+        /// The path of the archive to be created, specified as a relative or absolute path. A
+        /// relative path is interpreted as relative to the current working directory.
         /// </param>
         /// <param name="compressionLevel">
-        ///     One of the enumeration values that indicates whether to
-        ///     emphasize speed or compression effectiveness when creating the entry.
+        /// One of the enumeration values that indicates whether to emphasize speed or compression
+        /// effectiveness when creating the entry.
         /// </param>
         /// <param name="includeBaseDirectory">
-        ///     true to include the directory name from
-        ///     sourceDirectoryName at the root of the archive; false to include only the contents of the
-        ///     directory.
+        /// true to include the directory name from sourceDirectoryName at the root of the archive;
+        /// false to include only the contents of the directory.
         /// </param>
         public static void CreateZipFile([NotNull] this DirectoryInfo @this, FileInfo destinationArchiveFile, CompressionLevel compressionLevel, bool includeBaseDirectory)
         {
@@ -262,33 +255,30 @@ namespace Common.Utility.SystemExtensions
         }
 
         /// <summary>
-        ///     Creates a zip archive that contains the files and directories from the specified
-        ///     directory, uses the specified compression level and character encoding for entry names, and
-        ///     optionally includes the base directory.
+        /// Creates a zip archive that contains the files and directories from the specified
+        /// directory, uses the specified compression level and character encoding for entry names,
+        /// and optionally includes the base directory.
         /// </summary>
         /// <param name="this">
-        ///     The path to the directory to be archived, specified as a relative or
-        ///     absolute path. A relative path is interpreted as relative to the current working directory.
+        /// The path to the directory to be archived, specified as a relative or absolute path. A
+        /// relative path is interpreted as relative to the current working directory.
         /// </param>
         /// <param name="destinationArchiveFile">
-        ///     The path of the archive to be created, specified as a
-        ///     relative or absolute path. A relative path is interpreted as relative to the current working
-        ///     directory.
+        /// The path of the archive to be created, specified as a relative or absolute path. A
+        /// relative path is interpreted as relative to the current working directory.
         /// </param>
         /// <param name="compressionLevel">
-        ///     One of the enumeration values that indicates whether to
-        ///     emphasize speed or compression effectiveness when creating the entry.
+        /// One of the enumeration values that indicates whether to emphasize speed or compression
+        /// effectiveness when creating the entry.
         /// </param>
         /// <param name="includeBaseDirectory">
-        ///     true to include the directory name from
-        ///     sourceDirectoryName at the root of the archive; false to include only the contents of the
-        ///     directory.
+        /// true to include the directory name from sourceDirectoryName at the root of the archive;
+        /// false to include only the contents of the directory.
         /// </param>
         /// <param name="entryNameEncoding">
-        ///     The encoding to use when reading or writing entry names in
-        ///     this archive. Specify a value for this parameter only when an encoding is required for
-        ///     interoperability with zip archive tools and libraries that do not support UTF-8 encoding for
-        ///     entry names.
+        /// The encoding to use when reading or writing entry names in this archive. Specify a value
+        /// for this parameter only when an encoding is required for interoperability with zip
+        /// archive tools and libraries that do not support UTF-8 encoding for entry names.
         /// </param>
         public static void CreateZipFile([NotNull] this DirectoryInfo @this, FileInfo destinationArchiveFile, CompressionLevel compressionLevel, bool includeBaseDirectory, Encoding entryNameEncoding)
         {
@@ -296,10 +286,10 @@ namespace Common.Utility.SystemExtensions
         }
 
         /// <summary>
-        ///     A byte[] extension method that decompress the byte array gzip to string.
+        /// A byte[] extension method that decompress the byte array gzip to string.
         /// </summary>
-        /// <param name="this">The @this to act on.</param>
-        /// <returns>The byte array gzip to string.</returns>
+        /// <param name="this"> The @this to act on. </param>
+        /// <returns> The byte array gzip to string. </returns>
         public static byte[] DecompressGZip([NotNull] this byte[] @this)
         {
             using (var memoryStream = new MemoryStream(@this))
@@ -346,10 +336,9 @@ namespace Common.Utility.SystemExtensions
         public static string DecompressGZipString([NotNull] this byte[] bytes, Encoding encoding) => encoding.GetString(bytes.DecompressGZip());
 
         /// <summary>
-        ///     A FileInfo extension method that extracts the g zip to directory described by
-        ///     @this.
+        /// A FileInfo extension method that extracts the g zip to directory described by @this.
         /// </summary>
-        /// <param name="this">The @this to act on.</param>
+        /// <param name="this"> The @this to act on. </param>
         public static void ExtractGZipToDirectory([NotNull] this FileInfo @this)
         {
             using (var originalFileStream = @this.OpenRead())
@@ -367,11 +356,10 @@ namespace Common.Utility.SystemExtensions
         }
 
         /// <summary>
-        ///     A FileInfo extension method that extracts the g zip to directory described by
-        ///     @this.
+        /// A FileInfo extension method that extracts the g zip to directory described by @this.
         /// </summary>
-        /// <param name="this">The @this to act on.</param>
-        /// <param name="destination">Destination for the.</param>
+        /// <param name="this"> The @this to act on. </param>
+        /// <param name="destination"> Destination for the. </param>
         public static void ExtractGZipToDirectory([NotNull] this FileInfo @this, string destination)
         {
             using (var originalFileStream = @this.OpenRead())
@@ -387,11 +375,10 @@ namespace Common.Utility.SystemExtensions
         }
 
         /// <summary>
-        ///     A FileInfo extension method that extracts the g zip to directory described by
-        ///     @this.
+        /// A FileInfo extension method that extracts the g zip to directory described by @this.
         /// </summary>
-        /// <param name="this">The @this to act on.</param>
-        /// <param name="destination">Destination for the.</param>
+        /// <param name="this"> The @this to act on. </param>
+        /// <param name="destination"> Destination for the. </param>
         public static void ExtractGZipToDirectory([NotNull] this FileInfo @this, FileInfo destination)
         {
             using (var originalFileStream = @this.OpenRead())
@@ -407,13 +394,12 @@ namespace Common.Utility.SystemExtensions
         }
 
         /// <summary>
-        ///     Extracts all the files in the specified zip archive to a directory on the file system
+        /// Extracts all the files in the specified zip archive to a directory on the file system
         /// </summary>
-        /// <param name="this">The @this to act on.</param>
+        /// <param name="this"> The @this to act on. </param>
         /// <param name="destinationDirectoryName">
-        ///     The path to the directory in which to place the
-        ///     extracted files, specified as a relative or absolute path. A relative path is interpreted as
-        ///     relative to the current working directory.
+        /// The path to the directory in which to place the extracted files, specified as a relative
+        /// or absolute path. A relative path is interpreted as relative to the current working directory.
         /// </param>
         public static void ExtractZipFileToDirectory([NotNull] this FileInfo @this, string destinationDirectoryName)
         {
@@ -421,43 +407,44 @@ namespace Common.Utility.SystemExtensions
         }
 
         /// <summary>
-        ///     Extracts all the files in the specified zip archive to a directory on the file system and uses the specified
-        ///     character encoding for entry names.
+        /// Extracts all the files in the specified zip archive to a directory on the file system
+        /// and uses the specified character encoding for entry names.
         /// </summary>
-        /// <param name="this">The path to the archive that is to be extracted.</param>
+        /// <param name="this"> The path to the archive that is to be extracted. </param>
         /// <param name="destinationDirectoryName">
-        ///     The path to the directory in which to place the extracted files, specified as a
-        ///     relative or absolute path. A relative path is interpreted as relative to the current working directory.
+        /// The path to the directory in which to place the extracted files, specified as a relative
+        /// or absolute path. A relative path is interpreted as relative to the current working directory.
         /// </param>
         /// <param name="entryNameEncoding">
-        ///     The encoding to use when reading or writing entry names in this archive. Specify a
-        ///     value for this parameter only when an encoding is required for interoperability with zip archive tools and
-        ///     libraries that do not support UTF-8 encoding for entry names.
+        /// The encoding to use when reading or writing entry names in this archive. Specify a value
+        /// for this parameter only when an encoding is required for interoperability with zip
+        /// archive tools and libraries that do not support UTF-8 encoding for entry names.
         /// </param>
         public static void ExtractZipFileToDirectory([NotNull] this FileInfo @this, string destinationDirectoryName, Encoding entryNameEncoding)
         {
             ZipFile.ExtractToDirectory(@this.FullName, destinationDirectoryName, entryNameEncoding);
         }
 
-        /// <summary>Extracts all the files in the specified zip archive to a directory on the file system.</summary>
-        /// <param name="this">The @this to act on.</param>
-        /// <param name="destinationDirectory">Pathname of the destination directory.</param>
+        /// <summary>
+        /// Extracts all the files in the specified zip archive to a directory on the file system.
+        /// </summary>
+        /// <param name="this"> The @this to act on. </param>
+        /// <param name="destinationDirectory"> Pathname of the destination directory. </param>
         public static void ExtractZipFileToDirectory([NotNull] this FileInfo @this, DirectoryInfo destinationDirectory)
         {
             ZipFile.ExtractToDirectory(@this.FullName, destinationDirectory.FullName);
         }
 
         /// <summary>
-        ///     Extracts all the files in the specified zip archive to a directory on the file system
-        ///     and uses the specified character encoding for entry names.
+        /// Extracts all the files in the specified zip archive to a directory on the file system
+        /// and uses the specified character encoding for entry names.
         /// </summary>
-        /// <param name="this">The @this to act on.</param>
-        /// <param name="destinationDirectory">Pathname of the destination directory.</param>
+        /// <param name="this"> The @this to act on. </param>
+        /// <param name="destinationDirectory"> Pathname of the destination directory. </param>
         /// <param name="entryNameEncoding">
-        ///     The encoding to use when reading or writing entry names in
-        ///     this archive. Specify a value for this parameter only when an encoding is required for
-        ///     interoperability with zip archive tools and libraries that do not support UTF-8 encoding for
-        ///     entry names.
+        /// The encoding to use when reading or writing entry names in this archive. Specify a value
+        /// for this parameter only when an encoding is required for interoperability with zip
+        /// archive tools and libraries that do not support UTF-8 encoding for entry names.
         /// </param>
         public static void ExtractZipFileToDirectory([NotNull] this FileInfo @this, DirectoryInfo destinationDirectory, Encoding entryNameEncoding)
         {
@@ -465,47 +452,50 @@ namespace Common.Utility.SystemExtensions
         }
 
         /// <summary>
-        ///     The path to the archive to open, specified as a relative or absolute path. A relative path is interpreted as
-        ///     relative to the current working directory.
+        /// The path to the archive to open, specified as a relative or absolute path. A relative
+        /// path is interpreted as relative to the current working directory.
         /// </summary>
         /// <param name="this">
-        ///     The path to the archive to open, specified as a relative or absolute path. A relative path is
-        ///     interpreted as relative to the current working directory.
+        /// The path to the archive to open, specified as a relative or absolute path. A relative
+        /// path is interpreted as relative to the current working directory.
         /// </param>
-        /// <returns>The opened zip archive.</returns>
+        /// <returns> The opened zip archive. </returns>
         public static ZipArchive OpenReadZipFile([NotNull] this FileInfo @this)
         {
             return ZipFile.OpenRead(@this.FullName);
         }
 
-        /// <summary>Opens a zip archive at the specified path and in the specified mode.</summary>
-        /// <param name="this">The @this to act on.</param>
+        /// <summary>
+        /// Opens a zip archive at the specified path and in the specified mode.
+        /// </summary>
+        /// <param name="this"> The @this to act on. </param>
         /// <param name="mode">
-        ///     One of the enumeration values that specifies the actions that are allowed
-        ///     on the entries in the opened archive.
+        /// One of the enumeration values that specifies the actions that are allowed on the entries
+        /// in the opened archive.
         /// </param>
-        /// <returns>A ZipArchive.</returns>
+        /// <returns> A ZipArchive. </returns>
         public static ZipArchive OpenZipFile([NotNull] this FileInfo @this, ZipArchiveMode mode)
         {
             return ZipFile.Open(@this.FullName, mode);
         }
 
-        /// <summary>Opens a zip archive at the specified path and in the specified mode.</summary>
+        /// <summary>
+        /// Opens a zip archive at the specified path and in the specified mode.
+        /// </summary>
         /// <param name="this">
-        ///     The path to the archive to open, specified as a relative or absolute
-        ///     path. A relative path is interpreted as relative to the current working directory.
+        /// The path to the archive to open, specified as a relative or absolute path. A relative
+        /// path is interpreted as relative to the current working directory.
         /// </param>
         /// <param name="mode">
-        ///     One of the enumeration values that specifies the actions that are allowed
-        ///     on the entries in the opened archive.
+        /// One of the enumeration values that specifies the actions that are allowed on the entries
+        /// in the opened archive.
         /// </param>
         /// <param name="entryNameEncoding">
-        ///     The encoding to use when reading or writing entry names in
-        ///     this archive. Specify a value for this parameter only when an encoding is required for
-        ///     interoperability with zip archive tools and libraries that do not support UTF-8 encoding for
-        ///     entry names.
+        /// The encoding to use when reading or writing entry names in this archive. Specify a value
+        /// for this parameter only when an encoding is required for interoperability with zip
+        /// archive tools and libraries that do not support UTF-8 encoding for entry names.
         /// </param>
-        /// <returns>A ZipArchive.</returns>
+        /// <returns> A ZipArchive. </returns>
         public static ZipArchive OpenZipFile([NotNull] this FileInfo @this, ZipArchiveMode mode, Encoding entryNameEncoding)
         {
             return ZipFile.Open(@this.FullName, mode, entryNameEncoding);

@@ -9,8 +9,8 @@ namespace Common.Benchmarks.HttpClientVsWebRequest
     /// 内存测试
     /// </summary>
     // [MarkdownExporter, AsciiDocExporter, HtmlExporter, CsvExporter, RPlotExporter]
-    [HtmlExporter]
-    [MemoryDiagnoser]//要显示GC和内存分配
+   /* [HtmlExporter]
+    [MemoryDiagnoser]//要显示GC和内存分配*/
     public class TestHttp
     {
         [Params("http://121.36.213.19:8017/")]
@@ -24,17 +24,17 @@ namespace Common.Benchmarks.HttpClientVsWebRequest
             httpHelper=new HttpClient2();
             httpClient=new HttpClient();
         }
-        [Benchmark]
+        //[Benchmark]
         public void TestHttpHelper()
         {
             httpHelper.GetAsync(Url);
         }
-        [Benchmark]
+        //[Benchmark]
         public void TestHttpClient()
         {
             httpClient.DoGet(Url);
         }
-        [Benchmark]
+       // [Benchmark]
         public void TestWebRequest()
         {
             webClient.GetData(Url);

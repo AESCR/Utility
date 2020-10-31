@@ -6,7 +6,7 @@ using System.Text;
 namespace Common.Utility
 {
     /// <summary>
-    ///     RSA���ܽ��ܼ�RSAǩ������֤
+    /// RSA���ܽ��ܼ�RSAǩ������֤
     /// </summary>
     public class RSACryption
     {
@@ -121,10 +121,10 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     RSA ����Կ���� ����˽Կ �͹�Կ
+        /// RSA ����Կ���� ����˽Կ �͹�Կ
         /// </summary>
-        /// <param name="xmlKeys"></param>
-        /// <param name="xmlPublicKey"></param>
+        /// <param name="xmlKeys"> </param>
+        /// <param name="xmlPublicKey"> </param>
         public void RSAKey(out string xmlKeys, out string xmlPublicKey)
         {
             var rsa = new RSACryptoServiceProvider();

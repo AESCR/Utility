@@ -4,12 +4,14 @@ namespace Common.Utility.Random.Time
 {
     public class RandomTime
     {
+        #region Public Methods
+
         /// <summary>
-        ///     得到随机日期
+        /// 得到随机日期
         /// </summary>
-        /// <param name="time1">起始日期</param>
-        /// <param name="time2">结束日期</param>
-        /// <returns>间隔日期之间的 随机日期</returns>
+        /// <param name="time1"> 起始日期 </param>
+        /// <param name="time2"> 结束日期 </param>
+        /// <returns> 间隔日期之间的 随机日期 </returns>
         public DateTime GetRandomTime(DateTime time1, DateTime time2)
         {
             var random = new System.Random();
@@ -45,5 +47,7 @@ namespace Common.Utility.Random.Time
             var i = random.Next(Math.Abs(maxValue));
             return minTime.AddSeconds(i);
         }
+
+        #endregion Public Methods
     }
 }

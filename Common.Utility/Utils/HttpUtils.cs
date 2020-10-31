@@ -8,11 +8,13 @@ namespace Common.Utility.Utils
     /// </summary>
     public sealed class HttpUtils
     {
+        #region Public Methods
+
         /// <summary>
         /// 字典转url参数 使用前先编码
         /// </summary>
-        /// <param name="myParams">字典</param>
-        /// <returns></returns>
+        /// <param name="myParams"> 字典 </param>
+        /// <returns> </returns>
         public static string ParamsToUrl(IDictionary<string, string> myParams)
         {
             if (myParams == null)
@@ -27,7 +29,7 @@ namespace Common.Utility.Utils
                 sb.Append('=');
                 sb.Append(myParams[key]);
                 index++;
-                if (index<myParams.Count)
+                if (index < myParams.Count)
                 {
                     sb.Append('&');
                 }
@@ -39,8 +41,8 @@ namespace Common.Utility.Utils
         /// <summary>
         /// url转字典
         /// </summary>
-        /// <param name="url">请求地址</param>
-        /// <returns></returns>
+        /// <param name="url"> 请求地址 </param>
+        /// <returns> </returns>
         public static IDictionary<string, string> UrlToParams(string url)
         {
             IDictionary<string, string> dic = new Dictionary<string, string>();
@@ -50,10 +52,9 @@ namespace Common.Utility.Utils
             }
             if (url.Contains("&"))
             {
-               
                 //开始分割&
                 string[] splitList = url.Split('&');
-                for (int i = 0; i < splitList.Length; i = i +1)
+                for (int i = 0; i < splitList.Length; i = i + 1)
                 {
                     if (splitList[i].Contains("="))
                     {
@@ -75,7 +76,7 @@ namespace Common.Utility.Utils
 
             return dic;
         }
-    }
 
-    
+        #endregion Public Methods
+    }
 }

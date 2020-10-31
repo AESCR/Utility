@@ -4,56 +4,23 @@ namespace Common.Utility.Extensions
 {
     public static class DateTimeExtension
     {
-        /// <summary>
-        /// 获取时间戳
-        /// </summary>
-        /// <param name="time"></param>
-        /// <returns></returns>
-        public static long TimeStamp(this DateTime time)
-        {
-            global::System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new global::System.DateTime(1970, 1, 1));
-
-            return (int)(time - startTime).TotalSeconds;
-        }
+        #region Public Methods
 
         /// <summary>
-        /// 获取格式化时间字符串
-        /// yyyy-MM-dd HH:mm:ss
+        /// 获取格式化时间字符串 HH:mm:ss
         /// </summary>
-        /// <param name="time"></param>
-        /// <returns></returns>
-        public static string yyyMMddHHmmss(this DateTime time)
-        {
-            return time.ToString("yyyy-MM-dd HH:mm:ss");
-        }
-
-        /// <summary>
-        /// 获取格式化时间字符串
-        /// HH:mm:ss
-        /// </summary>
-        /// <param name="time"></param>
-        /// <returns></returns>
+        /// <param name="time"> </param>
+        /// <returns> </returns>
         public static string HHmmss(this DateTime time)
         {
             return time.ToString("HH:mm:ss");
         }
 
         /// <summary>
-        /// 获取格式化时间字符串
-        /// yyyy/MM/dd HH:mm:ss
-        /// </summary>
-        /// <param name="time"></param>
-        /// <returns></returns>
-        public static string yyyMMddHHmmss2(this DateTime time)
-        {
-            return time.ToString("yyyy/MM/dd HH:mm:ss");
-        }
-
-        /// <summary>
         /// 获取中文间隔时间差
         /// </summary>
-        /// <param name="time"></param>
-        /// <returns></returns>
+        /// <param name="time"> </param>
+        /// <returns> </returns>
         public static string TimeSpanChinese(this DateTime time, DateTime? nowTime = null)
         {
             var now = nowTime.HasValue ? nowTime.Value : DateTime.Now;
@@ -89,5 +56,39 @@ namespace Common.Utility.Extensions
                 return "刚刚";
             }
         }
+
+        /// <summary>
+        /// 获取时间戳
+        /// </summary>
+        /// <param name="time"> </param>
+        /// <returns> </returns>
+        public static long TimeStamp(this DateTime time)
+        {
+            global::System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new global::System.DateTime(1970, 1, 1));
+
+            return (int)(time - startTime).TotalSeconds;
+        }
+
+        /// <summary>
+        /// 获取格式化时间字符串 yyyy-MM-dd HH:mm:ss
+        /// </summary>
+        /// <param name="time"> </param>
+        /// <returns> </returns>
+        public static string yyyMMddHHmmss(this DateTime time)
+        {
+            return time.ToString("yyyy-MM-dd HH:mm:ss");
+        }
+
+        /// <summary>
+        /// 获取格式化时间字符串 yyyy/MM/dd HH:mm:ss
+        /// </summary>
+        /// <param name="time"> </param>
+        /// <returns> </returns>
+        public static string yyyMMddHHmmss2(this DateTime time)
+        {
+            return time.ToString("yyyy/MM/dd HH:mm:ss");
+        }
+
+        #endregion Public Methods
     }
 }

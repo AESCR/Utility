@@ -29,15 +29,13 @@ namespace Common.Utility
         #region Public Methods
 
         /// <summary>
-        ///     删除节点值
+        /// 删除节点值
         /// </summary>
-        /// <param name="path">路径</param>
-        /// <param name="node">节点</param>
-        /// <param name="attribute">属性名，非空时删除该节点属性值，否则删除节点值</param>
-        /// <param name="value">值</param>
-        /// 使用示列:
-        /// XMLProsess.Delete(path, "/Node", "")
-        /// XMLProsess.Delete(path, "/Node", "Attribute")
+        /// <param name="path"> 路径 </param>
+        /// <param name="node"> 节点 </param>
+        /// <param name="attribute"> 属性名，非空时删除该节点属性值，否则删除节点值 </param>
+        /// <param name="value"> 值 </param>
+        /// 使用示列: XMLProsess.Delete(path, "/Node", "") XMLProsess.Delete(path, "/Node", "Attribute")
         public static void Delete(string path, string node)
         {
             try
@@ -53,15 +51,13 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     删除数据
+        /// 删除数据
         /// </summary>
-        /// <param name="path">路径</param>
-        /// <param name="node">节点</param>
-        /// <param name="attribute">属性名，非空时删除该节点属性值，否则删除节点值</param>
-        /// <param name="value">值</param>
-        /// 使用示列:
-        /// XMLProsess.Delete(path, "/Node", "")
-        /// XMLProsess.Delete(path, "/Node", "Attribute")
+        /// <param name="path"> 路径 </param>
+        /// <param name="node"> 节点 </param>
+        /// <param name="attribute"> 属性名，非空时删除该节点属性值，否则删除节点值 </param>
+        /// <param name="value"> 值 </param>
+        /// 使用示列: XMLProsess.Delete(path, "/Node", "") XMLProsess.Delete(path, "/Node", "Attribute")
         public static void Delete(string path, string node, string attribute)
         {
             try
@@ -81,9 +77,9 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     删除所有行
+        /// 删除所有行
         /// </summary>
-        /// <param name="strXmlPath">XML路径</param>
+        /// <param name="strXmlPath"> XML路径 </param>
         public static bool DeleteXmlAllRows(string strXmlPath)
         {
             try
@@ -101,9 +97,9 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     通过删除DataSet中指定索引行，重写XML以实现删除指定行
+        /// 通过删除DataSet中指定索引行，重写XML以实现删除指定行
         /// </summary>
-        /// <param name="iDeleteRow">要删除的行在DataSet中的Index值</param>
+        /// <param name="iDeleteRow"> 要删除的行在DataSet中的Index值 </param>
         public static bool DeleteXmlRowByIndex(string strXmlPath, int iDeleteRow)
         {
             try
@@ -121,11 +117,11 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     删除指定列中指定值的行
+        /// 删除指定列中指定值的行
         /// </summary>
-        /// <param name="strXmlPath">XML相对路径</param>
-        /// <param name="strColumn">列名</param>
-        /// <param name="ColumnValue">指定值</param>
+        /// <param name="strXmlPath"> XML相对路径 </param>
+        /// <param name="strColumn"> 列名 </param>
+        /// <param name="ColumnValue"> 指定值 </param>
         public static bool DeleteXmlRows(string strXmlPath, string strColumn, string[] ColumnValue)
         {
             try
@@ -162,17 +158,16 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     插入数据
+        /// 插入数据
         /// </summary>
-        /// <param name="path">路径</param>
-        /// <param name="node">节点</param>
-        /// <param name="element">元素名，非空时插入新元素，否则在该元素中插入属性</param>
-        /// <param name="attribute">属性名，非空时插入该元素属性值，否则插入元素值</param>
-        /// <param name="value">值</param>
-        /// 使用示列:
-        /// XMLProsess.Insert(path, "/Node", "Element", "", "Value")
-        /// XMLProsess.Insert(path, "/Node", "Element", "Attribute", "Value")
-        /// XMLProsess.Insert(path, "/Node", "", "Attribute", "Value")
+        /// <param name="path"> 路径 </param>
+        /// <param name="node"> 节点 </param>
+        /// <param name="element"> 元素名，非空时插入新元素，否则在该元素中插入属性 </param>
+        /// <param name="attribute"> 属性名，非空时插入该元素属性值，否则插入元素值 </param>
+        /// <param name="value"> 值 </param>
+        /// 使用示列: XMLProsess.Insert(path, "/Node", "Element", "", "Value") XMLProsess.Insert(path,
+        /// "/Node", "Element", "Attribute", "Value") XMLProsess.Insert(path, "/Node", "",
+        /// "Attribute", "Value")
         public static void Insert(string path, string node, string element, string attribute, string value)
         {
             try
@@ -206,12 +201,12 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     插入数据
+        /// 插入数据
         /// </summary>
-        /// <param name="path">路径</param>
-        /// <param name="node">节点</param>
-        /// <param name="element">元素名，非空时插入新元素，否则在该元素中插入属性</param>
-        /// <param name="strList">由XML属性名和值组成的二维数组</param>
+        /// <param name="path"> 路径 </param>
+        /// <param name="node"> 节点 </param>
+        /// <param name="element"> 元素名，非空时插入新元素，否则在该元素中插入属性 </param>
+        /// <param name="strList"> 由XML属性名和值组成的二维数组 </param>
         public static void Insert(string path, string node, string element, string[][] strList)
         {
             try
@@ -244,14 +239,12 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     读取指定路径和节点的串联值
+        /// 读取指定路径和节点的串联值
         /// </summary>
-        /// <param name="path">路径</param>
-        /// <param name="node">节点</param>
-        /// <param name="attribute">属性名，非空时返回该属性值，否则返回串联值</param>
-        /// 使用示列:
-        /// XMLProsess.Read(path, "/Node", "")
-        /// XMLProsess.Read(path, "/Node/Element[@Attribute='Name']")
+        /// <param name="path"> 路径 </param>
+        /// <param name="node"> 节点 </param>
+        /// <param name="attribute"> 属性名，非空时返回该属性值，否则返回串联值 </param>
+        /// 使用示列: XMLProsess.Read(path, "/Node", "") XMLProsess.Read(path, "/Node/Element[@Attribute='Name']")
         public static string Read(string path, string node)
         {
             var value = "";
@@ -269,14 +262,13 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     读取指定路径和节点的属性值
+        /// 读取指定路径和节点的属性值
         /// </summary>
-        /// <param name="path">路径</param>
-        /// <param name="node">节点</param>
-        /// <param name="attribute">属性名，非空时返回该属性值，否则返回串联值</param>
-        /// 使用示列:
-        /// XMLProsess.Read(path, "/Node", "")
-        /// XMLProsess.Read(path, "/Node/Element[@Attribute='Name']", "Attribute")
+        /// <param name="path"> 路径 </param>
+        /// <param name="node"> 节点 </param>
+        /// <param name="attribute"> 属性名，非空时返回该属性值，否则返回串联值 </param>
+        /// 使用示列: XMLProsess.Read(path, "/Node", "") XMLProsess.Read(path,
+        /// "/Node/Element[@Attribute='Name']", "Attribute")
         public static string Read(string path, string node, string attribute)
         {
             var value = "";
@@ -294,14 +286,12 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     修改指定节点的数据
+        /// 修改指定节点的数据
         /// </summary>
-        /// <param name="path">路径</param>
-        /// <param name="node">节点</param>
-        /// <param name="value">值</param>
-        /// 使用示列:
-        /// XMLProsess.Insert(path, "/Node","Value")
-        /// XMLProsess.Insert(path, "/Node","Value")
+        /// <param name="path"> 路径 </param>
+        /// <param name="node"> 节点 </param>
+        /// <param name="value"> 值 </param>
+        /// 使用示列: XMLProsess.Insert(path, "/Node","Value") XMLProsess.Insert(path, "/Node","Value")
         public static void Update(string path, string node, string value)
         {
             try
@@ -317,15 +307,14 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     修改指定节点的属性值(静态)
+        /// 修改指定节点的属性值(静态)
         /// </summary>
-        /// <param name="path">路径</param>
-        /// <param name="node">节点</param>
-        /// <param name="attribute">属性名，非空时修改该节点属性值，否则修改节点值</param>
-        /// <param name="value">值</param>
-        /// 使用示列:
-        /// XMLProsess.Insert(path, "/Node", "", "Value")
-        /// XMLProsess.Insert(path, "/Node", "Attribute", "Value")
+        /// <param name="path"> 路径 </param>
+        /// <param name="node"> 节点 </param>
+        /// <param name="attribute"> 属性名，非空时修改该节点属性值，否则修改节点值 </param>
+        /// <param name="value"> 值 </param>
+        /// 使用示列: XMLProsess.Insert(path, "/Node", "", "Value") XMLProsess.Insert(path, "/Node",
+        /// "Attribute", "Value")
         public static void Update(string path, string node, string attribute, string value)
         {
             try
@@ -345,13 +334,13 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     更改符合条件的一条记录
+        /// 更改符合条件的一条记录
         /// </summary>
-        /// <param name="strXmlPath">XML文件路径</param>
-        /// <param name="Columns">列名数组</param>
-        /// <param name="ColumnValue">列值数组</param>
-        /// <param name="strWhereColumnName">条件列名</param>
-        /// <param name="strWhereColumnValue">条件列值</param>
+        /// <param name="strXmlPath"> XML文件路径 </param>
+        /// <param name="Columns"> 列名数组 </param>
+        /// <param name="ColumnValue"> 列值数组 </param>
+        /// <param name="strWhereColumnName"> 条件列名 </param>
+        /// <param name="strWhereColumnValue"> 条件列值 </param>
         public static bool UpdateXmlRow(string strXmlPath, string[] Columns, string[] ColumnValue,
             string strWhereColumnName, string strWhereColumnValue)
         {
@@ -384,12 +373,12 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     插入一行数据
+        /// 插入一行数据
         /// </summary>
-        /// <param name="strXmlPath">XML文件相对路径</param>
-        /// <param name="Columns">要插入行的列名数组，如：string[] Columns = {"name","IsMarried"};</param>
-        /// <param name="ColumnValue">要插入行每列的值数组，如：string[] ColumnValue={"XML大全","false"};</param>
-        /// <returns>成功返回true,否则返回false</returns>
+        /// <param name="strXmlPath"> XML文件相对路径 </param>
+        /// <param name="Columns"> 要插入行的列名数组，如：string[] Columns = {"name","IsMarried"}; </param>
+        /// <param name="ColumnValue"> 要插入行每列的值数组，如：string[] ColumnValue={"XML大全","false"}; </param>
+        /// <returns> 成功返回true,否则返回false </returns>
         public static bool WriteXmlByDataSet(string strXmlPath, string[] Columns, string[] ColumnValue)
         {
             try
@@ -416,9 +405,9 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     读取XML返回DataSet
+        /// 读取XML返回DataSet
         /// </summary>
-        /// <param name="strXmlPath">XML文件相对路径</param>
+        /// <param name="strXmlPath"> XML文件相对路径 </param>
         public DataSet GetDataSetByXml(string strXmlPath)
         {
             try
@@ -435,10 +424,10 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     读取XML返回经排序或筛选后的DataView
+        /// 读取XML返回经排序或筛选后的DataView
         /// </summary>
-        /// <param name="strWhere">筛选条件，如:"name='kgdiwss'"</param>
-        /// <param name="strSort"> 排序条件，如:"Id desc"</param>
+        /// <param name="strWhere"> 筛选条件，如:"name='kgdiwss'" </param>
+        /// <param name="strSort"> 排序条件，如:"Id desc" </param>
         public DataView GetDataViewByXml(string strWhere, string strSort)
         {
             try
@@ -459,12 +448,10 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     读取指定节点的数据
+        /// 读取指定节点的数据
         /// </summary>
-        /// <param name="node">节点</param>
-        /// 使用示列:
-        /// XMLProsess.Read("/Node", "")
-        /// XMLProsess.Read("/Node/Element[@Attribute='Name']")
+        /// <param name="node"> 节点 </param>
+        /// 使用示列: XMLProsess.Read("/Node", "") XMLProsess.Read("/Node/Element[@Attribute='Name']")
         public string Read(string node)
         {
             var value = "";
@@ -482,9 +469,9 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     获取某一节点的所有孩子节点的值
+        /// 获取某一节点的所有孩子节点的值
         /// </summary>
-        /// <param name="node">要查询的节点</param>
+        /// <param name="node"> 要查询的节点 </param>
         public XmlNodeList ReadAllChild(string node)
         {
             var doc = XMLLoad();
@@ -494,9 +481,9 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     获取某一节点的所有孩子节点的值
+        /// 获取某一节点的所有孩子节点的值
         /// </summary>
-        /// <param name="node">要查询的节点</param>
+        /// <param name="node"> 要查询的节点 </param>
         public string[] ReadAllChildallValue(string node)
         {
             var i = 0;
@@ -518,10 +505,10 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     修改指定节点的数据
+        /// 修改指定节点的数据
         /// </summary>
-        /// <param name="node">节点</param>
-        /// <param name="value">值</param>
+        /// <param name="node"> 节点 </param>
+        /// <param name="value"> 值 </param>
         public void Update(string node, string value)
         {
             try
@@ -541,9 +528,9 @@ namespace Common.Utility
         #region Private Methods
 
         /// <summary>
-        ///     返回完整路径
+        /// 返回完整路径
         /// </summary>
-        /// <param name="strPath">Xml的路径</param>
+        /// <param name="strPath"> Xml的路径 </param>
         private static string GetXmlFullPath(string strPath)
         {
             if (strPath.IndexOf(":") > 0)
@@ -552,9 +539,9 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     导入XML文件
+        /// 导入XML文件
         /// </summary>
-        /// <param name="strPath">XML文件路径</param>
+        /// <param name="strPath"> XML文件路径 </param>
         private static XmlDocument XMLLoad(string strPath)
         {
             var xmldoc = new XmlDocument();
@@ -571,9 +558,9 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     导入XML文件
+        /// 导入XML文件
         /// </summary>
-        /// <param name="XMLPath">XML文件路径</param>
+        /// <param name="XMLPath"> XML文件路径 </param>
         private XmlDocument XMLLoad()
         {
             var xmldoc = new XmlDocument();

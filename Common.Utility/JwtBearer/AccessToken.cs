@@ -1,12 +1,14 @@
-﻿﻿using System;
+﻿using System;
 
 namespace Common.Utility.JwtBearer
 {
     /// <summary>
-    ///     授权访问Token
+    /// 授权访问Token
     /// </summary>
     public class AccessToken
     {
+        #region Public Constructors
+
         public AccessToken()
         {
         }
@@ -23,24 +25,30 @@ namespace Common.Utility.JwtBearer
         {
         }
 
-        /// <summary>
-        ///     Token
-        /// </summary>
-        public string Token { get; }
+        #endregion Public Constructors
+
+        #region Public Properties
 
         /// <summary>
-        ///     Token 类型
+        /// 过期时间
         /// </summary>
-        public string TokenType { get; }
+        public DateTime Expired { get; }
 
         /// <summary>
-        ///     刷新令牌
+        /// 刷新令牌
         /// </summary>
         public string RefreshToken { get; }
 
         /// <summary>
-        ///     过期时间
+        /// Token
         /// </summary>
-        public DateTime Expired { get; }
+        public string Token { get; }
+
+        /// <summary>
+        /// Token 类型
+        /// </summary>
+        public string TokenType { get; }
+
+        #endregion Public Properties
     }
 }

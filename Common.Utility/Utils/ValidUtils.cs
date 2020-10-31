@@ -12,55 +12,11 @@ namespace Common.Utility.Tools
     public class ValidUtils
     {
         #region Public Methods
-        /// <summary>
-        /// 实体验证
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="results"></param>
-        /// <returns></returns>
-        public static bool IsValid(object value, out List<ValidationResult> results)
-        {
-            results=new List<ValidationResult>();
-            var validationContext = new ValidationContext(value);
-            var isValid = Validator.TryValidateObject(value, validationContext, results, true);
-            return isValid;
-        }
-        /// <summary>
-        ///     判断对象是否为Int32类型的数字
-        /// </summary>
-        /// <param name="Expression"></param>
-        /// <returns></returns>
-        public static bool IsNumeric(string expression)
-        {
-            if (expression != null)
-            {
-                var str = expression;
-                if (str.Length > 0 && str.Length <= 11 && Regex.IsMatch(str, @"^[-]?[0-9]*[.]?[0-9]*$"))
-                    if (str.Length < 10 || str.Length == 10 && str[0] == '1' ||
-                        str.Length == 11 && str[0] == '-' && str[1] == '1')
-                        return true;
-            }
-
-            return false;
-        }
-        
 
         /// <summary>
-        ///     是否为Double类型
+        /// 验证日期是否合法,对不规则的作了简单处理
         /// </summary>
-        /// <param name="expression"></param>
-        /// <returns></returns>
-        public static bool IsDouble(object expression)
-        {
-            if (expression != null)
-                return Regex.IsMatch(expression.ToString(), @"^([0-9])[0-9]*(\.\w*)?$");
-
-            return false;
-        }
-         /// <summary>
-        ///     验证日期是否合法,对不规则的作了简单处理
-        /// </summary>
-        /// <param name="date">日期</param>
+        /// <param name="date"> 日期 </param>
         public static bool IsDate(ref string date)
         {
             //如果为空，认为验证合格
@@ -159,9 +115,22 @@ namespace Common.Utility.Tools
         }
 
         /// <summary>
-        ///     验证EMail是否合法
+        /// 是否为Double类型
         /// </summary>
-        /// <param name="email">要验证的Email</param>
+        /// <param name="expression"> </param>
+        /// <returns> </returns>
+        public static bool IsDouble(object expression)
+        {
+            if (expression != null)
+                return Regex.IsMatch(expression.ToString(), @"^([0-9])[0-9]*(\.\w*)?$");
+
+            return false;
+        }
+
+        /// <summary>
+        /// 验证EMail是否合法
+        /// </summary>
+        /// <param name="email"> 要验证的Email </param>
         public static bool IsEmail(string email)
         {
             //如果为空，认为验证不合格
@@ -176,30 +145,11 @@ namespace Common.Utility.Tools
             //验证
             return IsMatch(email, pattern);
         }
-        /// <summary>
-        ///     验证输入字符串是否与模式字符串匹配，匹配返回true
-        /// </summary>
-        /// <param name="input">输入字符串</param>
-        /// <param name="pattern">模式字符串</param>
-        public static bool IsMatch(string input, string pattern)
-        {
-            return IsMatch(input, pattern, RegexOptions.IgnoreCase);
-        }
 
         /// <summary>
-        ///     验证输入字符串是否与模式字符串匹配，匹配返回true
+        /// 验证身份证是否合法
         /// </summary>
-        /// <param name="input">输入的字符串</param>
-        /// <param name="pattern">模式字符串</param>
-        /// <param name="options">筛选条件</param>
-        public static bool IsMatch(string input, string pattern, RegexOptions options)
-        {
-            return Regex.IsMatch(input, pattern, options);
-        }
-        /// <summary>
-        ///     验证身份证是否合法
-        /// </summary>
-        /// <param name="idCard">要验证的身份证</param>
+        /// <param name="idCard"> 要验证的身份证 </param>
         public static bool IsIdCard(string idCard)
         {
             //如果为空，认为验证合格
@@ -219,9 +169,9 @@ namespace Common.Utility.Tools
         }
 
         /// <summary>
-        ///     验证是否为整数 如果为空，认为验证不合格 返回false
+        /// 验证是否为整数 如果为空，认为验证不合格 返回false
         /// </summary>
-        /// <param name="number">要验证的整数</param>
+        /// <param name="number"> 要验证的整数 </param>
         public static bool IsInt(string number)
         {
             //如果为空，认为验证不合格
@@ -238,9 +188,9 @@ namespace Common.Utility.Tools
         }
 
         /// <summary>
-        ///     验证IP地址是否合法
+        /// 验证IP地址是否合法
         /// </summary>
-        /// <param name="ip">要验证的IP地址</param>
+        /// <param name="ip"> 要验证的IP地址 </param>
         public static bool IsIP(string ip)
         {
             //如果为空，认为验证合格
@@ -257,10 +207,31 @@ namespace Common.Utility.Tools
         }
 
         /// <summary>
-        ///     判断对象是否为空，为空返回true
+        /// 验证输入字符串是否与模式字符串匹配，匹配返回true
         /// </summary>
-        /// <typeparam name="T">要验证的对象的类型</typeparam>
-        /// <param name="data">要验证的对象</param>
+        /// <param name="input"> 输入字符串 </param>
+        /// <param name="pattern"> 模式字符串 </param>
+        public static bool IsMatch(string input, string pattern)
+        {
+            return IsMatch(input, pattern, RegexOptions.IgnoreCase);
+        }
+
+        /// <summary>
+        /// 验证输入字符串是否与模式字符串匹配，匹配返回true
+        /// </summary>
+        /// <param name="input"> 输入的字符串 </param>
+        /// <param name="pattern"> 模式字符串 </param>
+        /// <param name="options"> 筛选条件 </param>
+        public static bool IsMatch(string input, string pattern, RegexOptions options)
+        {
+            return Regex.IsMatch(input, pattern, options);
+        }
+
+        /// <summary>
+        /// 判断对象是否为空，为空返回true
+        /// </summary>
+        /// <typeparam name="T"> 要验证的对象的类型 </typeparam>
+        /// <param name="data"> 要验证的对象 </param>
         public static bool IsNullOrEmpty<T>(T data)
         {
             //如果为null
@@ -279,9 +250,9 @@ namespace Common.Utility.Tools
         }
 
         /// <summary>
-        ///     判断对象是否为空，为空返回true
+        /// 判断对象是否为空，为空返回true
         /// </summary>
-        /// <param name="data">要验证的对象</param>
+        /// <param name="data"> 要验证的对象 </param>
         public static bool IsNullOrEmpty(object data)
         {
             //如果为null
@@ -298,11 +269,63 @@ namespace Common.Utility.Tools
             //不为空
             return false;
         }
+
         /// <summary>
-        ///     检测客户输入的字符串是否有效,并将原始字符串修改为有效字符串或空字符串。
-        ///     当检测到客户的输入中有攻击性危险字符串,则返回false,有效返回true。
+        /// 验证是否为数字
         /// </summary>
-        /// <param name="input">要检测的字符串</param>
+        /// <param name="number"> 要验证的数字 </param>
+        public static bool IsNumber(string number)
+        {
+            //如果为空，认为验证不合格
+            if (IsNullOrEmpty(number)) return false;
+
+            //清除要验证字符串中的空格
+            number = number.Trim();
+
+            //模式字符串
+            var pattern = @"^[0-9]+[0-9]*[.]?[0-9]*$";
+
+            //验证
+            return IsMatch(number, pattern);
+        }
+
+        /// <summary>
+        /// 判断对象是否为Int32类型的数字
+        /// </summary>
+        /// <param name="Expression"> </param>
+        /// <returns> </returns>
+        public static bool IsNumeric(string expression)
+        {
+            if (expression != null)
+            {
+                var str = expression;
+                if (str.Length > 0 && str.Length <= 11 && Regex.IsMatch(str, @"^[-]?[0-9]*[.]?[0-9]*$"))
+                    if (str.Length < 10 || str.Length == 10 && str[0] == '1' ||
+                        str.Length == 11 && str[0] == '-' && str[1] == '1')
+                        return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 实体验证
+        /// </summary>
+        /// <param name="value"> </param>
+        /// <param name="results"> </param>
+        /// <returns> </returns>
+        public static bool IsValid(object value, out List<ValidationResult> results)
+        {
+            results = new List<ValidationResult>();
+            var validationContext = new ValidationContext(value);
+            var isValid = Validator.TryValidateObject(value, validationContext, results, true);
+            return isValid;
+        }
+
+        /// <summary>
+        /// 检测客户输入的字符串是否有效,并将原始字符串修改为有效字符串或空字符串。 当检测到客户的输入中有攻击性危险字符串,则返回false,有效返回true。
+        /// </summary>
+        /// <param name="input"> 要检测的字符串 </param>
         public static bool IsValidInput(ref string input)
         {
             try
@@ -333,25 +356,6 @@ namespace Common.Utility.Tools
             {
                 throw new Exception(ex.Message);
             }
-        }
-
-        /// <summary>
-        ///     验证是否为数字
-        /// </summary>
-        /// <param name="number">要验证的数字</param>
-        public static bool IsNumber(string number)
-        {
-            //如果为空，认为验证不合格
-            if (IsNullOrEmpty(number)) return false;
-
-            //清除要验证字符串中的空格
-            number = number.Trim();
-
-            //模式字符串
-            var pattern = @"^[0-9]+[0-9]*[.]?[0-9]*$";
-
-            //验证
-            return IsMatch(number, pattern);
         }
 
         #endregion Public Methods

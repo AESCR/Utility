@@ -9,16 +9,48 @@ namespace Common.Utility.Tools
     /// </summary>
     public sealed class CookieUtils
     {
+        #region Private Fields
+
         /// <summary>
         /// 解析Cookie
         /// </summary>
         private static readonly Regex RegexSplitCookie2 = new Regex(@"[^,][\S\s]+?;+[\S\s]+?(?=,\S)");
 
+        #endregion Private Fields
+
+        #region Public Methods
+
+        /// <summary>
+        /// 获取 Cookies
+        /// </summary>
+        /// <param name="setCookie"> </param>
+        /// <param name="uri"> </param>
+        /// <returns> </returns>
+        public static string GetCookies(string setCookie, Uri uri)
+        {
+            //获取所有Cookie
+            var strCookies = string.Empty;
+            var cookies = GetCookiesByHeader(setCookie);
+            foreach (Cookie cookie in cookies)
+            {
+                //忽略过期Cookie
+                if (cookie.Expires < DateTime.Now && cookie.Expires != DateTime.MinValue)
+                {
+                    continue;
+                }
+                if (uri.Host.Contains(cookie.Domain))
+                {
+                    strCookies += $"{cookie.Name}={cookie.Value}; ";
+                }
+            }
+            return strCookies;
+        }
+
         /// <summary>
         /// 获取所有Cookie 通过Set-Cookie
         /// </summary>
-        /// <param name="setCookie"></param>
-        /// <returns></returns>
+        /// <param name="setCookie"> </param>
+        /// <returns> </returns>
         public static CookieCollection GetCookiesByHeader(string setCookie)
         {
             var cookieCollection = new CookieCollection();
@@ -80,37 +112,11 @@ namespace Common.Utility.Tools
         }
 
         /// <summary>
-        /// 获取 Cookies
-        /// </summary>
-        /// <param name="setCookie"></param>
-        /// <param name="uri"></param>
-        /// <returns></returns>
-        public static string GetCookies(string setCookie, Uri uri)
-        {
-            //获取所有Cookie
-            var strCookies = string.Empty;
-            var cookies = GetCookiesByHeader(setCookie);
-            foreach (Cookie cookie in cookies)
-            {
-                //忽略过期Cookie
-                if (cookie.Expires < DateTime.Now && cookie.Expires != DateTime.MinValue)
-                {
-                    continue;
-                }
-                if (uri.Host.Contains(cookie.Domain))
-                {
-                    strCookies += $"{cookie.Name}={cookie.Value}; ";
-                }
-            }
-            return strCookies;
-        }
-
-        /// <summary>
         /// 通过Name 获取 Cookie Value
         /// </summary>
-        /// <param name="setCookie">Cookies</param>
-        /// <param name="name">Name</param>
-        /// <returns></returns>
+        /// <param name="setCookie"> Cookies </param>
+        /// <param name="name"> Name </param>
+        /// <returns> </returns>
         public static string GetCookieValueByName(string setCookie, string name)
         {
             var regex = new Regex($"(?<={name}=).*?(?=; )");
@@ -120,10 +126,10 @@ namespace Common.Utility.Tools
         /// <summary>
         /// 通过Name 设置 Cookie Value
         /// </summary>
-        /// <param name="setCookie">Cookies</param>
-        /// <param name="name">Name</param>
-        /// <param name="value">Value</param>
-        /// <returns></returns>
+        /// <param name="setCookie"> Cookies </param>
+        /// <param name="name"> Name </param>
+        /// <param name="value"> Value </param>
+        /// <returns> </returns>
         public static string SetCookieValueByName(string setCookie, string name, string value)
         {
             var regex = new Regex($"(?<={name}=).*?(?=; )");
@@ -135,28 +141,11 @@ namespace Common.Utility.Tools
         }
 
         /// <summary>
-        /// 通过Name 更新Cookie
-        /// </summary>
-        /// <param name="oldCookie">原Cookie</param>
-        /// <param name="newCookie">更新内容</param>
-        /// <param name="name">名字</param>
-        /// <returns></returns>
-        public static string UpdateCookieValueByName(string oldCookie, string newCookie, string name)
-        {
-            var regex = new Regex($"(?<={name}=).*?[(?=; )|$]");
-            if (regex.IsMatch(oldCookie) && regex.IsMatch(newCookie))
-            {
-                oldCookie = regex.Replace(oldCookie, regex.Match(newCookie).Value);
-            }
-            return oldCookie;
-        }
-
-        /// <summary>
         /// 根据新Cookie 更新旧的
         /// </summary>
-        /// <param name="oldCookie"></param>
-        /// <param name="newCookie"></param>
-        /// <returns></returns>
+        /// <param name="oldCookie"> </param>
+        /// <param name="newCookie"> </param>
+        /// <returns> </returns>
         public static string UpdateCookieValue(string oldCookie, string newCookie)
         {
             var list = GetCookiesByHeader(newCookie);
@@ -167,5 +156,24 @@ namespace Common.Utility.Tools
             }
             return oldCookie;
         }
+
+        /// <summary>
+        /// 通过Name 更新Cookie
+        /// </summary>
+        /// <param name="oldCookie"> 原Cookie </param>
+        /// <param name="newCookie"> 更新内容 </param>
+        /// <param name="name"> 名字 </param>
+        /// <returns> </returns>
+        public static string UpdateCookieValueByName(string oldCookie, string newCookie, string name)
+        {
+            var regex = new Regex($"(?<={name}=).*?[(?=; )|$]");
+            if (regex.IsMatch(oldCookie) && regex.IsMatch(newCookie))
+            {
+                oldCookie = regex.Replace(oldCookie, regex.Match(newCookie).Value);
+            }
+            return oldCookie;
+        }
+
+        #endregion Public Methods
     }
 }

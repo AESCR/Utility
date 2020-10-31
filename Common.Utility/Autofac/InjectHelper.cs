@@ -1,19 +1,21 @@
-﻿using System;
+﻿using Autofac;
+using Autofac.Extras.DynamicProxy;
+using System;
 using System.Linq;
 using System.Reflection;
-using Autofac;
-using Autofac.Extras.DynamicProxy;
 
 namespace Common.Utility.Autofac
 {
-   public static class InjectHelper
+    public static class InjectHelper
     {
+        #region Public Methods
+
         /// <summary>
         /// 自动注入
         /// </summary>
-        /// <param name="services"></param>
-        /// <param name="assembly"></param>
-        /// <param name="interceptedType">拦截器</param>
+        /// <param name="services"> </param>
+        /// <param name="assembly"> </param>
+        /// <param name="interceptedType"> 拦截器 </param>
         public static void AutoInjection(this ContainerBuilder services, Assembly assembly, Type interceptedType = null)
         {
             var types = assembly.GetTypes();
@@ -29,6 +31,7 @@ namespace Common.Utility.Autofac
                 .ToList();
 
             #region ISingletonDependency （单例）
+
             //获取标记了ISingletonDependency接口的接口
             var singletonInterfaceDependency = types
                     .Where(t => t.GetInterfaces().Contains(typeof(ISingletonDependency)))
@@ -56,7 +59,6 @@ namespace Common.Utility.Autofac
                 }
             }
 
-
             //获取标记了ISingletonDependency接口的类
             var singletonTypeDependency = types
                     .Where(t => t.GetInterfaces().Contains(typeof(ISingletonDependency)) && t.IsClass)
@@ -75,9 +77,11 @@ namespace Common.Utility.Autofac
                     });
                 }
             }
-            #endregion
+
+            #endregion ISingletonDependency （单例）
 
             #region ITransientDependency（每次实例）
+
             //获取标记了ITransientDependency接口的接口
             var transientInterfaceDependency = types
                    .Where(t => t.GetInterfaces().Contains(typeof(ITransientDependency)))
@@ -119,9 +123,11 @@ namespace Common.Utility.Autofac
                     });
                 }
             }
-            #endregion
+
+            #endregion ITransientDependency（每次实例）
 
             #region IScopedDependency（线程内唯一）
+
             //获取标记了IScopedDependency接口的接口
             var scopedInterfaceDependency = types
                    .Where(t => t.GetInterfaces().Contains(typeof(IScopedDependency)))
@@ -143,10 +149,8 @@ namespace Common.Utility.Autofac
                     }
                     if (autoInterceptorClass.Any(t => t == type) && interceptedType != null)
                         builder = builder.InterceptedBy(interceptedType).EnableInterfaceInterceptors();
-
                 }
             }
-
 
             //获取标记了IScopedDependency接口的类
             var scopedTypeDependency = types
@@ -166,7 +170,10 @@ namespace Common.Utility.Autofac
                     });
                 }
             }
-            #endregion
+
+            #endregion IScopedDependency（线程内唯一）
         }
+
+        #endregion Public Methods
     }
 }

@@ -7,7 +7,7 @@ namespace Common.Utility.Extensions.HttpClient
         #region Public Methods
 
         /// <summary>
-        ///     将Http状态码翻译为对应的中文
+        /// 将Http状态码翻译为对应的中文
         /// </summary>
         /// <param name="code"> Http状态码 </param>
         /// <returns> 中文解析 </returns>

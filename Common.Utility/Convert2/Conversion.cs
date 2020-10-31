@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -8,22 +9,72 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
-using Newtonsoft.Json;
 
 namespace Common.Utility.Convert2
 {
     /// <summary>
-    ///     处理数据类型转换，数制转换、编码转换相关的类
+    /// 处理数据类型转换，数制转换、编码转换相关的类
     /// </summary>
     public sealed class Conversion
     {
         #region Public Methods
 
         /// <summary>
-        ///     将byte[]转换成int
+        /// BinaryFormatter反序列化
         /// </summary>
-        /// <param name="data">需要转换成整数的byte数组</param>
-        public  int BytesToInt32(byte[] data)
+        /// <param name="str"> 字符串序列 </param>
+        public T BinaryDeserialize<T>(string str)
+        {
+            var intLen = str.Length / 2;
+            var bytes = new byte[intLen];
+            for (var i = 0; i < intLen; i++)
+            {
+                var ibyte = Convert.ToInt32(str.Substring(i * 2, 2), 16);
+                bytes[i] = (byte)ibyte;
+            }
+
+            var formatter = new BinaryFormatter();
+            using (var ms = new MemoryStream(bytes))
+            {
+                return (T)formatter.Deserialize(ms);
+            }
+        }
+
+        /// <summary>
+        /// BinaryFormatter序列化
+        /// </summary>
+        /// <param name="item"> 对象 </param>
+        public string BinarySerializer<T>(T item)
+        {
+            var formatter = new BinaryFormatter();
+            using (var ms = new MemoryStream())
+            {
+                formatter.Serialize(ms, item);
+                ms.Position = 0;
+                var bytes = ms.ToArray();
+                var sb = new StringBuilder();
+                foreach (var bt in bytes) sb.Append(string.Format("{0:X2}", bt));
+                return sb.ToString();
+            }
+        }
+
+        /// <summary>
+        /// 二进制反序列化
+        /// </summary>
+        /// <param name="data"> 数据缓冲区 </param>
+        /// <returns> 对象 </returns>
+        public object BinaryToObject(byte[] data)
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            using MemoryStream rems = new MemoryStream(data);
+            return formatter.Deserialize(rems);
+        }
+
+        /// <summary>
+        /// 将byte[]转换成int
+        /// </summary>
+        /// <param name="data"> 需要转换成整数的byte数组 </param>
+        public int BytesToInt32(byte[] data)
         {
             //如果传入的字节数组长度小于4,则返回0
             if (data.Length < 4) return 0;
@@ -47,24 +98,36 @@ namespace Common.Utility.Convert2
             //返回整数
             return num;
         }
-       
+
         /// <summary>
-        ///     使用指定字符集将byte[]转换成string
+        /// 字节转流
         /// </summary>
-        /// <param name="bytes">要转换的字节数组</param>
-        /// <param name="encoding">字符编码</param>
-        public  string BytesToString(byte[] bytes, Encoding encoding)
+        /// <param name="buffer"> </param>
+        /// <returns> </returns>
+        public Stream BytesToStream(byte[] buffer)
+        {
+            using Stream stream = new MemoryStream(buffer);
+            stream.Seek(0, SeekOrigin.Begin);
+            return stream;
+        }
+
+        /// <summary>
+        /// 使用指定字符集将byte[]转换成string
+        /// </summary>
+        /// <param name="bytes"> 要转换的字节数组 </param>
+        /// <param name="encoding"> 字符编码 </param>
+        public string BytesToString(byte[] bytes, Encoding encoding)
         {
             return encoding.GetString(bytes);
         }
 
         /// <summary>
-        ///     实现各进制数间的转换。ConvertBase("15",10,16)表示将十进制数15转换为16进制的数。
+        /// 实现各进制数间的转换。ConvertBase("15",10,16)表示将十进制数15转换为16进制的数。
         /// </summary>
-        /// <param name="value">要转换的值,即原值</param>
-        /// <param name="from">原值的进制,只能是2,8,10,16四个值。</param>
-        /// <param name="to">要转换到的目标进制，只能是2,8,10,16四个值。</param>
-        public  string ConvertBase(string value, int from, int to)
+        /// <param name="value"> 要转换的值,即原值 </param>
+        /// <param name="from"> 原值的进制,只能是2,8,10,16四个值。 </param>
+        /// <param name="to"> 要转换到的目标进制，只能是2,8,10,16四个值。 </param>
+        public string ConvertBase(string value, int from, int to)
         {
             try
             {
@@ -107,96 +170,12 @@ namespace Common.Utility.Convert2
         }
 
         /// <summary>
-        ///     指定字符串的固定长度，如果字符串小于固定长度，
-        ///     则在字符串的前面补足零，可设置的固定长度最大为9位
-        /// </summary>
-        /// <param name="text">原始字符串</param>
-        /// <param name="limitedLength">字符串的固定长度</param>
-        public  string RepairZero(string text, int limitedLength)
-        {
-            //补足0的字符串
-            var temp = "";
-
-            //补足0
-            for (var i = 0; i < limitedLength - text.Length; i++) temp += "0";
-
-            //连接text
-            temp += text;
-
-            //返回补足0的字符串
-            return temp;
-        }
-
-        /// <summary>
-        ///     使用指定字符集将string转换成byte[]
-        /// </summary>
-        /// <param name="text">要转换的字符串</param>
-        /// <param name="encoding">字符编码</param>
-        public  byte[] StringToBytes(string text, Encoding encoding)
-        {
-            return encoding.GetBytes(text);
-        }
-        /// <summary>
-        /// 将对象属性转换为key-value对
-        /// </summary>
-        /// <param name="o"></param>
-        /// <returns></returns>
-        public  Dictionary<String, Object> ObjectToDictionary(object o) 
-        {
-            Dictionary<String, Object> map = new Dictionary<string, object>();
-            Type t = o.GetType();
-            PropertyInfo[] pi = t.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            foreach (PropertyInfo p in pi)
-            {
-                MethodInfo mi = p.GetGetMethod();
-                if (mi != null && mi.IsPublic)
-                {
-                    map.Add(p.Name, mi.Invoke(o, new Object[] { }));
-                }
-            }
-            return map;
-        }
-        ///<summary>
-        /// 二进制序列化
-        /// </summary>
-        /// <param name="data">要序列化的对象</param>
-        /// <returns>返回存放序列化后的数据缓冲区</returns>
-        public  byte[] ObjectToBinary(object o)
-        {
-            using MemoryStream rems = new MemoryStream();
-            BinaryFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(rems, o);
-            return rems.GetBuffer();
-        }
-        /// <summary>
-        /// 二进制反序列化
-        /// </summary>
-        /// <param name="data">数据缓冲区</param>
-        /// <returns>对象</returns>
-        public  object BinaryToObject(byte[] data)
-        {
-            BinaryFormatter formatter = new BinaryFormatter();
-            using MemoryStream rems = new MemoryStream(data);
-            return formatter.Deserialize(rems);
-        }
-        /// <summary>
-        /// 字节转流
-        /// </summary>
-        /// <param name="buffer"></param>
-        /// <returns></returns>
-        public Stream BytesToStream(byte[] buffer)
-        {
-            using Stream stream = new MemoryStream(buffer);
-            stream.Seek(0, SeekOrigin.Begin);
-            return stream;
-        }
-        /// <summary>
         /// DataTable 转换为List 集合
         /// </summary>
-        /// <typeparam name="TResult">类型</typeparam>
-        /// <param name="dt">DataTable</param>
-        /// <returns></returns>
-        public  List<T> DataTableToList<T>(DataTable dt) where T : new()
+        /// <typeparam name="TResult"> 类型 </typeparam>
+        /// <param name="dt"> DataTable </param>
+        /// <returns> </returns>
+        public List<T> DataTableToList<T>(DataTable dt) where T : new()
         {
             //创建一个属性的列表
             List<PropertyInfo> prlist = new List<PropertyInfo>();
@@ -220,185 +199,70 @@ namespace Common.Utility.Convert2
             }
             return oblist;
         }
-        /// <summary>
-        /// 对象转Json
-        /// </summary>
-        /// <param name="o"></param>
-        /// <returns></returns>
-        public  string SerializeObject(object o)
-        {
-            return JsonConvert.SerializeObject(o);
-        }
+
         /// <summary>
         /// Json转对象
         /// </summary>
-        /// <param name="val"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public  T DeserializeObject<T>( string val)
+        /// <param name="val"> </param>
+        /// <typeparam name="T"> </typeparam>
+        /// <returns> </returns>
+        public T DeserializeObject<T>(string val)
         {
             return JsonConvert.DeserializeObject<T>(val);
         }
-        
-        /// <summary>
-        ///     将数组转换为字符串
-        /// </summary>
-        /// <param name="list">List</param>
-        /// <param name="speater">分隔符</param>
-        /// <returns>String</returns>
-        public  string ListToStr(List<string> list, string speater)
-        {
-            var sb = new StringBuilder();
-            for (var i = 0; i < list.Count; i++)
-                if (i == list.Count - 1)
-                {
-                    sb.Append(list[i]);
-                }
-                else
-                {
-                    sb.Append(list[i]);
-                    sb.Append(speater);
-                }
-
-            return sb.ToString();
-        }
 
         /// <summary>
-        ///     将字符串转换为数组
+        /// 文件化XML反序列化
         /// </summary>
-        /// <param name="str">字符串</param>
-        /// <returns>字符串数组</returns>
-        public  string[] StrToArray(string str)
+        /// <param name="path"> 文件路径 </param>
+        public T FileXmlDeserialize<T>(string path)
         {
-            return str.Split(new char[',']);
-        }
-        /// <summary>
-        ///     将对象转换为Int32类型
-        /// </summary>
-        /// <param name="expression">要转换的字符串</param>
-        /// <param name="defValue">缺省值</param>
-        /// <returns>转换后的int类型结果</returns>
-        public  int ObjToInt(object expression, int defValue)
-        {
-            if (expression != null)
-                return StrToInt(expression.ToString(), defValue);
-
-            return defValue;
-        }
-        /// <summary>
-        ///     string型转换为bool型
-        /// </summary>
-        /// <param name="strValue">要转换的字符串</param>
-        /// <param name="defValue">缺省值</param>
-        /// <returns>转换后的bool类型结果</returns>
-        public  bool StrToBool(string expression, bool defValue)
-        {
-            if (expression != null)
+            FileStream fs = null;
+            try
             {
-                if (string.Compare(expression, "true", true) == 0)
-                    return true;
-                if (string.Compare(expression, "false", true) == 0)
-                    return false;
+                fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                var serializer = new XmlSerializer(typeof(T));
+                return (T)serializer.Deserialize(fs);
             }
-
-            return defValue;
-        }
-
-        /// <summary>
-        ///     将对象转换为日期时间类型
-        /// </summary>
-        /// <param name="str">要转换的字符串</param>
-        /// <param name="defValue">缺省值</param>
-        /// <returns>转换后的int类型结果</returns>
-        public  DateTime StrToDateTime(string str, DateTime defValue)
-        {
-            if (!string.IsNullOrEmpty(str))
+            catch (Exception ex)
             {
-                DateTime dateTime;
-                if (DateTime.TryParse(str, out dateTime))
-                    return dateTime;
+                throw ex;
             }
-
-            return defValue;
-        }
-
-        /// <summary>
-        ///     将对象转换为日期时间类型
-        /// </summary>
-        /// <param name="str">要转换的字符串</param>
-        /// <returns>转换后的int类型结果</returns>
-        public  DateTime StrToDateTime(string str)
-        {
-            return StrToDateTime(str, DateTime.Now);
-        }
-
-        /// <summary>
-        ///     string型转换为decimal型
-        /// </summary>
-        /// <param name="strValue">要转换的字符串</param>
-        /// <param name="defValue">缺省值</param>
-        /// <returns>转换后的decimal类型结果</returns>
-        public  decimal StrToDecimal(string expression, decimal defValue)
-        {
-            if (expression == null || expression.Length > 10)
-                return defValue;
-
-            var intValue = defValue;
-            if (expression != null)
+            finally
             {
-                var IsDecimal = Regex.IsMatch(expression, @"^([-]|[0-9])[0-9]*(\.\w*)?$");
-                if (IsDecimal)
-                    decimal.TryParse(expression, out intValue);
+                fs?.Close();
             }
-
-            return intValue;
         }
 
         /// <summary>
-        ///     string型转换为float型
+        /// 文件化XML序列化 到文件
         /// </summary>
-        /// <param name="strValue">要转换的字符串</param>
-        /// <param name="defValue">缺省值</param>
-        /// <returns>转换后的int类型结果</returns>
-        public  float StrToFloat(string expression, float defValue)
+        /// <param name="obj"> 对象 </param>
+        /// <param name="filename"> 文件路径 </param>
+        public void FileXmlSerializer(object obj, string filename)
         {
-            if (expression == null || expression.Length > 10)
-                return defValue;
-
-            var intValue = defValue;
-            if (expression != null)
+            FileStream fs = null;
+            try
             {
-                var IsFloat = Regex.IsMatch(expression, @"^([-]|[0-9])[0-9]*(\.\w*)?$");
-                if (IsFloat)
-                    float.TryParse(expression, out intValue);
+                fs = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+                var serializer = new XmlSerializer(obj.GetType());
+                serializer.Serialize(fs, obj);
             }
-
-            return intValue;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                fs?.Close();
+            }
         }
 
         /// <summary>
-        ///     将字符串转换为Int32类型
+        /// HTML转行成TEXT
         /// </summary>
-        /// <param name="expression">要转换的字符串</param>
-        /// <param name="defValue">缺省值</param>
-        /// <returns>转换后的int类型结果</returns>
-        public  int StrToInt(string expression, int defValue)
-        {
-            if (string.IsNullOrEmpty(expression) || expression.Trim().Length >= 11 ||
-                !Regex.IsMatch(expression.Trim(), @"^([-]|[0-9])[0-9]*(\.\w*)?$"))
-                return defValue;
-
-            int rv;
-            if (int.TryParse(expression, out rv))
-                return rv;
-
-            return Convert.ToInt32(StrToFloat(expression, defValue));
-        }
-        /// <summary>
-        ///     HTML转行成TEXT
-        /// </summary>
-        /// <param name="strHtml"></param>
-        /// <returns></returns>
+        /// <param name="strHtml"> </param>
+        /// <returns> </returns>
         public string HtmlToTxt(string strHtml)
         {
             string[] aryReg =
@@ -432,78 +296,242 @@ namespace Common.Utility.Convert2
             strOutput.Replace("\r\n", "");
             return strOutput;
         }
-          /// <summary>
-        ///     文件化XML反序列化
+
+        /// <summary>
+        /// 将数组转换为字符串
         /// </summary>
-        /// <param name="path">文件路径</param>
-        public T FileXmlDeserialize<T>(string path)
+        /// <param name="list"> List </param>
+        /// <param name="speater"> 分隔符 </param>
+        /// <returns> String </returns>
+        public string ListToStr(List<string> list, string speater)
         {
-            FileStream fs = null;
-            try
-            {
-                fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                var serializer = new XmlSerializer(typeof(T));
-                return (T)serializer.Deserialize(fs);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                fs?.Close();
-            }
+            var sb = new StringBuilder();
+            for (var i = 0; i < list.Count; i++)
+                if (i == list.Count - 1)
+                {
+                    sb.Append(list[i]);
+                }
+                else
+                {
+                    sb.Append(list[i]);
+                    sb.Append(speater);
+                }
+
+            return sb.ToString();
+        }
+
+        ///<summary>
+        /// 二进制序列化
+        /// </summary>
+        /// <param name="data">要序列化的对象</param>
+        /// <returns>返回存放序列化后的数据缓冲区</returns>
+        public byte[] ObjectToBinary(object o)
+        {
+            using MemoryStream rems = new MemoryStream();
+            BinaryFormatter formatter = new BinaryFormatter();
+            formatter.Serialize(rems, o);
+            return rems.GetBuffer();
         }
 
         /// <summary>
-        ///  文件化XML序列化 到文件
+        /// 将对象属性转换为key-value对
         /// </summary>
-        /// <param name="obj">对象</param>
-        /// <param name="filename">文件路径</param>
-        public  void FileXmlSerializer(object obj, string filename)
+        /// <param name="o"> </param>
+        /// <returns> </returns>
+        public Dictionary<String, Object> ObjectToDictionary(object o)
         {
-            FileStream fs = null;
-            try
+            Dictionary<String, Object> map = new Dictionary<string, object>();
+            Type t = o.GetType();
+            PropertyInfo[] pi = t.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (PropertyInfo p in pi)
             {
-                fs = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                var serializer = new XmlSerializer(obj.GetType());
-                serializer.Serialize(fs, obj);
+                MethodInfo mi = p.GetGetMethod();
+                if (mi != null && mi.IsPublic)
+                {
+                    map.Add(p.Name, mi.Invoke(o, new Object[] { }));
+                }
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                fs?.Close();
-            }
+            return map;
         }
 
         /// <summary>
-        ///     BinaryFormatter反序列化
+        /// 将对象转换为Int32类型
         /// </summary>
-        /// <param name="str">字符串序列</param>
-        public T BinaryDeserialize<T>(string str)
+        /// <param name="expression"> 要转换的字符串 </param>
+        /// <param name="defValue"> 缺省值 </param>
+        /// <returns> 转换后的int类型结果 </returns>
+        public int ObjToInt(object expression, int defValue)
         {
-            var intLen = str.Length / 2;
-            var bytes = new byte[intLen];
-            for (var i = 0; i < intLen; i++)
-            {
-                var ibyte = Convert.ToInt32(str.Substring(i * 2, 2), 16);
-                bytes[i] = (byte)ibyte;
-            }
+            if (expression != null)
+                return StrToInt(expression.ToString(), defValue);
 
-            var formatter = new BinaryFormatter();
-            using (var ms = new MemoryStream(bytes))
-            {
-                return (T)formatter.Deserialize(ms);
-            }
+            return defValue;
         }
 
         /// <summary>
-        ///     文本化XML反序列化
+        /// 指定字符串的固定长度，如果字符串小于固定长度， 则在字符串的前面补足零，可设置的固定长度最大为9位
         /// </summary>
-        /// <param name="str">字符串序列</param>
+        /// <param name="text"> 原始字符串 </param>
+        /// <param name="limitedLength"> 字符串的固定长度 </param>
+        public string RepairZero(string text, int limitedLength)
+        {
+            //补足0的字符串
+            var temp = "";
+
+            //补足0
+            for (var i = 0; i < limitedLength - text.Length; i++) temp += "0";
+
+            //连接text
+            temp += text;
+
+            //返回补足0的字符串
+            return temp;
+        }
+
+        /// <summary>
+        /// 对象转Json
+        /// </summary>
+        /// <param name="o"> </param>
+        /// <returns> </returns>
+        public string SerializeObject(object o)
+        {
+            return JsonConvert.SerializeObject(o);
+        }
+
+        /// <summary>
+        /// 使用指定字符集将string转换成byte[]
+        /// </summary>
+        /// <param name="text"> 要转换的字符串 </param>
+        /// <param name="encoding"> 字符编码 </param>
+        public byte[] StringToBytes(string text, Encoding encoding)
+        {
+            return encoding.GetBytes(text);
+        }
+
+        /// <summary>
+        /// 将字符串转换为数组
+        /// </summary>
+        /// <param name="str"> 字符串 </param>
+        /// <returns> 字符串数组 </returns>
+        public string[] StrToArray(string str)
+        {
+            return str.Split(new char[',']);
+        }
+
+        /// <summary>
+        /// string型转换为bool型
+        /// </summary>
+        /// <param name="strValue"> 要转换的字符串 </param>
+        /// <param name="defValue"> 缺省值 </param>
+        /// <returns> 转换后的bool类型结果 </returns>
+        public bool StrToBool(string expression, bool defValue)
+        {
+            if (expression != null)
+            {
+                if (string.Compare(expression, "true", true) == 0)
+                    return true;
+                if (string.Compare(expression, "false", true) == 0)
+                    return false;
+            }
+
+            return defValue;
+        }
+
+        /// <summary>
+        /// 将对象转换为日期时间类型
+        /// </summary>
+        /// <param name="str"> 要转换的字符串 </param>
+        /// <param name="defValue"> 缺省值 </param>
+        /// <returns> 转换后的int类型结果 </returns>
+        public DateTime StrToDateTime(string str, DateTime defValue)
+        {
+            if (!string.IsNullOrEmpty(str))
+            {
+                DateTime dateTime;
+                if (DateTime.TryParse(str, out dateTime))
+                    return dateTime;
+            }
+
+            return defValue;
+        }
+
+        /// <summary>
+        /// 将对象转换为日期时间类型
+        /// </summary>
+        /// <param name="str"> 要转换的字符串 </param>
+        /// <returns> 转换后的int类型结果 </returns>
+        public DateTime StrToDateTime(string str)
+        {
+            return StrToDateTime(str, DateTime.Now);
+        }
+
+        /// <summary>
+        /// string型转换为decimal型
+        /// </summary>
+        /// <param name="strValue"> 要转换的字符串 </param>
+        /// <param name="defValue"> 缺省值 </param>
+        /// <returns> 转换后的decimal类型结果 </returns>
+        public decimal StrToDecimal(string expression, decimal defValue)
+        {
+            if (expression == null || expression.Length > 10)
+                return defValue;
+
+            var intValue = defValue;
+            if (expression != null)
+            {
+                var IsDecimal = Regex.IsMatch(expression, @"^([-]|[0-9])[0-9]*(\.\w*)?$");
+                if (IsDecimal)
+                    decimal.TryParse(expression, out intValue);
+            }
+
+            return intValue;
+        }
+
+        /// <summary>
+        /// string型转换为float型
+        /// </summary>
+        /// <param name="strValue"> 要转换的字符串 </param>
+        /// <param name="defValue"> 缺省值 </param>
+        /// <returns> 转换后的int类型结果 </returns>
+        public float StrToFloat(string expression, float defValue)
+        {
+            if (expression == null || expression.Length > 10)
+                return defValue;
+
+            var intValue = defValue;
+            if (expression != null)
+            {
+                var IsFloat = Regex.IsMatch(expression, @"^([-]|[0-9])[0-9]*(\.\w*)?$");
+                if (IsFloat)
+                    float.TryParse(expression, out intValue);
+            }
+
+            return intValue;
+        }
+
+        /// <summary>
+        /// 将字符串转换为Int32类型
+        /// </summary>
+        /// <param name="expression"> 要转换的字符串 </param>
+        /// <param name="defValue"> 缺省值 </param>
+        /// <returns> 转换后的int类型结果 </returns>
+        public int StrToInt(string expression, int defValue)
+        {
+            if (string.IsNullOrEmpty(expression) || expression.Trim().Length >= 11 ||
+                !Regex.IsMatch(expression.Trim(), @"^([-]|[0-9])[0-9]*(\.\w*)?$"))
+                return defValue;
+
+            int rv;
+            if (int.TryParse(expression, out rv))
+                return rv;
+
+            return Convert.ToInt32(StrToFloat(expression, defValue));
+        }
+
+        /// <summary>
+        /// 文本化XML反序列化
+        /// </summary>
+        /// <param name="str"> 字符串序列 </param>
         public T XmlDeserialize<T>(string str)
         {
             var serializer = new XmlSerializer(typeof(T));
@@ -514,27 +542,9 @@ namespace Common.Utility.Convert2
         }
 
         /// <summary>
-        ///     BinaryFormatter序列化
+        /// 文本化XML序列化
         /// </summary>
-        /// <param name="item">对象</param>
-        public string BinarySerializer<T>(T item)
-        {
-            var formatter = new BinaryFormatter();
-            using (var ms = new MemoryStream())
-            {
-                formatter.Serialize(ms, item);
-                ms.Position = 0;
-                var bytes = ms.ToArray();
-                var sb = new StringBuilder();
-                foreach (var bt in bytes) sb.Append(string.Format("{0:X2}", bt));
-                return sb.ToString();
-            }
-        }
-
-        /// <summary>
-        ///     文本化XML序列化
-        /// </summary>
-        /// <param name="item">对象</param>
+        /// <param name="item"> 对象 </param>
         public string XmlSerializer<T>(T item)
         {
             var serializer = new XmlSerializer(item.GetType());
@@ -545,6 +555,7 @@ namespace Common.Utility.Convert2
                 return sb.ToString();
             }
         }
+
         #endregion Public Methods
     }
 }

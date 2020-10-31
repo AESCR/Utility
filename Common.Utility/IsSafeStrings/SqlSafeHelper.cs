@@ -10,8 +10,8 @@ namespace Common.Utility.IsSafeStrings
         /// <summary>
         /// 检测是否存在与数据库相关的词
         /// </summary>
-        /// <param name="str">字符串</param>
-        /// <returns></returns>
+        /// <param name="str"> 字符串 </param>
+        /// <returns> </returns>
         public static bool CheckBadWord(this string str)
         {
             string pattern = @"select|insert|delete|from|count\(|drop table|update|truncate|asc\(|mid\(|char\(|xp_cmdshell|exec   master|netlocalgroup administrators|net user|or|and";
@@ -23,8 +23,8 @@ namespace Common.Utility.IsSafeStrings
         /// <summary>
         /// 完整过滤SQL字符。
         /// </summary>
-        /// <param name="str">要过滤SQL字符的字符串。</param>
-        /// <returns>已过滤掉SQL字符的字符串。</returns>
+        /// <param name="str"> 要过滤SQL字符的字符串。 </param>
+        /// <returns> 已过滤掉SQL字符的字符串。 </returns>
         public static string GetCompleteSafeSQL(string str)
         {
             if (str == String.Empty)
@@ -64,8 +64,8 @@ namespace Common.Utility.IsSafeStrings
         /// <summary>
         /// 简单过滤SQL非法字符串
         /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
+        /// <param name="value"> </param>
+        /// <returns> </returns>
         public static string GetSimpleSafeSQL(string str)
         {
             if (string.IsNullOrEmpty(str))
@@ -83,11 +83,10 @@ namespace Common.Utility.IsSafeStrings
         }
 
         /// <summary>
-        /// 检测客户输入的字符串是否有效,并将原始字符串修改为有效字符串或空字符串,并且修改原变量的值
-        /// 当检测到客户的输入中有攻击性危险字符串,则返回false,有效返回true
+        /// 检测客户输入的字符串是否有效,并将原始字符串修改为有效字符串或空字符串,并且修改原变量的值 当检测到客户的输入中有攻击性危险字符串,则返回false,有效返回true
         /// </summary>
-        /// <param name="str">要检测的字符串</param>
-        /// <param name="IsClear">是否进行对传入的字符串清空处理,默认为false,置换Sql危险字符</param>
+        /// <param name="str"> 要检测的字符串 </param>
+        /// <param name="IsClear"> 是否进行对传入的字符串清空处理,默认为false,置换Sql危险字符 </param>
         public static bool IsValidSafeSQL(ref string str, bool IsClear = false)
         {
             try
@@ -119,8 +118,8 @@ namespace Common.Utility.IsSafeStrings
         /// <summary>
         /// 正则替换掉与数据库相关的词
         /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
+        /// <param name="str"> </param>
+        /// <returns> </returns>
         public static string ReplaceBadWord(ref string str)
         {
             string[] pattern = { "select", "insert", "delete", "from", "count\\(", "drop table", "update", "truncate", "asc\\(", "mid\\(", "char\\(", "xp_cmdshell", "exec   master", "netlocalgroup administrators", "net user", "or", "and" };
@@ -134,8 +133,8 @@ namespace Common.Utility.IsSafeStrings
         /// <summary>
         /// 正则替换掉与数据库相关的词
         /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
+        /// <param name="str"> </param>
+        /// <returns> </returns>
         public static string ReplaceBadWord(this string str)
         {
             _ = ReplaceBadWord(ref str);

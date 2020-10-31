@@ -5,20 +5,34 @@ using System.Linq.Expressions;
 
 namespace Common.Utility.Expression2
 {
-   /// <summary>
-    ///     Expression表达式扩展操作类
-    /// 调用方法：repository.GetAll().AsExpandable().Where(predicate)
+    /// <summary>
+    /// Expression表达式扩展操作类 调用方法：repository.GetAll().AsExpandable().Where(predicate)
     /// </summary>
     public static class ExpressionExtensions
     {
+        #region Public Methods
+
         /// <summary>
-        ///     以特定的条件运行组合两个Expression表达式
+        /// 以 Expression.AndAlso 组合两个Expression表达式
         /// </summary>
-        /// <typeparam name="T">表达式的主实体类型</typeparam>
-        /// <param name="first">第一个Expression表达式</param>
-        /// <param name="second">要组合的Expression表达式</param>
-        /// <param name="merge">组合条件运算方式</param>
-        /// <returns>组合后的表达式</returns>
+        /// <typeparam name="T"> 表达式的主实体类型 </typeparam>
+        /// <param name="first"> 第一个Expression表达式 </param>
+        /// <param name="second"> 要组合的Expression表达式 </param>
+        /// <returns> 组合后的表达式 </returns>
+        public static Expression<Func<T, bool>> And<T>(this Expression<Func<T, bool>> first,
+            Expression<Func<T, bool>> second)
+        {
+            return first.Compose(second, Expression.AndAlso);
+        }
+
+        /// <summary>
+        /// 以特定的条件运行组合两个Expression表达式
+        /// </summary>
+        /// <typeparam name="T"> 表达式的主实体类型 </typeparam>
+        /// <param name="first"> 第一个Expression表达式 </param>
+        /// <param name="second"> 要组合的Expression表达式 </param>
+        /// <param name="merge"> 组合条件运算方式 </param>
+        /// <returns> 组合后的表达式 </returns>
         public static Expression<T> Compose<T>(this Expression<T> first, Expression<T> second,
             Func<Expression, Expression, Expression> merge)
         {
@@ -29,45 +43,40 @@ namespace Common.Utility.Expression2
         }
 
         /// <summary>
-        ///     以 Expression.AndAlso 组合两个Expression表达式
+        /// 以 Expression.OrElse 组合两个Expression表达式
         /// </summary>
-        /// <typeparam name="T">表达式的主实体类型</typeparam>
-        /// <param name="first">第一个Expression表达式</param>
-        /// <param name="second">要组合的Expression表达式</param>
-        /// <returns>组合后的表达式</returns>
-        public static Expression<Func<T, bool>> And<T>(this Expression<Func<T, bool>> first,
-            Expression<Func<T, bool>> second)
-        {
-            return first.Compose(second, Expression.AndAlso);
-        }
-
-        /// <summary>
-        ///     以 Expression.OrElse 组合两个Expression表达式
-        /// </summary>
-        /// <typeparam name="T">表达式的主实体类型</typeparam>
-        /// <param name="first">第一个Expression表达式</param>
-        /// <param name="second">要组合的Expression表达式</param>
-        /// <returns>组合后的表达式</returns>
+        /// <typeparam name="T"> 表达式的主实体类型 </typeparam>
+        /// <param name="first"> 第一个Expression表达式 </param>
+        /// <param name="second"> 要组合的Expression表达式 </param>
+        /// <returns> 组合后的表达式 </returns>
         public static Expression<Func<T, bool>> Or<T>(this Expression<Func<T, bool>> first,
             Expression<Func<T, bool>> second)
         {
             return first.Compose(second, Expression.OrElse);
         }
 
+        #endregion Public Methods
+
+        #region Private Classes
+
         private class ParameterRebinder : ExpressionVisitor
         {
+            #region Private Fields
+
             private readonly Dictionary<ParameterExpression, ParameterExpression> _map;
+
+            #endregion Private Fields
+
+            #region Private Constructors
 
             private ParameterRebinder(Dictionary<ParameterExpression, ParameterExpression> map)
             {
                 _map = map ?? new Dictionary<ParameterExpression, ParameterExpression>();
             }
 
-            public static Expression ReplaceParameters(Dictionary<ParameterExpression, ParameterExpression> map,
-                Expression exp)
-            {
-                return new ParameterRebinder(map).Visit(exp);
-            }
+            #endregion Private Constructors
+
+            #region Protected Methods
 
             protected override Expression VisitParameter(ParameterExpression node)
             {
@@ -76,6 +85,20 @@ namespace Common.Utility.Expression2
                     node = replacement;
                 return base.VisitParameter(node);
             }
+
+            #endregion Protected Methods
+
+            #region Public Methods
+
+            public static Expression ReplaceParameters(Dictionary<ParameterExpression, ParameterExpression> map,
+                            Expression exp)
+            {
+                return new ParameterRebinder(map).Visit(exp);
+            }
+
+            #endregion Public Methods
         }
+
+        #endregion Private Classes
     }
 }

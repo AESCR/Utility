@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 namespace Common.Utility
 {
     /// <summary>
-    ///     MySecurity(安全类) 的摘要说明。
+    /// MySecurity(安全类) 的摘要说明。
     /// </summary>
     public class MySecurity
     {
@@ -24,7 +24,7 @@ namespace Common.Utility
         #region Public Constructors
 
         /// <summary>
-        ///     初始化安全类
+        /// 初始化安全类
         /// </summary>
         public MySecurity()
         {
@@ -37,9 +37,9 @@ namespace Common.Utility
         #region Public Methods
 
         /// <summary>
-        ///     Base64解密
+        /// Base64解密
         /// </summary>
-        /// <param name="text">要解密的字符串</param>
+        /// <param name="text"> 要解密的字符串 </param>
         public static string DecodeBase64(string text)
         {
             //如果字符串为空，则返回
@@ -90,10 +90,10 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     Base64加密
+        /// Base64加密
         /// </summary>
-        /// <param name="text">要加密的字符串</param>
-        /// <returns></returns>
+        /// <param name="text"> 要加密的字符串 </param>
+        /// <returns> </returns>
         public static string EncodeBase64(string text)
         {
             //如果字符串为空，则返回
@@ -154,9 +154,9 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     128位MD5算法加密字符串
+        /// 128位MD5算法加密字符串
         /// </summary>
-        /// <param name="text">要加密的字符串</param>
+        /// <param name="text"> 要加密的字符串 </param>
         public static string MD5(string text)
         {
             //如果字符串为空，则返回
@@ -166,9 +166,9 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     128位MD5算法加密Byte数组
+        /// 128位MD5算法加密Byte数组
         /// </summary>
-        /// <param name="data">要加密的Byte数组</param>
+        /// <param name="data"> 要加密的Byte数组 </param>
         public static string MD5(byte[] data)
         {
             //如果Byte数组为空，则返回
@@ -220,11 +220,11 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     解密字符串
+        /// 解密字符串
         /// </summary>
-        /// <param name="inputStr">要解密的字符串</param>
-        /// <param name="keyStr">密钥</param>
-        /// <returns>解密后的结果</returns>
+        /// <param name="inputStr"> 要解密的字符串 </param>
+        /// <param name="keyStr"> 密钥 </param>
+        /// <returns> 解密后的结果 </returns>
         public static string SDecryptString(string inputStr, string keyStr)
         {
             var ws = new MySecurity();
@@ -232,10 +232,10 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     解密字符串 密钥为系统默认
+        /// 解密字符串 密钥为系统默认
         /// </summary>
-        /// <param name="inputStr">要解密的字符串</param>
-        /// <returns>解密后的结果</returns>
+        /// <param name="inputStr"> 要解密的字符串 </param>
+        /// <returns> 解密后的结果 </returns>
         public static string SDecryptString(string inputStr)
         {
             var ws = new MySecurity();
@@ -243,10 +243,10 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     加密字符串 密钥为系统默认
+        /// 加密字符串 密钥为系统默认
         /// </summary>
-        /// <param name="inputStr">输入字符串</param>
-        /// <returns>输出加密后字符串</returns>
+        /// <param name="inputStr"> 输入字符串 </param>
+        /// <returns> 输出加密后字符串 </returns>
         public static string SEncryptString(string inputStr)
         {
             var ws = new MySecurity();
@@ -254,11 +254,11 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     加密字符串
+        /// 加密字符串
         /// </summary>
-        /// <param name="inputStr">输入字符串</param>
-        /// <param name="keyStr">密码，可以为“”</param>
-        /// <returns>输出加密后字符串</returns>
+        /// <param name="inputStr"> 输入字符串 </param>
+        /// <param name="keyStr"> 密码，可以为“” </param>
+        /// <returns> 输出加密后字符串 </returns>
         public static string SEncryptString(string inputStr, string keyStr)
         {
             var ws = new MySecurity();
@@ -266,12 +266,12 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     解密文件
+        /// 解密文件
         /// </summary>
-        /// <param name="filePath">输入文件路径</param>
-        /// <param name="savePath">解密后输出文件路径</param>
-        /// <param name="keyStr">密码，可以为“”</param>
-        /// <returns></returns>
+        /// <param name="filePath"> 输入文件路径 </param>
+        /// <param name="savePath"> 解密后输出文件路径 </param>
+        /// <param name="keyStr"> 密码，可以为“” </param>
+        /// <returns> </returns>
         public bool DecryptFile(string filePath, string savePath, string keyStr)
         {
             var des = new DESCryptoServiceProvider();
@@ -305,11 +305,11 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     解密字符串
+        /// 解密字符串
         /// </summary>
-        /// <param name="inputStr">要解密的字符串</param>
-        /// <param name="keyStr">密钥</param>
-        /// <returns>解密后的结果</returns>
+        /// <param name="inputStr"> 要解密的字符串 </param>
+        /// <param name="keyStr"> 密钥 </param>
+        /// <returns> 解密后的结果 </returns>
         public string DecryptString(string inputStr, string keyStr)
         {
             var des = new DESCryptoServiceProvider();
@@ -342,12 +342,12 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     加密文件
+        /// 加密文件
         /// </summary>
-        /// <param name="filePath">输入文件路径</param>
-        /// <param name="savePath">加密后输出文件路径</param>
-        /// <param name="keyStr">密码，可以为“”</param>
-        /// <returns></returns>
+        /// <param name="filePath"> 输入文件路径 </param>
+        /// <param name="savePath"> 加密后输出文件路径 </param>
+        /// <param name="keyStr"> 密码，可以为“” </param>
+        /// <returns> </returns>
         public bool EncryptFile(string filePath, string savePath, string keyStr)
         {
             var des = new DESCryptoServiceProvider();
@@ -381,11 +381,11 @@ namespace Common.Utility
         }
 
         /// <summary>
-        ///     加密字符串
+        /// 加密字符串
         /// </summary>
-        /// <param name="inputStr">输入字符串</param>
-        /// <param name="keyStr">密码，可以为“”</param>
-        /// <returns>输出加密后字符串</returns>
+        /// <param name="inputStr"> 输入字符串 </param>
+        /// <param name="keyStr"> 密码，可以为“” </param>
+        /// <returns> 输出加密后字符串 </returns>
         public string EncryptString(string inputStr, string keyStr)
         {
             var des = new DESCryptoServiceProvider();

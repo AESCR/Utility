@@ -10,10 +10,10 @@ namespace Common.Utilities
         #region Public Methods
 
         /// <summary>
-        ///     将指定的集合转换成DataTable。
+        /// 将指定的集合转换成DataTable。
         /// </summary>
-        /// <param name="list">将指定的集合。</param>
-        /// <returns>返回转换后的DataTable。</returns>
+        /// <param name="list"> 将指定的集合。 </param>
+        /// <returns> 返回转换后的DataTable。 </returns>
         public static DataTable ToDataTable(this IList list)
         {
             var table = new DataTable();
