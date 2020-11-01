@@ -4,6 +4,7 @@ using Common.Utility.MemoryCache.Redis;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using Common.Utility.Autofac;
 using ToolBox.Time;
 
 namespace Common.Utility.LogDb
@@ -26,7 +27,7 @@ namespace Common.Utility.LogDb
     /// <summary>
     /// 写入Redis日志
     /// </summary>
-    public class LogRedis
+    public class LogRedis: ISingletonDependency
     {
         #region Private Fields
 

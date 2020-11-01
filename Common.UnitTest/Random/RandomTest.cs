@@ -10,8 +10,8 @@ namespace Common.UnitTest.Random
         public void RandomAProxy()
         {
             RandomProxy randomProxy=new RandomProxy();
-           var x=  randomProxy.GetRandomIp();
-           var x2=  randomProxy.GetRandomIps();
+           var x=  randomProxy.GetRandomIp("中国");
+           var x2=  randomProxy.GetRandomIps("中国");
         }
     }
 }

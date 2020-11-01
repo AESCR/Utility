@@ -3,6 +3,10 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using Common.Utility.Autofac;
+using Common.Utility.Utils;
+using COSXML.Network;
+using HttpClient = System.Net.Http.HttpClient;
 
 namespace Common.Utility.Random.Proxy
 {
@@ -120,7 +124,7 @@ namespace Common.Utility.Random.Proxy
     /// <summary>
     /// 随机代理
     /// </summary>
-    public class RandomProxy
+    public class RandomProxy: ISingletonDependency
     {
         #region Private Fields
 
@@ -148,11 +152,19 @@ namespace Common.Utility.Random.Proxy
 
         #region Public Methods
 
-        public ProxyIp GetRandomIp()
+        public ProxyIp GetRandomIp(string country="")
         {
             try
             {
-                var json = httpClient.DoGet("https://ip.jiangxianli.com/api/proxy_ip").ReadString();
+                string url = "https://ip.jiangxianli.com/api/proxy_ip";
+                Dictionary<string,string> param=new Dictionary<string, string>();
+                if (string.IsNullOrWhiteSpace(country)==false)
+                {
+                    param.Add("country",country);
+                }
+
+                url = url+"?"+HttpUtils.ParamsToUrl(param);
+                var json = httpClient.DoGet(url).ReadString();
                 if (string.IsNullOrEmpty(json) == false)
                 {
                     var josnData = JsonConvert.DeserializeObject<ProxyResponse>(json);
@@ -170,11 +182,19 @@ namespace Common.Utility.Random.Proxy
             return null;
         }
 
-        public List<ProxyIp> GetRandomIps()
+        public List<ProxyIp> GetRandomIps(string country = "")
         {
             try
             {
-                var json = httpClient.DoGet("https://ip.jiangxianli.com/api/proxy_ips").ReadString();
+                string url = "https://ip.jiangxianli.com/api/proxy_ips";
+                Dictionary<string, string> param = new Dictionary<string, string>();
+                if (string.IsNullOrWhiteSpace(country) == false)
+                {
+                    param.Add("country", country);
+                }
+
+                url = url + "?" + HttpUtils.ParamsToUrl(param);
+                var json = httpClient.DoGet(url).ReadString();
                 if (string.IsNullOrEmpty(json) == false)
                 {
                     var josnData = JsonConvert.DeserializeObject<ProxysResponse>(json);
