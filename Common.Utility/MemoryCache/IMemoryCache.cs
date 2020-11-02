@@ -52,8 +52,8 @@ namespace Common.Utility.Memory
             @this.RegisterType<MemoryCache2>().AsImplementedInterfaces().SingleInstance();
             var opt = new MemoryOptions();
             option(opt);
-            var redis = @this.RegisterType<RedisCache>().AsImplementedInterfaces()
-                .WithParameter(new TypedParameter(typeof(MemoryOptions), opt));
+            var redis = @this.Register((c, p) =>
+               new RedisCache(opt)).AsImplementedInterfaces();
             if (opt.UseRedis == false)
             {
                 redis.PreserveExistingDefaults(); //非默认值。
