@@ -72,14 +72,15 @@ namespace Common.Utility.JwtBearer
             JwtDyUser jwtDyUser = null;
             if (token != null)
                 AttachUserToContext(context, token, out jwtDyUser);
-
-            await _next(context);
-            if (jwtDyUser != null)
+            context.Response.OnStarting(() =>
             {
+                if (jwtDyUser == null) return Task.CompletedTask;
                 //生产新的Token
                 var accessToken = _generate.Generate(jwtDyUser);
                 context.Response.Cookies.Append("Token", accessToken.Token);
-            }
+                return Task.CompletedTask;
+            });
+            await _next(context);
         }
 
         #endregion Public Methods

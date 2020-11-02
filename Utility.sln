@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.UnitTest", "Common.U
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.WebApi", "Common.WebApi\Common.WebApi.csproj", "{FFC43FBA-C449-4FA8-A545-54A73770941C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Console", "Common.Console\Common.Console.csproj", "{D0323FA4-AD63-49F1-B19C-EFDACEFA03E2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Console2", "Common.Console\Common.Console2.csproj", "{D0323FA4-AD63-49F1-B19C-EFDACEFA03E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,4 +1,8 @@
-﻿using Common.Utility.Tools;
+﻿using System.Linq;
+using System.Reflection;
+using AutoMapper;
+using Common.Utility.Tools;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Common.Utility.AutoMapper
 {
@@ -22,5 +26,12 @@ namespace Common.Utility.AutoMapper
         }
 
         #endregion Public Methods
+
+        public static void RegisterAllProfiles(
+            this IServiceCollection @this, string assembly, string endName = "Profiles")
+        {
+            var types = Assembly.Load(assembly).GetTypes().Where(x => x.Name.EndsWith(endName)).ToArray();
+            @this.AddAutoMapper(types);
+        }
     }
 }
