@@ -3,10 +3,11 @@ using CSRedis;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using Common.Utility.Autofac;
 
 namespace Common.Utility.MemoryCache.Redis
 {
-    public class RedisCache : IDisposable, IRedisCache
+    public class RedisCache : IDisposable, IRedisCache, IScopedDependency
     {
         #region Private Fields
 
