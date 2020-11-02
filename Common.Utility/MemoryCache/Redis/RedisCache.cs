@@ -30,6 +30,7 @@ namespace Common.Utility.MemoryCache.Redis
             }
             _redisClient.ReconnectAttempts =3;//失败后重试3次
             _redisClient.ReconnectWait = 200;//在抛出异常之前，连接将在200ms之间重试3次
+            _redisClient.Connect(3000);
         }
         public RedisCache(MemoryOptions options)
         {
@@ -44,6 +45,7 @@ namespace Common.Utility.MemoryCache.Redis
             }
             _redisClient.ReconnectAttempts = options.ReconnectAttempts;//失败后重试3次
             _redisClient.ReconnectWait = options.ReconnectWait;//在抛出异常之前，连接将在200ms之间重试3次
+            _redisClient.Connect(options.Timeout);
             _memoryOptions = options;
         }
 
