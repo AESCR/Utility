@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Common.Utility.Extensions.Asp.NetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Ocelot.DependencyInjection;
 
 namespace Common.WebApi
 {
@@ -16,11 +18,24 @@ namespace Common.WebApi
             CreateHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
+        private static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            var hostBuilder = Host.CreateDefaultBuilder(args)
+                .ConfigureJson("ratelimit.json")
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseKestrel();
+                    webBuilder.UseStartup<Startup>()
+                        .ConfigureLogging(logging =>
+                        {
+#if !DEBUG
+                            logging.ClearProviders(); //移除已经注册的其他日志处理程序
+#endif
+
+                            logging.SetMinimumLevel(LogLevel.Trace); //设置最小的日志级别
+                        });
                 });
+            return hostBuilder;
+        }
     }
 }
