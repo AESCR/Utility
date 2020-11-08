@@ -1,13 +1,13 @@
-using Common.Utility.MemoryCache.Model;
-using CSRedis;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using Common.Utility.Autofac;
+using Common.Utility.Memory.Model;
+using CSRedis;
+using Newtonsoft.Json;
 
-namespace Common.Utility.MemoryCache.Redis
+namespace Common.Utility.Memory.Redis
 {
-    public class RedisCache : IDisposable, IRedisCache, IScopedDependency
+    public class RedisCache : IRedisCache, IScopedDependency
     {
         #region Private Fields
 
@@ -682,6 +682,10 @@ namespace Common.Utility.MemoryCache.Redis
         {
             if (disposing)
             {
+                if (_redisClient.IsConnected)
+                {
+                    _redisClient.Quit();
+                }
                 _redisClient?.Dispose();
             }
         }

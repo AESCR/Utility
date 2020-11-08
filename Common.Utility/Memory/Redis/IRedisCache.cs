@@ -1,11 +1,10 @@
-﻿using Common.Utility.Memory;
-using CSRedis;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using CSRedis;
 
-namespace Common.Utility.MemoryCache.Redis
+namespace Common.Utility.Memory.Redis
 {
-    public interface IRedisCache : IMemoryCache
+    public interface IRedisCache : IMemoryCache, IDisposable
     {
         #region Public Properties
 
@@ -58,7 +57,6 @@ namespace Common.Utility.MemoryCache.Redis
 
         long DelSortedSet<T>(string key, T members);
 
-        void Dispose();
 
         bool Expire(string key, TimeSpan timeSpan);
 

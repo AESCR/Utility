@@ -1,10 +1,10 @@
 ﻿using Autofac;
-using Common.Utility.MemoryCache.Model;
-using Common.Utility.MemoryCache.Redis;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
 using Common.Utility.Autofac;
+using Common.Utility.Memory.Model;
+using Common.Utility.Memory.Redis;
 using ToolBox.Time;
 
 namespace Common.Utility.LogDb

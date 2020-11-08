@@ -10,8 +10,9 @@ namespace Common.Utility.Extensions.HttpClient
     {
         #region Public Methods
 
-        public static T ReadModel<T>(this HttpResponseMessage httpResponse) where T : class
+        public static T ReadModel<T>(this HttpResponseMessage httpResponse, out bool succeed) where T : class
         {
+            succeed = false;
             try
             {
                 if (!httpResponse.IsSuccessStatusCode) return null;
@@ -23,28 +24,7 @@ namespace Common.Utility.Extensions.HttpClient
                 reader.Close();
                 dataStream.Close();
                 var t = JsonConvert.DeserializeObject<T>(s);
-                return t;
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-        }
-
-        public static T ReadModel<T>(this Task<HttpResponseMessage> httpResponseTask) where T : class
-        {
-            try
-            {
-                var httpResponse = httpResponseTask.Result;
-                if (!httpResponse.IsSuccessStatusCode) return null;
-                var taskStream = httpResponse.Content.ReadAsStreamAsync();
-                taskStream.Wait();
-                using var dataStream = taskStream.Result;
-                var reader = new StreamReader(dataStream);
-                var s = reader.ReadToEnd();
-                reader.Close();
-                dataStream.Close();
-                var t = JsonConvert.DeserializeObject<T>(s);
+                succeed = true;
                 return t;
             }
             catch
@@ -53,8 +33,26 @@ namespace Common.Utility.Extensions.HttpClient
             }
         }
 
-        public static string ReadString(this HttpResponseMessage httpResponse)
+        public static T ReadModel<T>(this Task<HttpResponseMessage> httpResponseTask, out bool succeed) where T : class
         {
+            HttpResponseMessage httpResponse;
+            try
+            {
+
+                httpResponse = httpResponseTask.Result;
+            }
+            catch
+            {
+                succeed = false;
+                return null;
+            }
+            return ReadModel<T>(httpResponse, out succeed);
+        }
+
+        public static string ReadString(this HttpResponseMessage httpResponse,out bool succeed)
+        {
+            succeed = false;
+            var statusText = httpResponse.StatusCode.ToChsText();
             try
             {
                 var taskStream = httpResponse.Content.ReadAsStreamAsync();
@@ -64,25 +62,31 @@ namespace Common.Utility.Extensions.HttpClient
                 var result = reader.ReadToEnd();
                 reader.Close();
                 dataStream.Close();
+                succeed = true;
                 return result;
             }
             catch
             {
-                return string.Empty;
+                succeed = false;
+                return statusText;
             }
+           
         }
 
-        public static string ReadString(this Task<HttpResponseMessage> httpResponseTask)
+        public static string ReadString(this Task<HttpResponseMessage> httpResponseTask, out bool succeed)
         {
-            var httpResponse = httpResponseTask.Result;
-            var taskStream = httpResponse.Content.ReadAsStreamAsync();
-            taskStream.Wait();
-            var dataStream = taskStream.Result;
-            var reader = new StreamReader(dataStream);
-            var result = reader.ReadToEnd();
-            reader.Close();
-            dataStream.Close();
-            return result;
+            HttpResponseMessage httpResponse;
+            try
+            {
+
+                 httpResponse = httpResponseTask.Result;
+            }
+            catch 
+            {
+                succeed = false;
+                return String.Empty;
+            }
+            return ReadString(httpResponse, out succeed);
         }
 
         #endregion Public Methods

@@ -1,4 +1,4 @@
-namespace Common.Utility.MemoryCache.Model
+namespace Common.Utility.Memory.Model
 {
     public class MemoryOptions
     {

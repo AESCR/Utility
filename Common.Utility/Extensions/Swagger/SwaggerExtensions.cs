@@ -15,16 +15,19 @@ namespace Common.Utility.Extensions.Swagger
         ///     服务
         /// </summary>
         /// <param name="this"></param>
-        public static void AddSwaggerGen(this IServiceCollection @this)
+        /// <param name="openAction"></param>
+        public static void AddSwaggerGen(this IServiceCollection @this,Action<OpenApiInfo> openAction)
         {
             @this.AddSwaggerGen(o =>
             {
-                o.SwaggerDoc("v1", new OpenApiInfo
+                var openApi = new OpenApiInfo
                 {
                     Title = "Document API",
                     Version = "v1",
                     Description = "ASP.NET Core Web API"
-                }
+                };
+                openAction(openApi);
+                o.SwaggerDoc("v1", openApi
                 );
                 // 使用反射获取xml文件。并构造出文件的路径
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";

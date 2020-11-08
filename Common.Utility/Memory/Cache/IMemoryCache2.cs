@@ -1,8 +1,7 @@
-﻿using Common.Utility.Memory;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace Common.Utility.MemoryCache.MemoryCache2
+namespace Common.Utility.Memory.Cache
 {
     public interface IMemoryCache2 : IMemoryCache
     {

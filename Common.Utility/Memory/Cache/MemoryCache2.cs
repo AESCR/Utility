@@ -1,9 +1,9 @@
-using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Caching.Memory;
 
-namespace Common.Utility.MemoryCache.MemoryCache2
+namespace Common.Utility.Memory.Cache
 {
     public class MemoryCache2 : IMemoryCache2
     {
@@ -12,7 +12,7 @@ namespace Common.Utility.MemoryCache.MemoryCache2
         /// <summary>
         /// MemoryCache 缓存
         /// </summary>
-        private Microsoft.Extensions.Caching.Memory.IMemoryCache _cache;
+        private readonly Microsoft.Extensions.Caching.Memory.IMemoryCache _cache;
 
         #endregion Private Fields
 
@@ -21,10 +21,10 @@ namespace Common.Utility.MemoryCache.MemoryCache2
         /// <summary>
         /// 构造器注入 IMemoryCache
         /// </summary>
-        /// <param name="cache"> </param>
-        public MemoryCache2(IMemoryCache cache)
+        public MemoryCache2()
         {
-            _cache = cache;
+            var options = new MemoryCacheOptions();
+            _cache = new MemoryCache(options);
         }
 
         #endregion Public Constructors

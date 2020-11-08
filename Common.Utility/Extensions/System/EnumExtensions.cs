@@ -130,7 +130,6 @@ namespace Common.Utility.SystemExtensions
             var list = new List<EnumEntry<TEnum, TRaw>>();
             if (enumType.IsEnum == false) return list;
 
-
             TEnum[] aryEnum = Enum.GetValues(enumType) as TEnum[];
             if (aryEnum == null) return list;
 

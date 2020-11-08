@@ -1,7 +1,5 @@
 ﻿using Common.Utility.HttpResponse;
 using Common.Utility.Memory;
-using Common.Utility.MemoryCache.Model;
-using Common.Utility.MemoryCache.Redis;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
@@ -11,6 +9,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Common.Utility.Memory.Model;
+using Common.Utility.Memory.Redis;
 
 namespace Common.Utility.Middleware
 {

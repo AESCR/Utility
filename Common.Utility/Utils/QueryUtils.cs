@@ -49,7 +49,7 @@ namespace Common.Utility.Utils
             {
                 try
                 {
-                    string response = client.DoGet("http://www.3322.org/dyndns/getip").ReadString();
+                    string response = client.DoGet("http://www.3322.org/dyndns/getip").ReadString(out _);
                     return response;
                 }
                 catch (Exception ex)

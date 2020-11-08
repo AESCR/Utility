@@ -26,7 +26,7 @@ namespace Common.Utility.Extensions.HttpClient
         /// </summary>
         /// <param name="httpClientHandler"> </param>
         /// <param name="urlString"> </param>
-        public static HttpClientHandler UseProxy(this HttpClientHandler httpClientHandler, string urlString)
+        public static HttpClientHandler UseWebProxy(this HttpClientHandler httpClientHandler, string urlString)
         {
             httpClientHandler.UseProxy = true;
             var wp = new WebProxy();

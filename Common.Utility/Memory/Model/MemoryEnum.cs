@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
-using Common.Utility.SystemExtensions;
 
-namespace Common.Utility.MemoryCache.Model
+namespace Common.Utility.Memory.Model
 {
     /// <summary>
     /// 内存Key关键字
@@ -39,18 +38,20 @@ namespace Common.Utility.MemoryCache.Model
         /// 获取左边菜单
         /// </summary>
         LeftMenu,
+
         /// <summary>
         /// UserAgent
         /// </summary>
-        UserAgent
+        UserAgent,
+
+        Proxy,
     }
 
     public static class EnumExtensions
     {
-
         #region Public Methods
 
-        public static string GetMemoryKey(this MemoryEnum @this)
+        public static string GetMemoryKey(this MemoryEnum @this, string value = null)
         {
             string enumName = Enum.Parse(@this.GetType(), @this.ToString()).ToString();
             if (string.IsNullOrWhiteSpace(enumName) != false) throw new ArgumentNullException(nameof(MemoryEnum));
@@ -61,7 +62,12 @@ namespace Common.Utility.MemoryCache.Model
             {
                 sBuilder.Append(t.ToString("x2"));
             }
-            return "System"+sBuilder.Append(enumName);
+
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return "System" + sBuilder.Append(enumName);
+            }
+            return "System" + sBuilder.Append(enumName).Append(value);
         }
 
         #endregion Public Methods

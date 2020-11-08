@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using BenchmarkDotNet.Attributes;
 using Common.Utility.Memory;
-using Common.Utility.MemoryCache.Model;
-using Common.Utility.MemoryCache.Redis;
+using Common.Utility.Memory.Cache;
+using Common.Utility.Memory.Model;
+using Common.Utility.Memory.Redis;
 using Common.Utility.Random.Num;
 
 namespace Common.Benchmarks.RedisTest
@@ -17,16 +18,18 @@ namespace Common.Benchmarks.RedisTest
     [MemoryDiagnoser]//要显示GC和内存分配
     public class TestRedis
     {
-        [Params(10, 100, 1000, 2000)] public int Time;
+        [Params(10, 100, 1000)] public int Time;
 
-        private readonly IMemoryCache _redisCache;
-        RandomNum random=new RandomNum();
+        private readonly IRedisCache _redisCache;
+        private readonly IMemoryCache2 memoryCache2;
+       RandomNum random=new RandomNum();
         public TestRedis()
         {
             _redisCache= new RedisCache(new MemoryOptions()
             {
                 Password = ".netbyydsj"
             });
+            memoryCache2 = new MemoryCache2();
         }
         [Benchmark]
         public void TestRedisA()
@@ -35,14 +38,10 @@ namespace Common.Benchmarks.RedisTest
             _redisCache.Add(key, "AESCR");
         }
         [Benchmark]
-        public void TestRedisB()
+        public void TestMemoryCacheB()
         {
-            var tempCache = new RedisCache(new MemoryOptions()
-            {
-                Password = ".netbyydsj"
-            });
             var key = random.GenerateCheckCodeNum(10);
-            tempCache.Add(key, "AESCR");
+            memoryCache2.Add(key, "AESCR");
         }
     }
 }

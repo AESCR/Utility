@@ -1,5 +1,6 @@
 ﻿using BenchmarkDotNet.Running;
 using Common.Benchmarks.LogRedis;
+using Common.Benchmarks.RedisTest;
 
 namespace Common.Benchmarks
 {
@@ -9,7 +10,7 @@ namespace Common.Benchmarks
 
         private static void Main(string[] args)
         {
-            BenchmarkRunner.Run(typeof(LogRedisTest).Assembly);
+            BenchmarkRunner.Run(typeof(TestRedis).Assembly);
 
             // BenchmarkRunner.Run(typeof(Program).Assembly);
         }

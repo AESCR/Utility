@@ -1,4 +1,4 @@
-﻿namespace Common.Utility.MemoryCache.Redis
+﻿namespace Common.Utility.Memory.Redis
 {
     public enum RedisVaule
     {

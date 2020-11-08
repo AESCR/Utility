@@ -1,12 +1,19 @@
-﻿using Common.Utility.Extensions.HttpClient;
+﻿using System;
+using Common.Utility.Autofac;
+using Common.Utility.Extensions.HttpClient;
+using Common.Utility.Utils;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Net.Http;
-using Common.Utility.Autofac;
-using Common.Utility.Utils;
-using COSXML.Network;
-using HttpClient = System.Net.Http.HttpClient;
+using Common.Utility.HttpRequest;
+using Common.Utility.Memory;
+using Common.Utility.Memory.Cache;
+using Common.Utility.Memory.Model;
+using Common.Utility.Random.Num;
+using Common.Utility.SystemExtensions;
 
 namespace Common.Utility.Random.Proxy
 {
@@ -15,6 +22,8 @@ namespace Common.Utility.Random.Proxy
     /// </summary>
     public class ProxyIp
     {
+        public string WebProxyUrl => $"{Protocol}://{Ip}:{Port}";
+
         #region Public Properties
 
         /// <summary>
@@ -98,14 +107,6 @@ namespace Common.Utility.Random.Proxy
 
     public class ProxysResponse
     {
-        #region Public Properties
-
-        public int Code { get; set; }
-        public ProxyListIP Data { get; set; }
-        public string Msg { get; set; }
-
-        #endregion Public Properties
-
         #region Public Classes
 
         public class ProxyListIP
@@ -113,30 +114,42 @@ namespace Common.Utility.Random.Proxy
             #region Public Properties
 
             [JsonProperty("current_page")] public string CurrentPage { get; set; }
+
             public List<ProxyIp> Data { get; set; }
 
             #endregion Public Properties
         }
 
         #endregion Public Classes
+
+        #region Public Properties
+
+        public int Code { get; set; }
+        public ProxyListIP Data { get; set; }
+        public string Msg { get; set; }
+
+        #endregion Public Properties
     }
 
     /// <summary>
     /// 随机代理
     /// </summary>
-    public class RandomProxy: ISingletonDependency
+    public class RandomProxy : ISingletonDependency
     {
         #region Private Fields
 
-        private HttpClient httpClient;
-
+        private readonly HttpClient httpClient;
+        private readonly IMemoryCache memory;
+        private readonly RandomNum random;
+        private readonly int minutes;
         #endregion Private Fields
 
         #region Public Constructors
 
-        public RandomProxy()
+        public RandomProxy(int minutes = 1)
         {
-            HttpClientHandler handler = new HttpClientHandler()
+            this.minutes = minutes;
+            var handler = new HttpClientHandler
             {
                 PreAuthenticate = true,
                 UseDefaultCredentials = false,
@@ -146,25 +159,39 @@ namespace Common.Utility.Random.Proxy
                 ClientCertificateOptions = ClientCertificateOption.Automatic
             };
             httpClient = new HttpClient(handler);
+            memory=new MemoryCache2();
+            random=new RandomNum();
+            
         }
 
         #endregion Public Constructors
-
         #region Public Methods
 
-        public ProxyIp GetRandomIp(string country="")
+        public ProxyIp GetRandomIp(bool cache=true)
         {
-            try
+            if (memory.Exists(MemoryEnum.Proxy.GetMemoryKey()))
             {
-                string url = "https://ip.jiangxianli.com/api/proxy_ip";
-                Dictionary<string,string> param=new Dictionary<string, string>();
-                if (string.IsNullOrWhiteSpace(country)==false)
+                var proxys = memory.Get<List<ProxyIp>>(MemoryEnum.Proxy.GetMemoryKey());
+                if (proxys.Count > 0)
                 {
-                    param.Add("country",country);
+                    var rint = random.GetRandomInt(0, proxys.Count);
+                    return proxys[rint];
+                }
+            }
+            if (cache)
+            {
+                var proxys = GetRandomIps();
+                if (proxys.Count > 0)
+                {
+                    var rint = random.GetRandomInt(0, proxys.Count);
+                    return proxys[rint];
                 }
 
-                url = url+"?"+HttpUtils.ParamsToUrl(param);
-                var json = httpClient.DoGet(url).ReadString();
+            }
+            else
+            {
+                var url = "https://ip.jiangxianli.com/api/proxy_ip";
+                var json = httpClient.DoGet(url).ReadString(out _);
                 if (string.IsNullOrEmpty(json) == false)
                 {
                     var josnData = JsonConvert.DeserializeObject<ProxyResponse>(json);
@@ -173,45 +200,70 @@ namespace Common.Utility.Random.Proxy
                         return josnData.Data;
                     }
                 }
-            }
-            catch
-            {
-                // ignored
-            }
 
-            return null;
+            }
+            throw new Exception("https://ip.jiangxianli.com not allow");
         }
 
-        public List<ProxyIp> GetRandomIps(string country = "")
+        public ProxyIp GetRandomIp(CountryEnum country)
         {
-            try
+            List<ProxyIp> proxys=new List<ProxyIp>();
+            int rint = 0;
+            if (memory.Exists(MemoryEnum.Proxy.GetMemoryKey(country.GetEnumName())))
             {
-                string url = "https://ip.jiangxianli.com/api/proxy_ips";
-                Dictionary<string, string> param = new Dictionary<string, string>();
-                if (string.IsNullOrWhiteSpace(country) == false)
+                 proxys = memory.Get<List<ProxyIp>>(MemoryEnum.Proxy.GetMemoryKey(country.GetEnumName()));
+                if (proxys.Count > 0)
                 {
-                    param.Add("country", country);
+                    rint = random.GetRandomInt(0, proxys.Count);
+                    return proxys[rint];
                 }
-
+            }
+            proxys = GetRandomIps(country);
+            rint = random.GetRandomInt(0, proxys.Count);
+            if (proxys.Count > 0)
+            {
+                rint = random.GetRandomInt(0, proxys.Count);
+                return proxys[rint];
+            }
+            throw new Exception("https://ip.jiangxianli.com not allow");
+        }
+        private List<ProxyIp> GetRandomIps(CountryEnum country=CountryEnum.China)
+        {
+            var url = "https://ip.jiangxianli.com/api/proxy_ips";
+            var param = new Dictionary<string, string>();
+            if (country != CountryEnum.All)
+            {
+                param.Add("country", country.ToDescription());
                 url = url + "?" + HttpUtils.ParamsToUrl(param);
-                var json = httpClient.DoGet(url).ReadString();
-                if (string.IsNullOrEmpty(json) == false)
+            }
+            var json = httpClient.DoGet(url).ReadString(out _);
+            if (string.IsNullOrEmpty(json) == false)
+            {
+                var josnData = JsonConvert.DeserializeObject<ProxysResponse>(json);
+                if (josnData != null && josnData.Code == 0)
                 {
-                    var josnData = JsonConvert.DeserializeObject<ProxysResponse>(json);
-                    if (josnData != null && josnData.Code == 0)
+                    memory.Add(MemoryEnum.Proxy.GetMemoryKey(), josnData.Data.Data,TimeSpan.FromMinutes(minutes));
+                    if (country!= CountryEnum.All)
                     {
-                        return josnData.Data.Data;
+                        memory.Add(MemoryEnum.Proxy.GetMemoryKey(country.GetEnumName()), josnData.Data.Data, TimeSpan.FromMinutes(minutes));
                     }
+                    return josnData.Data.Data;
                 }
             }
-            catch
-            {
-                // ignored
-            }
-
-            return new List<ProxyIp>();
+            throw new  Exception("https://ip.jiangxianli.com not allow");
         }
 
+     
         #endregion Public Methods
+    }
+    public enum CountryEnum
+    {
+        [Description("中国")]
+        China,
+        [Description("日本")]
+        Japanese,
+        [Description("美国")]
+        America,
+        All,
     }
 }

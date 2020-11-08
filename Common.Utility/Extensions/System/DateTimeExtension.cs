@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Common.Utility.Extensions
+namespace Common.Utility.Extensions.System
 {
     public static class DateTimeExtension
     {
@@ -60,35 +60,33 @@ namespace Common.Utility.Extensions
         /// <summary>
         /// 获取时间戳
         /// </summary>
-        /// <param name="time"> </param>
-        /// <returns> </returns>
-        public static long TimeStamp(this DateTime time)
+        /// <returns></returns>
+        public static string GetTimeStamp(this DateTime time)
         {
-            global::System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new global::System.DateTime(1970, 1, 1));
-
-            return (int)(time - startTime).TotalSeconds;
+            TimeSpan ts = time - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            return Convert.ToInt64(ts.TotalSeconds).ToString();
         }
+        /*
+                /// <summary>
+                /// 获取格式化时间字符串 yyyy-MM-dd HH:mm:ss
+                /// </summary>
+                /// <param name="time"> </param>
+                /// <returns> </returns>
+                public static string yyyMMddHHmmss(this DateTime time)
+                {
+                    return time.ToString("yyyy-MM-dd HH:mm:ss");
+                }
 
-        /// <summary>
-        /// 获取格式化时间字符串 yyyy-MM-dd HH:mm:ss
-        /// </summary>
-        /// <param name="time"> </param>
-        /// <returns> </returns>
-        public static string yyyMMddHHmmss(this DateTime time)
-        {
-            return time.ToString("yyyy-MM-dd HH:mm:ss");
-        }
-
-        /// <summary>
-        /// 获取格式化时间字符串 yyyy/MM/dd HH:mm:ss
-        /// </summary>
-        /// <param name="time"> </param>
-        /// <returns> </returns>
-        public static string yyyMMddHHmmss2(this DateTime time)
-        {
-            return time.ToString("yyyy/MM/dd HH:mm:ss");
-        }
-
+                /// <summary>
+                /// 获取格式化时间字符串 yyyy/MM/dd HH:mm:ss
+                /// </summary>
+                /// <param name="time"> </param>
+                /// <returns> </returns>
+                public static string yyyMMddHHmmss2(this DateTime time)
+                {
+                    return time.ToString("yyyy/MM/dd HH:mm:ss");
+                }
+        */
         #endregion Public Methods
     }
 }

@@ -1,8 +1,8 @@
 ﻿using Autofac;
-using Common.Utility.MemoryCache.MemoryCache2;
-using Common.Utility.MemoryCache.Model;
-using Common.Utility.MemoryCache.Redis;
 using System;
+using Common.Utility.Memory.Cache;
+using Common.Utility.Memory.Model;
+using Common.Utility.Memory.Redis;
 
 namespace Common.Utility.Memory
 {
@@ -47,8 +47,8 @@ namespace Common.Utility.Memory
         public static void RegisterMemoryCache(this ContainerBuilder @this, Action<MemoryOptions> option)
         {
             //内存注入
-            @this.RegisterType<Microsoft.Extensions.Caching.Memory.MemoryCache>().AsImplementedInterfaces()
-                .SingleInstance();
+           /* @this.RegisterType<Microsoft.Extensions.Caching.Memory.MemoryCache>().AsImplementedInterfaces()
+                .SingleInstance();*/
             @this.RegisterType<MemoryCache2>().AsImplementedInterfaces().SingleInstance();
             var opt = new MemoryOptions();
             option(opt);

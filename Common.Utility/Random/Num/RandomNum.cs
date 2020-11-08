@@ -69,7 +69,7 @@ namespace Common.Utility.Random.Num
         /// </summary>
         /// <returns> The check code number. </returns>
         /// <param name="codeCount"> Code count. Max 10 </param>
-        public string GenerateCheckCodeNum(int codeCount)
+        public string GenerateCheckCodeNum(int codeCount=10)
         {
             codeCount = codeCount > 10 ? 10 : codeCount; // unable to return unique number list longer than 10
             int[] arrInt = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };

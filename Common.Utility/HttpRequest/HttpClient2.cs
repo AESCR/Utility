@@ -1,15 +1,20 @@
-﻿using Newtonsoft.Json;
+﻿using Common.Utility.Random.Proxy;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Common.Utility.Extensions.HttpClient;
+using Common.Utility.Extensions.System;
+using Common.Utility.Utils;
 
 namespace Common.Utility.HttpRequest
 {
     /// <summary>
-    /// 请求帮助类
+    /// 请求帮助类 http://httpbin.org/ docker run -p 80:80 kennethreitz/httpbin
     /// </summary>
     public class HttpClient2
     {
@@ -18,34 +23,71 @@ namespace Common.Utility.HttpRequest
         /// <summary>
         /// 不同url分配不同HttpClient
         /// </summary>
-        private static readonly Dictionary<string, System.Net.Http.HttpClient> Dic = new Dictionary<string, System.Net.Http.HttpClient>();
+        private readonly Dictionary<string, HttpClient> _dic = new Dictionary<string, HttpClient>();
 
         #endregion Private Fields
 
         #region Public Fields
 
-        public static readonly System.Net.Http.HttpClient Instance;
+        private readonly RandomProxy _proxy = new RandomProxy();
+        public static readonly HttpClient Instance;
 
         #endregion Public Fields
 
         #region Public Constructors
+
 
         static HttpClient2()
         {
             Instance = new System.Net.Http.HttpClient();
         }
 
+        private bool _randomProxy = false;
+        private readonly Action<HttpClientHandler> handAction;
+        public HttpClient2(Action<HttpClientHandler> option=null,bool randomProxy=false)
+        {
+            handAction = option;
+            _randomProxy = randomProxy;
+        }
         #endregion Public Constructors
 
         #region Private Methods
 
-        private System.Net.Http.HttpClient GetHttpClient(string url)
+        private HttpClient GetClient(string url)
+        {
+
+            var uri = new Uri(url);
+            var key = uri.Scheme + uri.Host;
+            if (!_dic.Keys.Contains(key))
+            {
+                _dic.Add(key, new HttpClient());
+            }
+            return _dic[key];
+        }
+
+        private HttpClient GetHttpClient(string url)
+        {
+            if (_randomProxy)
+            {
+                return GetProxyClient(url);
+            }
+            else
+            {
+                return GetClient(url);
+            }
+        }
+        private HttpClient GetProxyClient(string url)
         {
             var uri = new Uri(url);
             var key = uri.Scheme + uri.Host;
-            if (!Dic.Keys.Contains(key))
-                Dic.Add(key, new System.Net.Http.HttpClient());
-            return Dic[key];
+            HttpClientHandler handler = new HttpClientHandler();
+            handler.UseDefault();
+            string webProxy = _proxy.GetRandomIp().WebProxyUrl;
+            handler.UseWebProxy(webProxy);
+            handAction?.Invoke(handler);
+            var tempClient = new HttpClient(handler);
+            tempClient.Timeout=TimeSpan.FromMilliseconds(900);
+            return tempClient;
         }
 
         #endregion Private Methods
