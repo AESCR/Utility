@@ -10,16 +10,10 @@ namespace Common.Utility
     /// </summary>
     public class ManagedThreadPool
     {
-        #region Constants
-
         /// <summary>
         /// Maximum number of threads the thread pool has at its disposal.
         /// </summary>
         private const int _maxWorkerThreads = 10;
-
-        #endregion Constants
-
-        #region Member Variables
 
         /// <summary>
         /// Queue of all the callbacks waiting to be executed.
@@ -46,10 +40,6 @@ namespace Common.Utility
         /// Lockable object for the pool.
         /// </summary>
         private static readonly object _poolLock = new object();
-
-        #endregion Member Variables
-
-        #region Construction and Finalization
 
         /// <summary>
         /// Initialize the thread pool.
@@ -87,10 +77,6 @@ namespace Common.Utility
                 newThread.Start();
             }
         }
-
-        #endregion Construction and Finalization
-
-        #region Public Methods
 
         /// <summary>
         /// Queues a user work item to the thread pool.
@@ -166,10 +152,6 @@ namespace Common.Utility
             }
         }
 
-        #endregion Public Methods
-
-        #region Properties
-
         /// <summary>
         /// Gets the number of threads at the disposal of the thread pool.
         /// </summary>
@@ -193,10 +175,6 @@ namespace Common.Utility
                 }
             }
         }
-
-        #endregion Properties
-
-        #region Thread Processing
 
         /// <summary>
         /// Event raised when there is an exception on a threadpool thread.
@@ -252,15 +230,11 @@ namespace Common.Utility
             }
         }
 
-        #endregion Thread Processing
-
         /// <summary>
         /// Used to hold a callback delegate and the state for that delegate.
         /// </summary>
         private class WaitingCallback
         {
-            #region Construction
-
             /// <summary>
             /// Initialize the callback holding object.
             /// </summary>
@@ -272,10 +246,6 @@ namespace Common.Utility
                 _state = state;
             }
 
-            #endregion Construction
-
-            #region Member Variables
-
             /// <summary>
             /// Callback delegate for the callback.
             /// </summary>
@@ -286,10 +256,6 @@ namespace Common.Utility
             /// </summary>
             private readonly object _state;
 
-            #endregion Member Variables
-
-            #region Properties
-
             /// <summary>
             /// Gets the callback delegate for the callback.
             /// </summary>
@@ -299,8 +265,6 @@ namespace Common.Utility
             /// Gets the state with which to call the callback delegate.
             /// </summary>
             public object State => _state;
-
-            #endregion Properties
         }
     }
 
@@ -309,8 +273,6 @@ namespace Common.Utility
     /// </summary>
     public class Semaphore
     {
-        #region Member Variables
-
         /// <summary>
         /// The number of units alloted by this semaphore.
         /// </summary>
@@ -320,10 +282,6 @@ namespace Common.Utility
         /// Lock for the semaphore.
         /// </summary>
         private readonly object _semLock = new object();
-
-        #endregion Member Variables
-
-        #region Construction
 
         /// <summary>
         /// Initialize the semaphore as a binary semaphore.
@@ -345,10 +303,6 @@ namespace Common.Utility
             if (count < 0) throw new ArgumentException("Semaphore must have a count of at least 0.", "count");
             _count = count;
         }
-
-        #endregion Construction
-
-        #region Synchronization Operations
 
         /// <summary>
         /// V the semaphore (add 1 unit to it).
@@ -408,7 +362,5 @@ namespace Common.Utility
                 _count = count;
             }
         }
-
-        #endregion Synchronization Operations
     }
 }

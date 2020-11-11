@@ -1,26 +1,21 @@
-﻿using System;
+﻿using CSRedis;
+using System;
 using System.Collections.Generic;
-using CSRedis;
 
 namespace Common.Utility.Memory.Redis
 {
     public interface IRedisCache : IMemoryCache, IDisposable
     {
-        #region Public Properties
-
         bool IsConnect { get; }
         bool Launch { get; }
 
-        #endregion Public Properties
-
-        #region Public Methods
-
         bool Add<T>(string key, T val, TimeSpan timeSpan, bool isOverride);
-
 
         bool AddHash<T>(string key, Dictionary<string, T> dic, TimeSpan timeSpan);
 
         bool AddHash<T>(string key, string field, T t);
+
+        bool AddHash<T>(string key, Dictionary<string, T> dic);
 
         long AddList<T>(string key, List<T> list);
 
@@ -31,7 +26,6 @@ namespace Common.Utility.Memory.Redis
         long AddList<T>(string key, List<T> list, TimeSpan timeSpan);
 
         long AddSet<T>(string key, List<T> list);
-        bool AddHash<T>(string key, Dictionary<string, T> dic);
 
         long AddSet<T>(string key, List<T> list, TimeSpan timeSpan);
 
@@ -56,7 +50,6 @@ namespace Common.Utility.Memory.Redis
         long DelSortedSet<T>(string key, List<T> members);
 
         long DelSortedSet<T>(string key, T members);
-
 
         bool Expire(string key, TimeSpan timeSpan);
 
@@ -87,7 +80,5 @@ namespace Common.Utility.Memory.Redis
         bool SwitchDb(int index);
 
         void Unsubscribe(params string[] name);
-
-        #endregion Public Methods
     }
 }

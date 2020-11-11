@@ -4,8 +4,6 @@ namespace Common.Utility.Extensions
 {
     public static class ComparableExtension
     {
-        #region Public Methods
-
         /// <summary>
         /// 检查一个值在最小值和最大值之间
         /// </summary>
@@ -18,7 +16,5 @@ namespace Common.Utility.Extensions
         {
             return value.CompareTo(minInclusiveValue) >= 0 && value.CompareTo(maxInclusiveValue) <= 0;
         }
-
-        #endregion Public Methods
     }
 }

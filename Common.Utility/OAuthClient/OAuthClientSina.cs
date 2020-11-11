@@ -11,15 +11,9 @@ namespace Common.Utility.OAuthClient
 
     public class OAuthClientSina : OAuthClient
     {
-        #region Public Constructors
-
         public OAuthClientSina(string clientId, string clientSecret, string callbackUrl)
             : base(clientId, clientSecret, callbackUrl)
         { }
-
-        #endregion Public Constructors
-
-        #region Public Methods
 
         /// <summary>
         /// 获取票据信息
@@ -96,7 +90,5 @@ namespace Common.Utility.OAuthClient
                 return user;
             }
         }
-
-        #endregion Public Methods
     }
 }

@@ -6,8 +6,6 @@ namespace Common.Utility.JwtBearer
 {
     public interface IAccessTokenGenerate
     {
-        #region Public Methods
-
         /// <summary>
         /// 生成授权访问Tokan
         /// </summary>
@@ -42,7 +40,5 @@ namespace Common.Utility.JwtBearer
         /// <param name="securityToken"> </param>
         /// <returns> </returns>
         bool ValidateToken(string token, out JwtSecurityToken securityToken);
-
-        #endregion Public Methods
     }
 }

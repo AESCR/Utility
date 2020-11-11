@@ -11,8 +11,6 @@ namespace Common.Utility.SystemExtensions
     /// </summary>
     public static class ExceptionExtension
     {
-        #region Public Methods
-
         /// <summary>
         /// Determines whether the provided <paramref name="exception" /> should be considered
         /// fatal. An exception is considered to be fatal if it, or any of the inner exceptions are
@@ -101,7 +99,5 @@ namespace Common.Utility.SystemExtensions
             }
             return exception;
         }
-
-        #endregion Public Methods
     }
 }

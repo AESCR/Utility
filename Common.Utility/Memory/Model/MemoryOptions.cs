@@ -2,8 +2,6 @@ namespace Common.Utility.Memory.Model
 {
     public class MemoryOptions
     {
-        #region Public Properties
-
         public int DbIndex { get; set; } = 0;
         public string Host { get; set; } = "localhost";
         public string Password { get; set; }
@@ -25,7 +23,5 @@ namespace Common.Utility.Memory.Model
         /// 是否默认注入Redis
         /// </summary>
         public bool UseRedis { get; set; } = false;
-
-        #endregion Public Properties
     }
 }

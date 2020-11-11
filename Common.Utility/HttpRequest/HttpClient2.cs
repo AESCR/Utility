@@ -1,15 +1,13 @@
-﻿using Common.Utility.Random.Proxy;
+﻿using Common.Utility.Extensions.HttpClient;
+using Common.Utility.Extensions.System;
+using Common.Utility.Random.Proxy;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Common.Utility.Extensions.HttpClient;
-using Common.Utility.Extensions.System;
-using Common.Utility.Utils;
 
 namespace Common.Utility.HttpRequest
 {
@@ -18,44 +16,29 @@ namespace Common.Utility.HttpRequest
     /// </summary>
     public class HttpClient2
     {
-        #region Private Fields
-
         /// <summary>
         /// 不同url分配不同HttpClient
         /// </summary>
         private readonly Dictionary<string, HttpClient> _dic = new Dictionary<string, HttpClient>();
 
-        #endregion Private Fields
-
-        #region Public Fields
-
         private readonly RandomProxy _proxy = new RandomProxy();
+        private readonly Action<HttpClientHandler> handAction;
+        private bool _randomProxy = false;
         public static readonly HttpClient Instance;
-
-        #endregion Public Fields
-
-        #region Public Constructors
-
 
         static HttpClient2()
         {
             Instance = new System.Net.Http.HttpClient();
         }
 
-        private bool _randomProxy = false;
-        private readonly Action<HttpClientHandler> handAction;
-        public HttpClient2(Action<HttpClientHandler> option=null,bool randomProxy=false)
+        public HttpClient2(Action<HttpClientHandler> option = null, bool randomProxy = false)
         {
             handAction = option;
             _randomProxy = randomProxy;
         }
-        #endregion Public Constructors
-
-        #region Private Methods
 
         private HttpClient GetClient(string url)
         {
-
             var uri = new Uri(url);
             var key = uri.Scheme + uri.Host;
             if (!_dic.Keys.Contains(key))
@@ -76,6 +59,7 @@ namespace Common.Utility.HttpRequest
                 return GetClient(url);
             }
         }
+
         private HttpClient GetProxyClient(string url)
         {
             var uri = new Uri(url);
@@ -86,13 +70,9 @@ namespace Common.Utility.HttpRequest
             handler.UseWebProxy(webProxy);
             handAction?.Invoke(handler);
             var tempClient = new HttpClient(handler);
-            tempClient.Timeout=TimeSpan.FromMilliseconds(900);
+            tempClient.Timeout = TimeSpan.FromMilliseconds(900);
             return tempClient;
         }
-
-        #endregion Private Methods
-
-        #region Public Methods
 
         /// <summary>
         /// Delete请求
@@ -238,7 +218,5 @@ namespace Common.Utility.HttpRequest
         {
             return await PutAsync(url, JsonConvert.SerializeObject(content), headers);
         }
-
-        #endregion Public Methods
     }
 }

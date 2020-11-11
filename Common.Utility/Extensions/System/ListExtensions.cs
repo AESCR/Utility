@@ -7,8 +7,6 @@ namespace Common.Utilities
 {
     public static class ListExtensions
     {
-        #region Public Methods
-
         /// <summary>
         /// 将指定的集合转换成DataTable。
         /// </summary>
@@ -75,7 +73,5 @@ namespace Common.Utilities
 
             return table;
         }
-
-        #endregion Public Methods
     }
 }

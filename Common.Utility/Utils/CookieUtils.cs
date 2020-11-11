@@ -9,16 +9,10 @@ namespace Common.Utility.Tools
     /// </summary>
     public sealed class CookieUtils
     {
-        #region Private Fields
-
         /// <summary>
         /// 解析Cookie
         /// </summary>
         private static readonly Regex RegexSplitCookie2 = new Regex(@"[^,][\S\s]+?;+[\S\s]+?(?=,\S)");
-
-        #endregion Private Fields
-
-        #region Public Methods
 
         /// <summary>
         /// 获取 Cookies
@@ -173,7 +167,5 @@ namespace Common.Utility.Tools
             }
             return oldCookie;
         }
-
-        #endregion Public Methods
     }
 }

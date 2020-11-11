@@ -5,8 +5,6 @@ namespace Common.Utility.IsSafeStrings
 {
     public class XSSHelper
     {
-        #region Public Methods
-
         /// <summary>
         /// 过滤HTML标记
         /// </summary>
@@ -28,7 +26,5 @@ namespace Common.Utility.IsSafeStrings
             string str = HtmlFilter(html);
             return str;
         }
-
-        #endregion Public Methods
     }
 }

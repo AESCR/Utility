@@ -10,15 +10,9 @@ namespace Common.Utility.JwtBearer
     /// </summary>
     public class NullDySession
     {
-        #region Private Constructors
-
         private NullDySession()
         {
         }
-
-        #endregion Private Constructors
-
-        #region Public Properties
 
         /// <summary>
         /// 获取DySession实例
@@ -41,7 +35,5 @@ namespace Common.Utility.JwtBearer
                 return JsonConvert.DeserializeObject<JwtDyUser>(userClaim.Value);
             }
         }
-
-        #endregion Public Properties
     }
 }

@@ -11,8 +11,6 @@ namespace Common.Utility.Middleware
     /// </summary>
     public static class RequestResponseLoggingMiddlewareExtensions
     {
-        #region Public Methods
-
         /// <summary>
         /// 日志记录
         /// </summary>
@@ -22,30 +20,18 @@ namespace Common.Utility.Middleware
         {
             return app.UseMiddleware<LogMiddleware>();
         }
-
-        #endregion Public Methods
     }
 
     public class LogMiddleware
     {
-        #region Private Fields
-
         private readonly ILogger _logger;
         private readonly RequestDelegate _next;
-
-        #endregion Private Fields
-
-        #region Public Constructors
 
         public LogMiddleware(RequestDelegate next)
         {
             _next = next;
             _logger = LogManager.GetLogger("logs");
         }
-
-        #endregion Public Constructors
-
-        #region Public Methods
 
         public async Task Invoke(HttpContext context)
         {
@@ -55,7 +41,5 @@ namespace Common.Utility.Middleware
             _logger.Info("Response Url:" + context.Request.Path + Environment.NewLine
                          + "Body:" + context.Response.Body.ToString());
         }
-
-        #endregion Public Methods
     }
 }

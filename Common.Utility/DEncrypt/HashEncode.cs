@@ -8,8 +8,6 @@ namespace Common.Utility
     /// </summary>
     public class HashEncode
     {
-        #region Public Methods
-
         /// <summary>
         /// �õ�һ�������ֵ
         /// </summary>
@@ -47,7 +45,5 @@ namespace Common.Utility
             foreach (var o in Value) Security += (int)o + "O";
             return Security;
         }
-
-        #endregion Public Methods
     }
 }

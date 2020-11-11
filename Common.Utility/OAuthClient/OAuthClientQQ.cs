@@ -10,15 +10,9 @@ namespace Common.Utility.OAuthClient
 
     public class OAuthClientQQ : OAuthClient
     {
-        #region Public Constructors
-
         public OAuthClientQQ(string clientId, string clientSecret, string callbackUrl)
             : base(clientId, clientSecret, callbackUrl)
         { }
-
-        #endregion Public Constructors
-
-        #region Public Methods
 
         /// <summary>
         /// 获取票据信息
@@ -36,8 +30,6 @@ namespace Common.Utility.OAuthClient
                 tokenUrl.Append("&client_id=" + ClientId);//申请QQ登录成功后，分配给网站的appid。
                 tokenUrl.Append("&client_secret=" + ClientSecret);//申请QQ登录成功后，分配给网站的appkey。
 
-                #region 注释
-
                 /*
                 *  上一步返回的authorization code。
                     如果用户成功登录并授权，则会跳转到指定的回调地址，并在URL中带上Authorization Code。
@@ -45,8 +37,6 @@ namespace Common.Utility.OAuthClient
                     http://www.qq.com/my.php?code=520DD95263C1CFEA087******
                     注意此code会在10分钟内过期。
                 */
-
-                #endregion 注释
 
                 tokenUrl.Append("&code=" + code);
                 tokenUrl.Append("&redirect_uri=" + CallbackUrl);//与上面一步中传入的redirect_uri保持一致。
@@ -118,7 +108,5 @@ namespace Common.Utility.OAuthClient
                 return user;
             }
         }
-
-        #endregion Public Methods
     }
 }

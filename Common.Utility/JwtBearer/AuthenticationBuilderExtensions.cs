@@ -7,8 +7,6 @@ namespace Common.Utility.JwtBearer
 {
     public static class AuthenticationBuilderExtensions
     {
-        #region Private Methods
-
         private static AuthenticationBuilder AddJwtBearer(this AuthenticationBuilder build, AccessTokenOptions options)
         {
             build.Services.AddSingleton<IAccessTokenGenerate>(new AccessTokenGenerate(options));
@@ -31,10 +29,6 @@ namespace Common.Utility.JwtBearer
             });
             return build;
         }
-
-        #endregion Private Methods
-
-        #region Public Methods
 
         /// <summary>
         /// 自定义Jwt认证
@@ -71,7 +65,5 @@ namespace Common.Utility.JwtBearer
         {
             return build.AddJwtBearer(new AccessTokenOptions());
         }
-
-        #endregion Public Methods
     }
 }

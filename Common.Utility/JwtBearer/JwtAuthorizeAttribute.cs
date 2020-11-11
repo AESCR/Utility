@@ -9,8 +9,6 @@ namespace Common.Utility.JwtBearer
 {
     public class JwtAuthorizeAttribute : AuthorizeAttribute, IAuthorizationFilter
     {
-        #region Private Methods
-
         private static bool HasAllowAnonymous(AuthorizationFilterContext context)
         {
             var filters = context.Filters;
@@ -22,10 +20,6 @@ namespace Common.Utility.JwtBearer
             var endpoint = context.HttpContext.GetEndpoint();
             return endpoint?.Metadata?.GetMetadata<IAllowAnonymous>() != null;
         }
-
-        #endregion Private Methods
-
-        #region Public Methods
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
@@ -42,7 +36,5 @@ namespace Common.Utility.JwtBearer
                     new BadRequestObjectResult($"用户，不具备访问的权限。");
             }
         }
-
-        #endregion Public Methods
     }
 }

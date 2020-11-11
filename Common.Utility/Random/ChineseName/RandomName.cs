@@ -4,8 +4,6 @@ namespace Common.Utility.Random.ChineseName
 {
     public class RandomName
     {
-        #region Private Fields
-
         /// <summary>
         /// 姓氏列表
         /// </summary>
@@ -61,19 +59,11 @@ namespace Common.Utility.Random.ChineseName
 + "东门    西门    商    牟    佘    佴    伯    赏    南宫    墨    哈    谯    笪    年    爱    阳    佟 "
 + "第五    言    福";
 
-        #endregion Private Fields
-
-        #region Public Constructors
-
         public RandomName()
         {
             arrLastName = strLastName.Replace(" ", " ")
                 .Replace("\t", " ").Split(new char[] { ' ' });
         }
-
-        #endregion Public Constructors
-
-        #region Public Methods
 
         /// <summary>
         /// 随机姓名
@@ -92,7 +82,5 @@ namespace Common.Utility.Random.ChineseName
             }
             return name;
         }
-
-        #endregion Public Methods
     }
 }

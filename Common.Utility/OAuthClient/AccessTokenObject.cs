@@ -2,8 +2,6 @@
 {
     public class AccessTokenObject
     {
-        #region Public Properties
-
         /// <summary>
         /// 票据
         /// </summary>
@@ -13,7 +11,5 @@
         /// 可将此ID进行存储便于用户下次登录时辨识其身份
         /// </summary>
         public string UserId { get; set; }
-
-        #endregion Public Properties
     }
 }

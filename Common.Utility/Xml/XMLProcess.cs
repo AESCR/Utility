@@ -7,8 +7,6 @@ namespace Common.Utility
 {
     public class XMLProcess
     {
-        #region Public Constructors
-
         public XMLProcess()
         {
         }
@@ -18,15 +16,56 @@ namespace Common.Utility
             XMLPath = strPath;
         }
 
-        #endregion Public Constructors
-
-        #region Public Properties
-
         public string XMLPath { get; }
 
-        #endregion Public Properties
+        /// <summary>
+        /// 返回完整路径
+        /// </summary>
+        /// <param name="strPath"> Xml的路径 </param>
+        private static string GetXmlFullPath(string strPath)
+        {
+            if (strPath.IndexOf(":") > 0)
+                return strPath;
+            return strPath;
+        }
 
-        #region Public Methods
+        /// <summary>
+        /// 导入XML文件
+        /// </summary>
+        /// <param name="strPath"> XML文件路径 </param>
+        private static XmlDocument XMLLoad(string strPath)
+        {
+            var xmldoc = new XmlDocument();
+            try
+            {
+                var filename = strPath;
+                if (File.Exists(filename)) xmldoc.Load(filename);
+            }
+            catch (Exception e)
+            {
+            }
+
+            return xmldoc;
+        }
+
+        /// <summary>
+        /// 导入XML文件
+        /// </summary>
+        /// <param name="XMLPath"> XML文件路径 </param>
+        private XmlDocument XMLLoad()
+        {
+            var xmldoc = new XmlDocument();
+            try
+            {
+                var filename = XMLPath;
+                if (File.Exists(filename)) xmldoc.Load(filename);
+            }
+            catch (Exception e)
+            {
+            }
+
+            return xmldoc;
+        }
 
         /// <summary>
         /// 删除节点值
@@ -522,60 +561,5 @@ namespace Common.Utility
             {
             }
         }
-
-        #endregion Public Methods
-
-        #region Private Methods
-
-        /// <summary>
-        /// 返回完整路径
-        /// </summary>
-        /// <param name="strPath"> Xml的路径 </param>
-        private static string GetXmlFullPath(string strPath)
-        {
-            if (strPath.IndexOf(":") > 0)
-                return strPath;
-            return strPath;
-        }
-
-        /// <summary>
-        /// 导入XML文件
-        /// </summary>
-        /// <param name="strPath"> XML文件路径 </param>
-        private static XmlDocument XMLLoad(string strPath)
-        {
-            var xmldoc = new XmlDocument();
-            try
-            {
-                var filename = strPath;
-                if (File.Exists(filename)) xmldoc.Load(filename);
-            }
-            catch (Exception e)
-            {
-            }
-
-            return xmldoc;
-        }
-
-        /// <summary>
-        /// 导入XML文件
-        /// </summary>
-        /// <param name="XMLPath"> XML文件路径 </param>
-        private XmlDocument XMLLoad()
-        {
-            var xmldoc = new XmlDocument();
-            try
-            {
-                var filename = XMLPath;
-                if (File.Exists(filename)) xmldoc.Load(filename);
-            }
-            catch (Exception e)
-            {
-            }
-
-            return xmldoc;
-        }
-
-        #endregion Private Methods
     }
 }

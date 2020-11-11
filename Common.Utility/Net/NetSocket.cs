@@ -11,8 +11,6 @@ namespace Common.Utility.Net
     /// </summary>
     public class NetSocket
     {
-        #region Public Properties
-
         /// <summary>
         /// 获取本机的局域网IP
         /// </summary>
@@ -53,10 +51,6 @@ namespace Common.Utility.Net
                 return addressList[1].ToString();
             }
         }
-
-        #endregion Public Properties
-
-        #region Public Methods
 
         /// <summary>
         /// 绑定终结点
@@ -448,7 +442,5 @@ namespace Common.Utility.Net
         {
             return IPAddress.Parse(ip);
         }
-
-        #endregion Public Methods
     }
 }

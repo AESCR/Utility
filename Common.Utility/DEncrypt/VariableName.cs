@@ -5,8 +5,6 @@
     /// </summary>
     public class VariableName
     {
-        #region Public Fields
-
         /// <summary>
         /// 服务器配置文件中关于Access数据库路径
         /// </summary>
@@ -166,7 +164,5 @@
         /// 日期格式化字符串"yyyyMMdd" 如20031206
         /// </summary>
         public static readonly string YYYYMMDD = "yyyyMMdd";
-
-        #endregion Public Fields
     }
 }

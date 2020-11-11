@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Common.Utility.Autofac;
+using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Common.Utility.Autofac;
-using Common.Utility.Random.Num;
-using HtmlAgilityPack;
 
 namespace Common.Utility.Random.UAgent
 {
@@ -11,12 +10,13 @@ namespace Common.Utility.Random.UAgent
     {
         public RandomUAgent()
         {
-           //TODo WebApi
+            //TODo WebApi
         }
+
         /// <summary>
         /// 爬取UAgent
         /// </summary>
-        /// <returns></returns>
+        /// <returns> </returns>
         public static Dictionary<string, List<string>> SpiderUAgent()
         {
             var web = new HtmlWeb();
@@ -54,13 +54,11 @@ namespace Common.Utility.Random.UAgent
                 string name = url.Name;
                 try
                 {
-
                     spiderUAgent.Add(name, stimuli);
-                   
                 }
                 catch (Exception e)
                 {
-                    return ;
+                    return;
                 }
             });
             try
@@ -72,7 +70,6 @@ namespace Common.Utility.Random.UAgent
             {
                 return spiderUAgent;
             }
-           
         }
     }
 }

@@ -4,8 +4,6 @@ namespace Common.Utility.Extensions.System
 {
     public static class HttpRequestExtensions
     {
-        #region Public Methods
-
         public static string GetAbsoluteUri(this Microsoft.AspNetCore.Http.HttpRequest request)
         {
             return new StringBuilder()
@@ -27,7 +25,5 @@ namespace Common.Utility.Extensions.System
                 .Append(request.PathBase)
                 .ToString();
         }
-
-        #endregion Public Methods
     }
 }

@@ -1,22 +1,21 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Text;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
 
 namespace Common.Utility.Extensions.Swagger
 {
     public static class SwaggerExtensions
     {
         /// <summary>
-        ///     服务
+        /// 服务
         /// </summary>
-        /// <param name="this"></param>
-        /// <param name="openAction"></param>
-        public static void AddSwaggerGen(this IServiceCollection @this,Action<OpenApiInfo> openAction)
+        /// <param name="this"> </param>
+        /// <param name="openAction"> </param>
+        public static void AddSwaggerGen(this IServiceCollection @this, Action<OpenApiInfo> openAction)
         {
             @this.AddSwaggerGen(o =>
             {
@@ -34,8 +33,6 @@ namespace Common.Utility.Extensions.Swagger
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 // 启用xml注释. 该方法第二个参数启用控制器的注释，默认为false.
                 o.IncludeXmlComments(xmlPath, true);
-
-                #region 启用swagger验证功能
 
                 o.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
@@ -56,15 +53,13 @@ namespace Common.Utility.Extensions.Swagger
                         new List<string>()
                     }
                 });
-
-                #endregion
             });
         }
 
         /// <summary>
         /// 启动配置页面
         /// </summary>
-        /// <param name="this"></param>
+        /// <param name="this"> </param>
         public static void UseSwaggerUi(this IApplicationBuilder @this)
         {
             @this.UseSwagger();

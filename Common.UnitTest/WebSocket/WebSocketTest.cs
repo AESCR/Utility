@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Common.Utility.Net;
+﻿using Common.Utility.Net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace Common.UnitTest.WebSocket
 {
@@ -12,7 +10,7 @@ namespace Common.UnitTest.WebSocket
         [TestMethod]
         public void WebSocketFleckTest()
         {
-            WebSocketFleck fleck=new  WebSocketFleck();
+            WebSocketFleck fleck = new WebSocketFleck();
             Console.WriteLine("123");
             Console.ReadLine();
         }

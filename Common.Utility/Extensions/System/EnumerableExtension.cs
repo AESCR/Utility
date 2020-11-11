@@ -9,8 +9,6 @@ namespace Common.Utility.Extensions.System
     /// </summary>
     public static class EnumerableExtension
     {
-        #region Public Methods
-
         public static IList<T> AddIf<T>(this IEnumerable<T> query, bool condition, T entity)
         {
             var list = query.ToList();
@@ -189,10 +187,6 @@ namespace Common.Utility.Extensions.System
             return condition ? query.Where(func) : query;
         }
 
-        #endregion Public Methods
-
-        #region MyRegion
-
         ///// <summary>
         ///// 随机取 Enumerable 中的一个值
         ///// </summary>
@@ -235,7 +229,5 @@ namespace Common.Utility.Extensions.System
         //        return current;
         //    }
         //}
-
-        #endregion MyRegion
     }
 }

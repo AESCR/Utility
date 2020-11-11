@@ -10,8 +10,6 @@ namespace Common.Utility.SystemExtensions
 {
     public static class EnumExtensions
     {
-        #region Public Methods
-
         /// <summary>
         /// 获取DisplayAttribute上指定的Desc
         /// </summary>
@@ -113,8 +111,6 @@ namespace Common.Utility.SystemExtensions
         {
             return EnumHelper.ConvertToEnum<T>(value.ToString(), defVal);
         }
-
-        #endregion Public Methods
     }
 
     /// <summary>
@@ -122,8 +118,6 @@ namespace Common.Utility.SystemExtensions
     /// </summary>
     public static class EnumHelper
     {
-        #region Public Methods
-
         public static List<EnumEntry<TEnum, TRaw>> ConvertEnumToEntryList<TEnum, TRaw>(IEnumerable<TEnum> excludes = null, Func<TRaw, string, string> func = null)
         {
             var enumType = typeof(TEnum);
@@ -343,11 +337,7 @@ namespace Common.Utility.SystemExtensions
             }
             return value;
         }
-
-        #endregion Public Methods
     }
-
-    #region EnumHelper
 
     /// <summary>
     /// 枚举Entry
@@ -356,8 +346,6 @@ namespace Common.Utility.SystemExtensions
     /// <typeparam name="TRaw"> 枚举类型的基础类型 </typeparam>
     public class EnumEntry<TEnum, TRaw>
     {
-        #region Public Constructors
-
         public EnumEntry()
         {
         }
@@ -368,10 +356,6 @@ namespace Common.Utility.SystemExtensions
             RawValue = raw;
             EnumString = strEnum;
         }
-
-        #endregion Public Constructors
-
-        #region Public Properties
 
         /// <summary>
         /// 自定义名称
@@ -417,9 +401,5 @@ namespace Common.Utility.SystemExtensions
         /// 基础数值类型
         /// </summary>
         public TRaw RawValue { get; set; }
-
-        #endregion Public Properties
     }
-
-    #endregion EnumHelper
 }

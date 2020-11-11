@@ -12,8 +12,6 @@ namespace Common.Utility.SystemExtensions
     /// </summary>
     public static class CompressionExtension
     {
-        #region Public Methods
-
         /// <summary>
         /// A string extension method that compress the given string to GZip byte array.
         /// </summary>
@@ -500,7 +498,5 @@ namespace Common.Utility.SystemExtensions
         {
             return ZipFile.Open(@this.FullName, mode, entryNameEncoding);
         }
-
-        #endregion Public Methods
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Common.Utility.HttpResponse;
 using Common.Utility.Memory;
+using Common.Utility.Memory.Model;
+using Common.Utility.Memory.Redis;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
@@ -9,8 +11,6 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using Common.Utility.Memory.Model;
-using Common.Utility.Memory.Redis;
 
 namespace Common.Utility.Middleware
 {
@@ -19,8 +19,6 @@ namespace Common.Utility.Middleware
     /// </summary>
     public static class IpBlackUtils
     {
-        #region Public Methods
-
         public static bool AddIpBlack(IMemoryCache memory, string ip)
         {
             if (memory.IsRedis)
@@ -65,14 +63,10 @@ namespace Common.Utility.Middleware
             black.Remove(ip);
             return memoryCache.Add(MemoryEnum.BlackIps.GetMemoryKey(), black, true);
         }
-
-        #endregion Public Methods
     }
 
     public static class RequestIpMiddlewareExtensions
     {
-        #region Public Methods
-
         /// <summary>
         /// IP黑名单 IpBlackUtils.AddIpBlack() 操作黑名单
         /// </summary>
@@ -82,8 +76,6 @@ namespace Common.Utility.Middleware
         {
             return builder.UseMiddleware<RequestIpMiddleware>();
         }
-
-        #endregion Public Methods
     }
 
     /// <summary>
@@ -91,24 +83,14 @@ namespace Common.Utility.Middleware
     /// </summary>
     public class RequestIpMiddleware
     {
-        #region Private Fields
-
         private readonly IMemoryCache _memory;
         private readonly RequestDelegate _next;
-
-        #endregion Private Fields
-
-        #region Public Constructors
 
         public RequestIpMiddleware(RequestDelegate next, IMemoryCache memory)
         {
             _next = next;
             _memory = memory;
         }
-
-        #endregion Public Constructors
-
-        #region Public Methods
 
         public async Task Invoke(HttpContext context)
         {
@@ -140,7 +122,5 @@ namespace Common.Utility.Middleware
             }
             await _next.Invoke(context);
         }
-
-        #endregion Public Methods
     }
 }

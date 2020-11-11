@@ -7,8 +7,6 @@ namespace Common.Utility.JwtBearer
     /// </summary>
     public class AccessToken
     {
-        #region Public Constructors
-
         public AccessToken()
         {
         }
@@ -24,10 +22,6 @@ namespace Common.Utility.JwtBearer
         public AccessToken(string token, string tokenType, DateTime expired) : this(token, tokenType, expired, null)
         {
         }
-
-        #endregion Public Constructors
-
-        #region Public Properties
 
         /// <summary>
         /// 过期时间
@@ -48,7 +42,5 @@ namespace Common.Utility.JwtBearer
         /// Token 类型
         /// </summary>
         public string TokenType { get; }
-
-        #endregion Public Properties
     }
 }

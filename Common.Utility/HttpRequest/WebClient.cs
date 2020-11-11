@@ -15,8 +15,6 @@ namespace Common.Utility.HttpRequest
     /// </summary>
     public class DownloadEventArgs : EventArgs
     {
-        #region Public Properties
-
         /// <summary>
         /// 已接收的字节数
         /// </summary>
@@ -31,8 +29,6 @@ namespace Common.Utility.HttpRequest
         /// 总字节数
         /// </summary>
         public int TotalBytes { get; set; }
-
-        #endregion Public Properties
     }
 
     /// <summary>
@@ -40,17 +36,11 @@ namespace Common.Utility.HttpRequest
     /// </summary>
     public class MultipartForm
     {
-        #region Private Fields
-
         private readonly string boundary;
 
         private readonly MemoryStream ms;
 
         private byte[] formData;
-
-        #endregion Private Fields
-
-        #region Public Constructors
 
         /// <summary>
         /// 实例化
@@ -61,10 +51,6 @@ namespace Common.Utility.HttpRequest
             ms = new MemoryStream();
             StringEncoding = Encoding.Default;
         }
-
-        #endregion Public Constructors
-
-        #region Public Properties
 
         /// <summary>
         /// 获取此编码内容的类型
@@ -94,10 +80,6 @@ namespace Common.Utility.HttpRequest
         /// </summary>
         public Encoding StringEncoding { set; get; }
 
-        #endregion Public Properties
-
-        #region Public Methods
-
         /// <summary>
         /// 添加字符串
         /// </summary>
@@ -113,8 +95,6 @@ namespace Common.Utility.HttpRequest
             var buf = StringEncoding.GetBytes(sb.ToString());
             ms.Write(buf, 0, buf.Length);
         }
-
-        #endregion Public Methods
     }
 
     /// <summary>
@@ -122,8 +102,6 @@ namespace Common.Utility.HttpRequest
     /// </summary>
     public class UploadEventArgs : EventArgs
     {
-        #region Public Properties
-
         /// <summary>
         /// 已发送的字节数
         /// </summary>
@@ -133,8 +111,6 @@ namespace Common.Utility.HttpRequest
         /// 总字节数
         /// </summary>
         public int TotalBytes { get; set; }
-
-        #endregion Public Properties
     }
 
     /// <summary>
@@ -142,13 +118,7 @@ namespace Common.Utility.HttpRequest
     /// </summary>
     public class WebClient
     {
-        #region Private Fields
-
         private static CookieContainer cc;
-
-        #endregion Private Fields
-
-        #region Public Constructors
 
         static WebClient()
         {
@@ -164,17 +134,9 @@ namespace Common.Utility.HttpRequest
             ResponseHeaders = new WebHeaderCollection();
         }
 
-        #endregion Public Constructors
-
-        #region Public Events
-
         public event EventHandler<DownloadEventArgs> DownloadProgressChanged;
 
         public event EventHandler<UploadEventArgs> UploadProgressChanged;
-
-        #endregion Public Events
-
-        #region Public Properties
 
         /// <summary>
         /// 设置发送和接收的数据缓冲大小
@@ -214,104 +176,6 @@ namespace Common.Utility.HttpRequest
         /// 获取响应头集合
         /// </summary>
         public WebHeaderCollection ResponseHeaders { get; private set; }
-
-        #endregion Public Properties
-
-        #region Public Methods
-
-        /// <summary>
-        /// 下载文件
-        /// </summary>
-        /// <param name="url"> 文件URL地址 </param>
-        /// <param name="filename"> 文件保存完整路径 </param>
-        public void DownloadFile(string url, string filename)
-        {
-            FileStream fs = null;
-            try
-            {
-                var request = CreateRequest(url, "GET");
-                var data = GetData(request);
-                fs = new FileStream(filename, FileMode.Create, FileAccess.Write);
-                fs.Write(data, 0, data.Length);
-            }
-            finally
-            {
-                if (fs != null) fs.Close();
-            }
-        }
-
-        /// <summary>
-        /// 从指定URL下载数据
-        /// </summary>
-        /// <param name="url"> 网址 </param>
-        /// <returns> </returns>
-        public byte[] GetData(string url)
-        {
-            var request = CreateRequest(url, "GET");
-            return GetData(request);
-        }
-
-        /// <summary>
-        /// 获取网页源代码
-        /// </summary>
-        /// <param name="url"> 网址 </param>
-        /// <returns> </returns>
-        public string GetHtml(string url)
-        {
-            var request = CreateRequest(url, "GET");
-            RespHtml = Encoding.GetString(GetData(request));
-            return RespHtml;
-        }
-
-        /// <summary>
-        /// 向指定URL发送文本数据
-        /// </summary>
-        /// <param name="url"> 网址 </param>
-        /// <param name="postData"> urlencode编码的文本数据 </param>
-        /// <returns> </returns>
-        public string Post(string url, string postData)
-        {
-            var data = Encoding.GetBytes(postData);
-            return Post(url, data);
-        }
-
-        /// <summary>
-        /// 向指定URL发送字节数据
-        /// </summary>
-        /// <param name="url"> 网址 </param>
-        /// <param name="postData"> 发送的字节数组 </param>
-        /// <returns> </returns>
-        public string Post(string url, byte[] postData)
-        {
-            var request = CreateRequest(url, "POST");
-            request.ContentType = "application/x-www-form-urlencoded";
-            request.ContentLength = postData.Length;
-            request.KeepAlive = true;
-            PostData(request, postData);
-            RespHtml = Encoding.GetString(GetData(request));
-            return RespHtml;
-        }
-
-        /// <summary>
-        /// 向指定网址发送mulitpart编码的数据
-        /// </summary>
-        /// <param name="url"> 网址 </param>
-        /// <param name="mulitpartForm"> mulitpart form data </param>
-        /// <returns> </returns>
-        public string Post(string url, MultipartForm mulitpartForm)
-        {
-            var request = CreateRequest(url, "POST");
-            request.ContentType = mulitpartForm.ContentType;
-            request.ContentLength = mulitpartForm.FormData.Length;
-            request.KeepAlive = true;
-            PostData(request, mulitpartForm.FormData);
-            RespHtml = Encoding.GetString(GetData(request));
-            return RespHtml;
-        }
-
-        #endregion Public Methods
-
-        #region Private Methods
 
         /// <summary>
         /// 从磁盘加载Cookie
@@ -355,7 +219,7 @@ namespace Common.Utility.HttpRequest
         }
 
         private bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain,
-                    SslPolicyErrors errors)
+                            SslPolicyErrors errors)
         {
             return true;
         }
@@ -471,6 +335,94 @@ namespace Common.Utility.HttpRequest
             stream.Close();
         }
 
-        #endregion Private Methods
+        /// <summary>
+        /// 下载文件
+        /// </summary>
+        /// <param name="url"> 文件URL地址 </param>
+        /// <param name="filename"> 文件保存完整路径 </param>
+        public void DownloadFile(string url, string filename)
+        {
+            FileStream fs = null;
+            try
+            {
+                var request = CreateRequest(url, "GET");
+                var data = GetData(request);
+                fs = new FileStream(filename, FileMode.Create, FileAccess.Write);
+                fs.Write(data, 0, data.Length);
+            }
+            finally
+            {
+                if (fs != null) fs.Close();
+            }
+        }
+
+        /// <summary>
+        /// 从指定URL下载数据
+        /// </summary>
+        /// <param name="url"> 网址 </param>
+        /// <returns> </returns>
+        public byte[] GetData(string url)
+        {
+            var request = CreateRequest(url, "GET");
+            return GetData(request);
+        }
+
+        /// <summary>
+        /// 获取网页源代码
+        /// </summary>
+        /// <param name="url"> 网址 </param>
+        /// <returns> </returns>
+        public string GetHtml(string url)
+        {
+            var request = CreateRequest(url, "GET");
+            RespHtml = Encoding.GetString(GetData(request));
+            return RespHtml;
+        }
+
+        /// <summary>
+        /// 向指定URL发送文本数据
+        /// </summary>
+        /// <param name="url"> 网址 </param>
+        /// <param name="postData"> urlencode编码的文本数据 </param>
+        /// <returns> </returns>
+        public string Post(string url, string postData)
+        {
+            var data = Encoding.GetBytes(postData);
+            return Post(url, data);
+        }
+
+        /// <summary>
+        /// 向指定URL发送字节数据
+        /// </summary>
+        /// <param name="url"> 网址 </param>
+        /// <param name="postData"> 发送的字节数组 </param>
+        /// <returns> </returns>
+        public string Post(string url, byte[] postData)
+        {
+            var request = CreateRequest(url, "POST");
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.ContentLength = postData.Length;
+            request.KeepAlive = true;
+            PostData(request, postData);
+            RespHtml = Encoding.GetString(GetData(request));
+            return RespHtml;
+        }
+
+        /// <summary>
+        /// 向指定网址发送mulitpart编码的数据
+        /// </summary>
+        /// <param name="url"> 网址 </param>
+        /// <param name="mulitpartForm"> mulitpart form data </param>
+        /// <returns> </returns>
+        public string Post(string url, MultipartForm mulitpartForm)
+        {
+            var request = CreateRequest(url, "POST");
+            request.ContentType = mulitpartForm.ContentType;
+            request.ContentLength = mulitpartForm.FormData.Length;
+            request.KeepAlive = true;
+            PostData(request, mulitpartForm.FormData);
+            RespHtml = Encoding.GetString(GetData(request));
+            return RespHtml;
+        }
     }
 }

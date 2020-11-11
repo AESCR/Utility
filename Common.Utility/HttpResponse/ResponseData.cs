@@ -13,22 +13,16 @@
 
     public static class ResponseUtils
     {
-        #region Public Methods
-
         public static ResponseBody GetResponseByCode(long code)
         {
             ResponseBody response = new ResponseBody { Code = code };
             //Todo 通过Code查询出响应体
             return response;
         }
-
-        #endregion Public Methods
     }
 
     public class ResponseBody
     {
-        #region Public Properties
-
         /// <summary>
         /// 消息对应码
         /// </summary>
@@ -48,7 +42,5 @@
         /// 标题
         /// </summary>
         public string Title { get; set; }
-
-        #endregion Public Properties
     }
 }

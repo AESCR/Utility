@@ -4,8 +4,6 @@ namespace Common.Utility
 {
     public class PinYin
     {
-        #region Public Methods
-
         /// <summary>
         /// 取汉字拼音的首字母
         /// </summary>
@@ -28,9 +26,6 @@ namespace Common.Utility
                     strResult = strResult + (char)gbkBytes[i];
                     i++;
                 }
-
-                #region 生成汉字拼音简码,取拼音首字母
-
                 else
                 {
                     key = (ushort)(gbkBytes[i] * 256 + gbkBytes[i + 1]);
@@ -84,8 +79,6 @@ namespace Common.Utility
                         strResult = strResult + "?";
                     i = i + 2;
                 }
-
-                #endregion 生成汉字拼音简码,取拼音首字母
             }
 
             return strResult;
@@ -188,7 +181,5 @@ namespace Common.Utility
 
             return return_py.ToUpper();
         }
-
-        #endregion Public Methods
     }
 }

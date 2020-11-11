@@ -7,8 +7,6 @@ namespace Common.Utilities
 {
     public static class DataTableExtensions
     {
-        #region Public Methods
-
         public static List<T> ToEntities<T>(this DataTable table) where T : new()
         {
             var entities = new List<T>();
@@ -67,7 +65,5 @@ namespace Common.Utilities
 
             return entity;
         }
-
-        #endregion Public Methods
     }
 }

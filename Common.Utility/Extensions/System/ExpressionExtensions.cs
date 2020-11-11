@@ -10,8 +10,6 @@ namespace Common.Utility.Expression2
     /// </summary>
     public static class ExpressionExtensions
     {
-        #region Public Methods
-
         /// <summary>
         /// 以 Expression.AndAlso 组合两个Expression表达式
         /// </summary>
@@ -55,28 +53,14 @@ namespace Common.Utility.Expression2
             return first.Compose(second, Expression.OrElse);
         }
 
-        #endregion Public Methods
-
-        #region Private Classes
-
         private class ParameterRebinder : ExpressionVisitor
         {
-            #region Private Fields
-
             private readonly Dictionary<ParameterExpression, ParameterExpression> _map;
-
-            #endregion Private Fields
-
-            #region Private Constructors
 
             private ParameterRebinder(Dictionary<ParameterExpression, ParameterExpression> map)
             {
                 _map = map ?? new Dictionary<ParameterExpression, ParameterExpression>();
             }
-
-            #endregion Private Constructors
-
-            #region Protected Methods
 
             protected override Expression VisitParameter(ParameterExpression node)
             {
@@ -86,19 +70,11 @@ namespace Common.Utility.Expression2
                 return base.VisitParameter(node);
             }
 
-            #endregion Protected Methods
-
-            #region Public Methods
-
             public static Expression ReplaceParameters(Dictionary<ParameterExpression, ParameterExpression> map,
                             Expression exp)
             {
                 return new ParameterRebinder(map).Visit(exp);
             }
-
-            #endregion Public Methods
         }
-
-        #endregion Private Classes
     }
 }

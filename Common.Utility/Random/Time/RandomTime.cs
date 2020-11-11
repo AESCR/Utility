@@ -4,8 +4,6 @@ namespace Common.Utility.Random.Time
 {
     public class RandomTime
     {
-        #region Public Methods
-
         /// <summary>
         /// 得到随机日期
         /// </summary>
@@ -47,7 +45,5 @@ namespace Common.Utility.Random.Time
             var i = random.Next(Math.Abs(maxValue));
             return minTime.AddSeconds(i);
         }
-
-        #endregion Public Methods
     }
 }

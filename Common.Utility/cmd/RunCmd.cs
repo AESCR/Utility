@@ -4,22 +4,20 @@ namespace Common.Utility
 {
     public class RunCmd
     {
-        #region Private Fields
-
         private readonly Process proc;
-
-        #endregion Private Fields
-
-        #region Public Constructors
 
         public RunCmd()
         {
             proc = new Process();
         }
 
-        #endregion Public Constructors
-
-        #region Public Methods
+        private void sortProcess_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(e.Data))
+            {
+                //this.BeginInvoke(new Action(() => { this.listBox1.Items.Add(e.Data); }));
+            }
+        }
 
         public void Exe(string cmd)
         {
@@ -38,19 +36,5 @@ namespace Common.Utility
             cmdWriter.Close();
             proc.Close();
         }
-
-        #endregion Public Methods
-
-        #region Private Methods
-
-        private void sortProcess_OutputDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            if (!string.IsNullOrEmpty(e.Data))
-            {
-                //this.BeginInvoke(new Action(() => { this.listBox1.Items.Add(e.Data); }));
-            }
-        }
-
-        #endregion Private Methods
     }
 }

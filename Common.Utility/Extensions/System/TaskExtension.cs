@@ -10,7 +10,10 @@ namespace Common.Utility.SystemExtensions
 {
     public static class TaskExtension
     {
-        #region Public Methods
+        private static string CreateMessage(TimeSpan timeout, string filePath, int lineNumber)
+                    => string.IsNullOrEmpty(filePath)
+                    ? $"The operation timed out after reaching the limit of {timeout.TotalMilliseconds}ms."
+                    : $"The operation at {filePath}:{lineNumber} timed out after reaching the limit of {timeout.TotalMilliseconds}ms.";
 
         /// <summary>
         /// Runs an action on the current scheduler instead of the default scheduler.
@@ -140,16 +143,5 @@ namespace Common.Utility.SystemExtensions
         public static Task WhenAny(this IEnumerable<Task> tasks) => Task.WhenAny(tasks);
 
         public static Task<Task<TResult>> WhenAny<TResult>(this IEnumerable<Task<TResult>> tasks) => Task.WhenAny(tasks);
-
-        #endregion Public Methods
-
-        #region Private Methods
-
-        private static string CreateMessage(TimeSpan timeout, string filePath, int lineNumber)
-            => string.IsNullOrEmpty(filePath)
-            ? $"The operation timed out after reaching the limit of {timeout.TotalMilliseconds}ms."
-            : $"The operation at {filePath}:{lineNumber} timed out after reaching the limit of {timeout.TotalMilliseconds}ms.";
-
-        #endregion Private Methods
     }
 }

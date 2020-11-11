@@ -156,7 +156,7 @@ export  function getName(name) {
 
 /**
    * 银行卡号验证
-   * @param bank 
+   * @param bank
    */
 export function getBankIdCard(bank) {
     var bankReg = /^\d*$/;
@@ -208,7 +208,6 @@ export function formatTime(timeStr,fmt = "YYYY-mm-dd HH:MM") {
     let date = new Date(timeStr);
     return dateFormat(date,fmt);
 }
-
 
 export function deepClone(source){
     const targetObj = source.constructor === Array ? [] : {}; // 判断复制的目标是数组还是对象

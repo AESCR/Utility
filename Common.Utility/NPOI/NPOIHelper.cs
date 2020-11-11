@@ -14,8 +14,6 @@ namespace Common.Utility.NPOI
     /// </summary>
     public class NPOIHelper
     {
-        #region Public Methods
-
         /// <summary>
         /// DataTable导出到Excel文件
         /// </summary>
@@ -49,8 +47,6 @@ namespace Common.Utility.NPOI
             var format = workbook.CreateDataFormat();
             dateStyle.DataFormat = format.GetFormat("yyyy-MM-dd");
 
-            #region 取得每列的列宽（最大宽度）
-
             var arrColWidth = new int[dtSource.Columns.Count];
             foreach (DataColumn item in dtSource.Columns)
                 //GBK对应的code page是CP936
@@ -62,19 +58,13 @@ namespace Common.Utility.NPOI
                     if (intTemp > arrColWidth[j]) arrColWidth[j] = intTemp;
                 }
 
-            #endregion 取得每列的列宽（最大宽度）
-
             var rowIndex = 0;
 
             foreach (DataRow row in dtSource.Rows)
             {
-                #region 新建表，填充表头，填充列头，样式
-
                 if (rowIndex == 65535 || rowIndex == 0)
                 {
                     if (rowIndex != 0) sheet = workbook.CreateSheet();
-
-                    #region 表头及样式
 
                     {
                         var headerRow = sheet.CreateRow(0);
@@ -95,10 +85,6 @@ namespace Common.Utility.NPOI
                         }
                     }
 
-                    #endregion 表头及样式
-
-                    #region 列头及样式
-
                     {
                         var headerRow = sheet.CreateRow(1);
                         var headStyle = workbook.CreateCellStyle();
@@ -118,14 +104,8 @@ namespace Common.Utility.NPOI
                         }
                     }
 
-                    #endregion 列头及样式
-
                     rowIndex = 2;
                 }
-
-                #endregion 新建表，填充表头，填充列头，样式
-
-                #region 填充内容
 
                 var contentStyle = workbook.CreateCellStyle();
                 contentStyle.Alignment = HorizontalAlignment.Left;
@@ -182,8 +162,6 @@ namespace Common.Utility.NPOI
                             break;
                     }
                 }
-
-                #endregion 填充内容
 
                 rowIndex++;
             }
@@ -242,7 +220,5 @@ namespace Common.Utility.NPOI
 
             return dt;
         }
-
-        #endregion Public Methods
     }
 }

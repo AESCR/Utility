@@ -9,8 +9,6 @@ namespace Common.Utility
     /// </summary>
     public class XmlHelper
     {
-        #region Private Fields
-
         /// <summary>
         /// XML文件的物理路径
         /// </summary>
@@ -26,10 +24,6 @@ namespace Common.Utility
         /// </summary>
         private XmlDocument _xml;
 
-        #endregion Private Fields
-
-        #region Public Constructors
-
         /// <summary>
         /// 实例化XmlHelper对象
         /// </summary>
@@ -40,9 +34,42 @@ namespace Common.Utility
             _filePath = xmlFilePath;
         }
 
-        #endregion Public Constructors
+        /// <summary>
+        /// 创建根节点对象
+        /// </summary>
+        /// <param name="xmlFilePath"> Xml文件的相对路径 </param>
+        private static XmlElement CreateRootElement(string xmlFilePath)
+        {
+            //定义变量，表示XML文件的绝对路径
+            var filePath = "";
 
-        #region Public Methods
+            //获取XML文件的绝对路径
+            filePath = xmlFilePath;
+
+            //创建XmlDocument对象
+            var xmlDocument = new XmlDocument();
+            //加载XML文件
+            xmlDocument.Load(filePath);
+
+            //返回根节点
+            return xmlDocument.DocumentElement;
+        }
+
+        /// <summary>
+        /// 创建XML的根节点
+        /// </summary>
+        private void CreateXMLElement()
+        {
+            //创建一个XML对象
+            _xml = new XmlDocument();
+
+            if (File.Exists(_filePath))
+                //加载XML文件
+                _xml.Load(_filePath);
+
+            //为XML的根节点赋值
+            _element = _xml.DocumentElement;
+        }
 
         /// <summary>
         /// 获取指定XPath表达式节点的属性值
@@ -204,48 +231,5 @@ namespace Common.Utility
             //保存XML文件
             _xml.Save(_filePath);
         }
-
-        #endregion Public Methods
-
-        #region Private Methods
-
-        /// <summary>
-        /// 创建根节点对象
-        /// </summary>
-        /// <param name="xmlFilePath"> Xml文件的相对路径 </param>
-        private static XmlElement CreateRootElement(string xmlFilePath)
-        {
-            //定义变量，表示XML文件的绝对路径
-            var filePath = "";
-
-            //获取XML文件的绝对路径
-            filePath = xmlFilePath;
-
-            //创建XmlDocument对象
-            var xmlDocument = new XmlDocument();
-            //加载XML文件
-            xmlDocument.Load(filePath);
-
-            //返回根节点
-            return xmlDocument.DocumentElement;
-        }
-
-        /// <summary>
-        /// 创建XML的根节点
-        /// </summary>
-        private void CreateXMLElement()
-        {
-            //创建一个XML对象
-            _xml = new XmlDocument();
-
-            if (File.Exists(_filePath))
-                //加载XML文件
-                _xml.Load(_filePath);
-
-            //为XML的根节点赋值
-            _element = _xml.DocumentElement;
-        }
-
-        #endregion Private Methods
     }
 }

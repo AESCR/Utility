@@ -7,13 +7,7 @@ namespace Common.Utility.Compression
 {
     public static class GzipCompress
     {
-        #region Public Fields
-
         public static Encoding ZipArchivEncoding = Encoding.Default;
-
-        #endregion Public Fields
-
-        #region Public Methods
 
         /// <summary>
         /// 压缩归档为一个包
@@ -47,6 +41,7 @@ namespace Common.Utility.Compression
             }
             return resultBytes;
         }
+
         /// <summary>
         /// 压缩归档为一个包
         /// </summary>
@@ -79,6 +74,5 @@ namespace Common.Utility.Compression
             }
             return resultBytes;
         }
-        #endregion Public Methods
     }
 }

@@ -14,15 +14,9 @@ namespace Common.Utility.MongoDB
 {
     public class MongoDbClient
     {
-        #region Private Fields
-
         private IMongoClient client = null;
         private IMongoDatabase database = null;
         private string databaseName = string.Empty;
-
-        #endregion Private Fields
-
-        #region Public Constructors
 
         public MongoDbClient(string connectionString)
         {
@@ -35,10 +29,6 @@ namespace Common.Utility.MongoDB
             database = client.GetDatabase(databaseName);
         }
 
-        #endregion Public Constructors
-
-        #region Public Properties
-
         public string DatabaseName
         {
             get { return databaseName; }
@@ -49,28 +39,50 @@ namespace Common.Utility.MongoDB
             }
         }
 
-        #endregion Public Properties
-
-        #region Public Methods
-
-        public IList<BsonDocument> GetDatabase()
+        /// <summary>
+        /// 删除一个文档
+        /// </summary>
+        /// <typeparam name="T"> </typeparam>
+        /// <param name="documentname"> </param>
+        /// <param name="id"> </param>
+        /// <returns> </returns>
+        public void Delete<T>(string documentname, string id)
         {
-            return client.ListDatabases().ToList();
+            ObjectId oid = ObjectId.Parse(id);
+            var filterid = Builders<T>.Filter.Eq("_id", oid);
+            database.GetCollection<T>(documentname).DeleteOne(filterid);
+        }
+
+        public void Delete<T>(string documentname, string property, string value)
+        {
+            FilterDefinition<T> filter = Builders<T>.Filter.Eq(property, value);
+            database.GetCollection<T>(documentname).DeleteOne(filter);
         }
 
         /// <summary>
-        /// 执行命令，命令请参考MongoCommand,命令太多，不一一展示，传入的就是里面的字符串，有些命令执行需要连接到admin表
+        /// 通过一个属性名和属性值删除多个文档
         /// </summary>
-        /// <param name="cmdText"> </param>
+        /// <typeparam name="T"> </typeparam>
+        /// <param name="documentname"> </param>
+        /// <param name="id"> </param>
         /// <returns> </returns>
-        public BsonDocument RunCommand(string cmdText)
+        public void DeleteMany<T>(string documentname, string property, string value)
         {
-            return database.RunCommand<BsonDocument>(cmdText);
+            FilterDefinition<T> filter = Builders<T>.Filter.Eq(property, value);
+            database.GetCollection<T>(documentname).DeleteMany(filter);
         }
 
-        #endregion Public Methods
-
-        #region SELECT
+        /// <summary>
+        /// 通过一个属性名和属性值删除多个文档
+        /// </summary>
+        /// <typeparam name="T"> </typeparam>
+        /// <param name="documentname"> </param>
+        /// <param name="filter"> </param>
+        /// <returns> </returns>
+        public void DeleteMany<T>(string documentname, FilterDefinition<T> filter)
+        {
+            database.GetCollection<T>(documentname).DeleteMany(filter);
+        }
 
         /// <summary>
         /// 获取全部文档
@@ -107,6 +119,11 @@ namespace Common.Utility.MongoDB
         public long GetCount<T>(string documentname, FilterDefinition<T> filter)
         {
             return database.GetCollection<T>(documentname).Count(filter);
+        }
+
+        public IList<BsonDocument> GetDatabase()
+        {
+            return client.ListDatabases().ToList();
         }
 
         /// <summary>
@@ -324,22 +341,6 @@ namespace Common.Utility.MongoDB
         }
 
         /// <summary>
-        /// 判断文档存在状态
-        /// </summary>
-        /// <typeparam name="T"> </typeparam>
-        /// <param name="documentname"> </param>
-        /// <param name="filterexist"> </param>
-        /// <returns> </returns>
-        public bool IsExistDocument<T>(string documentname, FilterDefinition<T> filter)
-        {
-            return database.GetCollection<T>(documentname).Count(filter) > 0;
-        }
-
-        #endregion SELECT
-
-        #region INSERT
-
-        /// <summary>
         /// 新增
         /// </summary>
         /// <typeparam name="T"> </typeparam>
@@ -391,9 +392,27 @@ namespace Common.Utility.MongoDB
             }
         }
 
-        #endregion INSERT
+        /// <summary>
+        /// 判断文档存在状态
+        /// </summary>
+        /// <typeparam name="T"> </typeparam>
+        /// <param name="documentname"> </param>
+        /// <param name="filterexist"> </param>
+        /// <returns> </returns>
+        public bool IsExistDocument<T>(string documentname, FilterDefinition<T> filter)
+        {
+            return database.GetCollection<T>(documentname).Count(filter) > 0;
+        }
 
-        #region UPDATE
+        /// <summary>
+        /// 执行命令，命令请参考MongoCommand,命令太多，不一一展示，传入的就是里面的字符串，有些命令执行需要连接到admin表
+        /// </summary>
+        /// <param name="cmdText"> </param>
+        /// <returns> </returns>
+        public BsonDocument RunCommand(string cmdText)
+        {
+            return database.RunCommand<BsonDocument>(cmdText);
+        }
 
         /// <summary>
         /// 更新指定属性值，按ID就只有一条，替换一条
@@ -449,72 +468,13 @@ namespace Common.Utility.MongoDB
             database.GetCollection<T>(documentname).ReplaceOne(filter, oldinfo);
         }
 
-        #endregion UPDATE
-
-        #region DELETE
-
-        /// <summary>
-        /// 删除一个文档
-        /// </summary>
-        /// <typeparam name="T"> </typeparam>
-        /// <param name="documentname"> </param>
-        /// <param name="id"> </param>
-        /// <returns> </returns>
-        public void Delete<T>(string documentname, string id)
-        {
-            ObjectId oid = ObjectId.Parse(id);
-            var filterid = Builders<T>.Filter.Eq("_id", oid);
-            database.GetCollection<T>(documentname).DeleteOne(filterid);
-        }
-
-        public void Delete<T>(string documentname, string property, string value)
-        {
-            FilterDefinition<T> filter = Builders<T>.Filter.Eq(property, value);
-            database.GetCollection<T>(documentname).DeleteOne(filter);
-        }
-
-        /// <summary>
-        /// 通过一个属性名和属性值删除多个文档
-        /// </summary>
-        /// <typeparam name="T"> </typeparam>
-        /// <param name="documentname"> </param>
-        /// <param name="id"> </param>
-        /// <returns> </returns>
-        public void DeleteMany<T>(string documentname, string property, string value)
-        {
-            FilterDefinition<T> filter = Builders<T>.Filter.Eq(property, value);
-            database.GetCollection<T>(documentname).DeleteMany(filter);
-        }
-
-        /// <summary>
-        /// 通过一个属性名和属性值删除多个文档
-        /// </summary>
-        /// <typeparam name="T"> </typeparam>
-        /// <param name="documentname"> </param>
-        /// <param name="filter"> </param>
-        /// <returns> </returns>
-        public void DeleteMany<T>(string documentname, FilterDefinition<T> filter)
-        {
-            database.GetCollection<T>(documentname).DeleteMany(filter);
-        }
-
-        #endregion DELETE
-
-        #region Public Classes
-
         /// <summary>
         /// 有些命令要求你连到系统库上才能执行 https://docs.mongodb.com/manual/reference/command/listCommands/
         /// </summary>
         public sealed class MongoCommand
         {
-            #region Public Fields
-
             public const string ListCommands = "{ listCommands: 1 }";
             public const string ListDatabases = "{listDatabases:1}";
-
-            #endregion Public Fields
         }
-
-        #endregion Public Classes
     }
 }

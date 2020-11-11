@@ -11,8 +11,6 @@ namespace Common.Utility.Tools
     /// </summary>
     public class ValidUtils
     {
-        #region Public Methods
-
         /// <summary>
         /// 验证日期是否合法,对不规则的作了简单处理
         /// </summary>
@@ -43,8 +41,6 @@ namespace Common.Utility.Tools
             {
                 //如果日期字符串中存在非数字，则返回false
                 if (!IsInt(date)) return false;
-
-                #region 对纯数字进行解析
 
                 //对8位纯数字进行解析
                 if (date.Length == 8)
@@ -107,8 +103,6 @@ namespace Common.Utility.Tools
                     date = Convert.ToDateTime(year).ToString("d");
                     return true;
                 }
-
-                #endregion 对纯数字进行解析
 
                 return false;
             }
@@ -357,7 +351,5 @@ namespace Common.Utility.Tools
                 throw new Exception(ex.Message);
             }
         }
-
-        #endregion Public Methods
     }
 }

@@ -4,13 +4,7 @@ namespace Common.Utility.Autofac
 {
     public class AppModule
     {
-        #region Public Properties
-
         public Assembly ModuleAssembly { get; set; }
-
-        #endregion Public Properties
-
-        #region Public Methods
 
         /// <summary>
         /// 初始化
@@ -32,7 +26,5 @@ namespace Common.Utility.Autofac
         public virtual void PreInitialize()
         {
         }
-
-        #endregion Public Methods
     }
 }

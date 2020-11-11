@@ -2,8 +2,6 @@
 {
     public class OAuthUserInfo
     {
-        #region Public Properties
-
         /// <summary>
         /// 性别 true 男
         /// </summary>
@@ -16,8 +14,6 @@
 
         public string ImgUrl { get; set; }
         public string Name { get; set; }
-
-        #endregion Public Properties
 
         //昵称
         //头像

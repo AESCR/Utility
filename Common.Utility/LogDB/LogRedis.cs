@@ -1,18 +1,16 @@
 ﻿using Autofac;
-using System;
-using System.Reflection;
-using System.Threading.Tasks;
 using Common.Utility.Autofac;
 using Common.Utility.Memory.Model;
 using Common.Utility.Memory.Redis;
+using System;
+using System.Reflection;
+using System.Threading.Tasks;
 using ToolBox.Time;
 
 namespace Common.Utility.LogDb
 {
     public static class LogRedisExtensions
     {
-        #region Public Methods
-
         public static void RegisterLogRedis(this ContainerBuilder @this, Action<LogRedisgOptions> option)
         {
             var opt = new LogRedisgOptions();
@@ -20,23 +18,15 @@ namespace Common.Utility.LogDb
             @this.RegisterType<LogRedis>().AsImplementedInterfaces()
                 .SingleInstance().WithParameter(new TypedParameter(typeof(LogRedisgOptions), opt)); ;
         }
-
-        #endregion Public Methods
     }
 
     /// <summary>
     /// 写入Redis日志
     /// </summary>
-    public class LogRedis: ISingletonDependency
+    public class LogRedis : ISingletonDependency
     {
-        #region Private Fields
-
         private readonly string _logName;
         private readonly IRedisCache redisCache;
-
-        #endregion Private Fields
-
-        #region Public Constructors
 
         public LogRedis(LogRedisgOptions options)
         {
@@ -48,10 +38,6 @@ namespace Common.Utility.LogDb
             redisCache = new RedisCache(options);
             redisCache.SwitchDb(options.DbIndex);
         }
-
-        #endregion Public Constructors
-
-        #region Public Methods
 
         public void Error(object msg)
         {
@@ -76,8 +62,6 @@ namespace Common.Utility.LogDb
                 redisCache.AddList(_logName + "-warn-" + TimeHelper.FormatDate(DateTime.Now, "2"), msg);
             });
         }
-
-        #endregion Public Methods
     }
 
     /// <summary>
@@ -85,11 +69,7 @@ namespace Common.Utility.LogDb
     /// </summary>
     public class LogRedisgOptions : MemoryOptions
     {
-        #region Public Properties
-
         public string LogName { get; set; }
         public new bool UseRedis { get; } = true;
-
-        #endregion Public Properties
     }
 }

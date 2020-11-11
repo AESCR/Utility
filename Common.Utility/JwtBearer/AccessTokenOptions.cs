@@ -17,21 +17,11 @@ namespace Common.Utility.JwtBearer
 
     public class AccessTokenOptions
     {
-        #region Private Fields
-
         private string _secret;
         private SecurityType _securityType;
 
-        #endregion Private Fields
-
-        #region Public Fields
-
         public static string DefaultSecret = string.Empty;
         public static SecurityType DefaultSecurityType;
-
-        #endregion Public Fields
-
-        #region Public Constructors
 
         public AccessTokenOptions()
         {
@@ -41,10 +31,6 @@ namespace Common.Utility.JwtBearer
             DefaultScheme = "Bearer";
             InitDefault();
         }
-
-        #endregion Public Constructors
-
-        #region Public Properties
 
         /// <summary>
         /// 权限
@@ -103,10 +89,6 @@ namespace Common.Utility.JwtBearer
         /// 签名证书
         /// </summary>
         public SigningCredentials SigningCredentials => BuildSigningCredentials(Secret, SecurityType);
-
-        #endregion Public Properties
-
-        #region Private Methods
 
         /// <summary>
         /// 组装 HmacSha256 签名证书
@@ -205,7 +187,5 @@ namespace Common.Utility.JwtBearer
                 DefaultSecurityType = SecurityType.HmacSha256;
             }
         }
-
-        #endregion Private Methods
     }
 }

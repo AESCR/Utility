@@ -10,8 +10,6 @@ namespace Common.Utility.Tools
     /// </summary>
     public static class CommonUtils
     {
-        #region Public Methods
-
         /// <summary>
         /// 截取指定长度字符串
         /// </summary>
@@ -55,6 +53,103 @@ namespace Common.Utility.Tools
             if (isShowFix && mybyte.Length > len)
                 tempString += "…";
             return tempString;
+        }
+
+        /// <summary>
+        /// 转中文大写数字
+        /// </summary>
+        /// <param name="value"> </param>
+        /// <returns> </returns>
+        public static string ConvertNumToZhUpperCase(decimal value)
+        {
+            string[] numList = { "零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖" };
+            string[] unitList = { "分", "角", "元", "拾", "佰", "仟", "万", "拾", "佰", "仟", "亿", "拾", "佰", "仟" };
+
+            var money = value;
+            if (money == 0) return "零元整";
+
+            var strMoney = new StringBuilder();
+            //只取小数后2位
+
+            var strNum = decimal.Truncate(money * 100).ToString();
+
+            var len = strNum.Length;
+            var zero = 0;
+            for (var i = 0; i < len; i++)
+            {
+                var num = int.Parse(strNum.Substring(i, 1));
+                var unitNum = len - i - 1;
+
+                if (num == 0)
+                {
+                    zero++;
+                    if (unitNum == 2 || unitNum == 6 || unitNum == 10)
+                    {
+                        if (unitNum == 2 || zero < 4)
+                            strMoney.Append(unitList[unitNum]);
+                        zero = 0;
+                    }
+                }
+                else
+                {
+                    if (zero > 0)
+                    {
+                        strMoney.Append(numList[0]);
+                        zero = 0;
+                    }
+
+                    strMoney.Append(numList[num]);
+                    strMoney.Append(unitList[unitNum]);
+                }
+            }
+
+            if (zero > 0)
+                strMoney.Append("整");
+
+            return strMoney.ToString();
+        }
+
+        /// <summary>
+        /// 将object对象转换为实体对象
+        /// </summary>
+        /// <typeparam name="T"> 实体对象类名 </typeparam>
+        /// <param name="asObject"> object对象 </param>
+        /// <returns> </returns>
+        public static T ConvertObject<T>(object asObject) where T : new()
+        {
+            //创建实体对象实例
+            var t = Activator.CreateInstance<T>();
+            if (asObject != null)
+            {
+                Type type = asObject.GetType();
+                //遍历实体对象属性
+                foreach (var info in typeof(T).GetProperties())
+                {
+                    object obj = null;
+                    //取得object对象中此属性的值
+                    var val = type.GetProperty(info.Name)?.GetValue(asObject);
+                    if (val != null)
+                    {
+                        //非泛型
+                        if (!info.PropertyType.IsGenericType)
+                            obj = Convert.ChangeType(val, info.PropertyType);
+                        else//泛型Nullable<>
+                        {
+                            Type genericTypeDefinition = info.PropertyType.GetGenericTypeDefinition();
+                            if (genericTypeDefinition == typeof(Nullable<>))
+                            {
+                                obj = Convert.ChangeType(val, Nullable.GetUnderlyingType(info.PropertyType));
+                            }
+                            else
+                            {
+                                obj = Convert.ChangeType(val, info.PropertyType);
+                            }
+                        }
+                        info.SetValue(t, obj, null);
+                    }
+                }
+            }
+            return t;
         }
 
         /// <summary>
@@ -351,6 +446,14 @@ namespace Common.Utility.Tools
             return false;
         }
 
+        public static decimal? ParseToDecimalValue(object decimalObj)
+        {
+            if (decimalObj == null) return null;
+            decimal decValue;
+            if (!decimal.TryParse(decimalObj.ToString(), out decValue)) return null;
+            return decValue;
+        }
+
         /// <summary>
         /// 分割字符串
         /// </summary>
@@ -420,139 +523,6 @@ namespace Common.Utility.Tools
         }
 
         /// <summary>
-        /// 转全角的函数(SBC case)
-        /// </summary>
-        /// <param name="input"> </param>
-        /// <returns> </returns>
-        public static string ToSBC(string input)
-        {
-            //半角转全角：
-            var c = input.ToCharArray();
-            for (var i = 0; i < c.Length; i++)
-            {
-                if (c[i] == 32)
-                {
-                    c[i] = (char)12288;
-                    continue;
-                }
-
-                if (c[i] < 127)
-                    c[i] = (char)(c[i] + 65248);
-            }
-
-            return new string(c);
-        }
-
-        #endregion Public Methods
-
-        #region Public Methods
-
-        /// <summary>
-        /// 转中文大写数字
-        /// </summary>
-        /// <param name="value"> </param>
-        /// <returns> </returns>
-        public static string ConvertNumToZhUpperCase(decimal value)
-        {
-            string[] numList = { "零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖" };
-            string[] unitList = { "分", "角", "元", "拾", "佰", "仟", "万", "拾", "佰", "仟", "亿", "拾", "佰", "仟" };
-
-            var money = value;
-            if (money == 0) return "零元整";
-
-            var strMoney = new StringBuilder();
-            //只取小数后2位
-
-            var strNum = decimal.Truncate(money * 100).ToString();
-
-            var len = strNum.Length;
-            var zero = 0;
-            for (var i = 0; i < len; i++)
-            {
-                var num = int.Parse(strNum.Substring(i, 1));
-                var unitNum = len - i - 1;
-
-                if (num == 0)
-                {
-                    zero++;
-                    if (unitNum == 2 || unitNum == 6 || unitNum == 10)
-                    {
-                        if (unitNum == 2 || zero < 4)
-                            strMoney.Append(unitList[unitNum]);
-                        zero = 0;
-                    }
-                }
-                else
-                {
-                    if (zero > 0)
-                    {
-                        strMoney.Append(numList[0]);
-                        zero = 0;
-                    }
-
-                    strMoney.Append(numList[num]);
-                    strMoney.Append(unitList[unitNum]);
-                }
-            }
-
-            if (zero > 0)
-                strMoney.Append("整");
-
-            return strMoney.ToString();
-        }
-
-        /// <summary>
-        /// 将object对象转换为实体对象
-        /// </summary>
-        /// <typeparam name="T"> 实体对象类名 </typeparam>
-        /// <param name="asObject"> object对象 </param>
-        /// <returns> </returns>
-        public static T ConvertObject<T>(object asObject) where T : new()
-        {
-            //创建实体对象实例
-            var t = Activator.CreateInstance<T>();
-            if (asObject != null)
-            {
-                Type type = asObject.GetType();
-                //遍历实体对象属性
-                foreach (var info in typeof(T).GetProperties())
-                {
-                    object obj = null;
-                    //取得object对象中此属性的值
-                    var val = type.GetProperty(info.Name)?.GetValue(asObject);
-                    if (val != null)
-                    {
-                        //非泛型
-                        if (!info.PropertyType.IsGenericType)
-                            obj = Convert.ChangeType(val, info.PropertyType);
-                        else//泛型Nullable<>
-                        {
-                            Type genericTypeDefinition = info.PropertyType.GetGenericTypeDefinition();
-                            if (genericTypeDefinition == typeof(Nullable<>))
-                            {
-                                obj = Convert.ChangeType(val, Nullable.GetUnderlyingType(info.PropertyType));
-                            }
-                            else
-                            {
-                                obj = Convert.ChangeType(val, info.PropertyType);
-                            }
-                        }
-                        info.SetValue(t, obj, null);
-                    }
-                }
-            }
-            return t;
-        }
-
-        public static decimal? ParseToDecimalValue(object decimalObj)
-        {
-            if (decimalObj == null) return null;
-            decimal decValue;
-            if (!decimal.TryParse(decimalObj.ToString(), out decValue)) return null;
-            return decValue;
-        }
-
-        /// <summary>
         /// 截取指定位数
         /// </summary>
         /// <param name="d"> </param>
@@ -576,6 +546,28 @@ namespace Common.Utility.Tools
             return Math.Truncate(d) + Math.Floor((d - Math.Truncate(d)) * sp) / sp;
         }
 
-        #endregion Public Methods
+        /// <summary>
+        /// 转全角的函数(SBC case)
+        /// </summary>
+        /// <param name="input"> </param>
+        /// <returns> </returns>
+        public static string ToSBC(string input)
+        {
+            //半角转全角：
+            var c = input.ToCharArray();
+            for (var i = 0; i < c.Length; i++)
+            {
+                if (c[i] == 32)
+                {
+                    c[i] = (char)12288;
+                    continue;
+                }
+
+                if (c[i] < 127)
+                    c[i] = (char)(c[i] + 65248);
+            }
+
+            return new string(c);
+        }
     }
 }

@@ -4,8 +4,6 @@ namespace ToolBox.Time
 {
     public class DateFormat
     {
-        #region Public Methods
-
         //返回每月的第一天和最后一天
         public static void ReturnDateFormat(int month, out string firstDay, out string lastDay)
         {
@@ -77,7 +75,5 @@ namespace ToolBox.Time
                     break;
             }
         }
-
-        #endregion Public Methods
     }
 }

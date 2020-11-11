@@ -5,8 +5,6 @@ namespace Common.Utility.Extensions.System
 {
     public static class CollectionExtension
     {
-        #region Public Methods
-
         /// <summary>
         /// 添加ICollection中不存在的值
         /// </summary>
@@ -36,7 +34,5 @@ namespace Common.Utility.Extensions.System
         {
             return source == null || source.Count <= 0;
         }
-
-        #endregion Public Methods
     }
 }

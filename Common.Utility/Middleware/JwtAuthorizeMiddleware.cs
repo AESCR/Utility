@@ -12,8 +12,6 @@ namespace Common.Utility.JwtBearer
 {
     public static class JwtAuthorizeExtensions
     {
-        #region Public Methods
-
         /// <summary>
         /// 扩展方法，对IApplicationBuilder进行扩展
         /// </summary>
@@ -24,8 +22,6 @@ namespace Common.Utility.JwtBearer
             // UseMiddleware<T>
             return builder.UseMiddleware<JwtAuthorizeMiddleware>();
         }
-
-        #endregion Public Methods
     }
 
     /// <summary>
@@ -33,17 +29,11 @@ namespace Common.Utility.JwtBearer
     /// </summary>
     public class JwtAuthorizeMiddleware
     {
-        #region Private Fields
-
         private readonly IAccessTokenGenerate _generate;
         private readonly IMemoryCache _memory;
 
         // 私有字段
         private readonly RequestDelegate _next;
-
-        #endregion Private Fields
-
-        #region Public Constructors
 
         /// <summary>
         /// 公共构造函数，参数是RequestDelegate类型 通过构造函数进行注入，依赖注入服务会自动完成注入
@@ -57,35 +47,6 @@ namespace Common.Utility.JwtBearer
             _memory = memory;
             _generate = generate;
         }
-
-        #endregion Public Constructors
-
-        #region Public Methods
-
-        public async Task Invoke(HttpContext context)
-        {
-            //获取上传token，可自定义扩展
-            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last()
-                        ?? context.Request.Headers["X-Token"].FirstOrDefault()
-                        ?? context.Request.Query["Token"].FirstOrDefault()
-                        ?? context.Request.Cookies["Token"];
-            JwtDyUser jwtDyUser = null;
-            if (token != null)
-                AttachUserToContext(context, token, out jwtDyUser);
-            context.Response.OnStarting(() =>
-            {
-                if (jwtDyUser == null) return Task.CompletedTask;
-                //生产新的Token
-                var accessToken = _generate.Generate(jwtDyUser);
-                context.Response.Cookies.Append("Token", accessToken.Token);
-                return Task.CompletedTask;
-            });
-            await _next(context);
-        }
-
-        #endregion Public Methods
-
-        #region Private Methods
 
         private void AttachUserToContext(HttpContext context, string token, out JwtDyUser jwtDyUser)
         {
@@ -111,6 +72,25 @@ namespace Common.Utility.JwtBearer
             }
         }
 
-        #endregion Private Methods
+        public async Task Invoke(HttpContext context)
+        {
+            //获取上传token，可自定义扩展
+            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last()
+                        ?? context.Request.Headers["X-Token"].FirstOrDefault()
+                        ?? context.Request.Query["Token"].FirstOrDefault()
+                        ?? context.Request.Cookies["Token"];
+            JwtDyUser jwtDyUser = null;
+            if (token != null)
+                AttachUserToContext(context, token, out jwtDyUser);
+            context.Response.OnStarting(() =>
+            {
+                if (jwtDyUser == null) return Task.CompletedTask;
+                //生产新的Token
+                var accessToken = _generate.Generate(jwtDyUser);
+                context.Response.Cookies.Append("Token", accessToken.Token);
+                return Task.CompletedTask;
+            });
+            await _next(context);
+        }
     }
 }

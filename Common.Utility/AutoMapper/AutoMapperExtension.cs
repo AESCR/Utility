@@ -1,8 +1,8 @@
-﻿using System.Linq;
-using System.Reflection;
-using AutoMapper;
+﻿using AutoMapper;
 using Common.Utility.Tools;
 using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
+using System.Reflection;
 
 namespace Common.Utility.AutoMapper
 {
@@ -18,14 +18,10 @@ namespace Common.Utility.AutoMapper
         /// <param name="obj"> 源对象 </param>
         /// <returns> 转化之后的实体 </returns>
 
-        #region Public Methods
-
         public static T MapTo<T>(this object obj) where T : new()
         {
             return obj == null ? default(T) : CommonUtils.ConvertObject<T>(obj);
         }
-
-        #endregion Public Methods
 
         public static void RegisterAllProfiles(
             this IServiceCollection @this, string assembly, string endName = "Profiles")

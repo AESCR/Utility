@@ -49,8 +49,6 @@ namespace Common.Utility.Memory.Model
 
     public static class EnumExtensions
     {
-        #region Public Methods
-
         public static string GetMemoryKey(this MemoryEnum @this, string value = null)
         {
             string enumName = Enum.Parse(@this.GetType(), @this.ToString()).ToString();
@@ -69,7 +67,5 @@ namespace Common.Utility.Memory.Model
             }
             return "System" + sBuilder.Append(enumName).Append(value);
         }
-
-        #endregion Public Methods
     }
 }

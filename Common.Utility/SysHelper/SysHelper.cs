@@ -12,8 +12,6 @@ namespace Utilities
     /// </summary>
     public static class SysHelper
     {
-        #region Public Properties
-
         /// <summary>
         /// 获取当前应用程序域
         /// </summary>
@@ -28,10 +26,6 @@ namespace Utilities
         /// 获取换行字符
         /// </summary>
         public static string NewLine => Environment.NewLine;
-
-        #endregion Public Properties
-
-        #region Public Methods
 
         /// <summary>
         /// 获取程序集描述说明
@@ -73,21 +67,6 @@ namespace Utilities
         }
 
         /// <summary>
-        /// 获取指定调用层级的方法名
-        /// </summary>
-        /// <param name="level"> 调用的层数 </param>
-        public static string GetMethodName(int level)
-        {
-            //创建一个堆栈跟踪
-            var trace = new StackTrace();
-
-            //获取指定调用层级的方法名
-            return trace.GetFrame(level)?.GetMethod()?.Name;
-        }
-
-        #region Console
-
-        /// <summary>
         /// 获取对象所使用的内存
         /// </summary>
         /// <param name="this"> </param>
@@ -101,6 +80,19 @@ namespace Utilities
             Console.WriteLine($"Memory地址:{result}");
             Console.WriteLine("------------------------------------------------------------");
             return result;
+        }
+
+        /// <summary>
+        /// 获取指定调用层级的方法名
+        /// </summary>
+        /// <param name="level"> 调用的层数 </param>
+        public static string GetMethodName(int level)
+        {
+            //创建一个堆栈跟踪
+            var trace = new StackTrace();
+
+            //获取指定调用层级的方法名
+            return trace.GetFrame(level)?.GetMethod()?.Name;
         }
 
         /// <summary>
@@ -170,9 +162,5 @@ namespace Utilities
             Console.WriteLine("------------------------------------------------------------");
             return @this;
         }
-
-        #endregion Console
-
-        #endregion Public Methods
     }
 }

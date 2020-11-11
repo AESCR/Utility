@@ -5,8 +5,6 @@ namespace Common.Utility.Excel
 {
     public interface IExcelWorkBook
     {
-        #region Public Methods
-
         /// <summary>
         /// 读取xls/xlsx文件
         /// </summary>
@@ -22,7 +20,5 @@ namespace Common.Utility.Excel
         /// <param name="setting"> </param>
         /// <returns> </returns>
         byte[] WriteExcel(DataTable data);
-
-        #endregion Public Methods
     }
 }

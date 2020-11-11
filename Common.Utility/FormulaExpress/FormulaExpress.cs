@@ -25,31 +25,6 @@ namespace Common.Utility
     /// </summary>
     public class FormulaDeal
     {
-        #region Public Methods
-
-        public string SpiltExpression(string strExpression)
-        {
-            var strTemp = "";
-            var strExp = "";
-            while (strExpression.IndexOf("(") != -1)
-            {
-                strTemp = strExpression.Substring(strExpression.LastIndexOf("(") + 1,
-                    strExpression.Length - strExpression.LastIndexOf("(") - 1);
-                strExp = strTemp.Substring(0, strTemp.IndexOf(")"));
-                strExpression = strExpression.Replace("(" + strExp + ")", CalculateExpress(strExp).ToString());
-            }
-
-            if (strExpression.IndexOf("+") != -1 || strExpression.IndexOf("-") != -1
-                                                 || strExpression.IndexOf("*") != -1 ||
-                                                 strExpression.IndexOf("/") != -1)
-                strExpression = CalculateExpress(strExpression).ToString();
-            return strExpression;
-        }
-
-        #endregion Public Methods
-
-        #region Private Methods
-
         private double CalculateExExpress(string strExpression, EnumFormula ExpressType)
         {
             double retValue = 0;
@@ -204,6 +179,23 @@ namespace Common.Utility
             return tmpMax;
         }
 
-        #endregion Private Methods
+        public string SpiltExpression(string strExpression)
+        {
+            var strTemp = "";
+            var strExp = "";
+            while (strExpression.IndexOf("(") != -1)
+            {
+                strTemp = strExpression.Substring(strExpression.LastIndexOf("(") + 1,
+                    strExpression.Length - strExpression.LastIndexOf("(") - 1);
+                strExp = strTemp.Substring(0, strTemp.IndexOf(")"));
+                strExpression = strExpression.Replace("(" + strExp + ")", CalculateExpress(strExp).ToString());
+            }
+
+            if (strExpression.IndexOf("+") != -1 || strExpression.IndexOf("-") != -1
+                                                 || strExpression.IndexOf("*") != -1 ||
+                                                 strExpression.IndexOf("/") != -1)
+                strExpression = CalculateExpress(strExpression).ToString();
+            return strExpression;
+        }
     }
 }

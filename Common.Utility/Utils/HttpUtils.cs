@@ -9,18 +9,15 @@ namespace Common.Utility.Utils
     /// </summary>
     public sealed class HttpUtils
     {
-        #region Public Methods
-
         /// <summary>
-        /// 字典转url参数 
+        /// 字典转url参数
         /// </summary>
         /// <param name="myParams"> 字典 </param>
-        /// <param name="autoEncoding">是否自动编码</param>
-        /// <param name="encoding">编码格式</param>
+        /// <param name="autoEncoding"> 是否自动编码 </param>
+        /// <param name="encoding"> 编码格式 </param>
         /// <returns> </returns>
-        public static string ParamsToUrl(IDictionary<string, string> myParams,bool autoEncoding=true, Encoding encoding=null)
+        public static string ParamsToUrl(IDictionary<string, string> myParams, bool autoEncoding = true, Encoding encoding = null)
         {
-           
             if (myParams == null)
             {
                 return string.Empty;
@@ -46,14 +43,13 @@ namespace Common.Utility.Utils
         /// <summary>
         /// url参数 拼接
         /// </summary>
-        /// <param name="url">请求地址</param>
+        /// <param name="url"> 请求地址 </param>
         /// <param name="myParams"> 字典 </param>
-        /// <param name="autoEncoding">是否自动编码</param>
-        /// <param name="encoding">编码格式</param>
+        /// <param name="autoEncoding"> 是否自动编码 </param>
+        /// <param name="encoding"> 编码格式 </param>
         /// <returns> </returns>
-        public static string ParamsToUrl(string url,IDictionary<string, string> myParams, bool autoEncoding = true, Encoding encoding = null)
+        public static string ParamsToUrl(string url, IDictionary<string, string> myParams, bool autoEncoding = true, Encoding encoding = null)
         {
-
             if (myParams == null)
             {
                 return string.Empty;
@@ -73,8 +69,9 @@ namespace Common.Utility.Utils
                 }
             }
 
-            return url+"?"+sb.ToString();
+            return url + "?" + sb.ToString();
         }
+
         public static string UrlDeCode(string str, Encoding encoding = null)
         {
             if (encoding == null)
@@ -105,8 +102,8 @@ namespace Common.Utility.Utils
         /// url转字典
         /// </summary>
         /// <param name="url"> 请求地址 </param>
-        /// <param name="autoEncoding"></param>
-        /// <param name="encoding"></param>
+        /// <param name="autoEncoding"> </param>
+        /// <param name="encoding"> </param>
         /// <returns> </returns>
         public static IDictionary<string, string> UrlToParams(string url, bool autoEncoding = true, Encoding encoding = null)
         {
@@ -141,7 +138,5 @@ namespace Common.Utility.Utils
 
             return dic;
         }
-
-        #endregion Public Methods
     }
 }

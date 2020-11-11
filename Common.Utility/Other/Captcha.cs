@@ -3,84 +3,6 @@ using System.Drawing;
 
 public static class Captcha
 {
-    #region Public Methods
-
-    public static Image Generate(string captchaText)
-    {
-        var fontsize = 24;
-        var font = new Font("Arial", fontsize);
-
-        SizeF sizeF;
-        using (var g = Graphics.FromImage(new Bitmap(1, 1)))
-        {
-            sizeF = g.MeasureString(captchaText, font, 0, StringFormat.GenericDefault);
-        }
-
-        var image2d_x = (int)sizeF.Width;
-        var image2d_y = (int)(fontsize * 1.3);
-
-        var image2d = new Bitmap(image2d_x, image2d_y);
-        var black = Color.Black;
-        var white = Color.White;
-
-        using (var g = Graphics.FromImage(image2d))
-        {
-            g.Clear(black);
-            g.DrawString(captchaText, font, Brushes.White, 0, 0);
-        }
-
-        var rnd = new Random();
-        var T = cameraTransform(new double[] { rnd.Next(-90, 90), -200, rnd.Next(150, 250) }, new double[] { 0, 0, 0 });
-        T = matrixProduct(T, viewingTransform(60, 300, 3000));
-
-        var coord = new double[image2d_x * image2d_y][];
-
-        var count = 0;
-        for (var y = 0; y < image2d_y; y += 2)
-            for (var x = 0; x < image2d_x; x++)
-            {
-                var xc = x - image2d_x / 2;
-                var zc = y - image2d_y / 2;
-                var yc = -(double)(image2d.GetPixel(x, y).ToArgb() & 0xff) / 256 * 4;
-                double[] xyz = { xc, yc, zc, 1 };
-                xyz = vectorProduct(xyz, T);
-                coord[count] = xyz;
-                count++;
-            }
-
-        var image3d_x = 256;
-        var image3d_y = image3d_x * 9 / 16;
-        var image3d = new Bitmap(image3d_x, image3d_y);
-        var fgcolor = Color.White;
-        var bgcolor = Color.Black;
-        using (var g = Graphics.FromImage(image3d))
-        {
-            g.Clear(bgcolor);
-            count = 0;
-            var scale = 1.75 - (double)image2d_x / 400;
-            for (var y = 0; y < image2d_y; y += 2)
-                for (var x = 0; x < image2d_x; x++)
-                {
-                    if (x > 0)
-                    {
-                        var x0 = coord[count - 1][0] * scale + image3d_x / 2;
-                        var y0 = coord[count - 1][1] * scale + image3d_y / 2;
-                        var x1 = coord[count][0] * scale + image3d_x / 2;
-                        var y1 = coord[count][1] * scale + image3d_y / 2;
-                        g.DrawLine(new Pen(fgcolor), (float)x0, (float)y0, (float)x1, (float)y1);
-                    }
-
-                    count++;
-                }
-        }
-
-        return image3d;
-    }
-
-    #endregion Public Methods
-
-    #region Private Methods
-
     private static double[] addVector(double[] a, double[] b)
     {
         return new[] { a[0] + b[0], a[1] + b[1], a[2] + b[2] };
@@ -172,5 +94,75 @@ public static class Captcha
         return new[] { cot, 0, 0, 0, 0, cot, 0, 0, 0, 0, (f + n) / (f - n), -1, 0, 0, 2 * f * n / (f - n), 0 };
     }
 
-    #endregion Private Methods
+    public static Image Generate(string captchaText)
+    {
+        var fontsize = 24;
+        var font = new Font("Arial", fontsize);
+
+        SizeF sizeF;
+        using (var g = Graphics.FromImage(new Bitmap(1, 1)))
+        {
+            sizeF = g.MeasureString(captchaText, font, 0, StringFormat.GenericDefault);
+        }
+
+        var image2d_x = (int)sizeF.Width;
+        var image2d_y = (int)(fontsize * 1.3);
+
+        var image2d = new Bitmap(image2d_x, image2d_y);
+        var black = Color.Black;
+        var white = Color.White;
+
+        using (var g = Graphics.FromImage(image2d))
+        {
+            g.Clear(black);
+            g.DrawString(captchaText, font, Brushes.White, 0, 0);
+        }
+
+        var rnd = new Random();
+        var T = cameraTransform(new double[] { rnd.Next(-90, 90), -200, rnd.Next(150, 250) }, new double[] { 0, 0, 0 });
+        T = matrixProduct(T, viewingTransform(60, 300, 3000));
+
+        var coord = new double[image2d_x * image2d_y][];
+
+        var count = 0;
+        for (var y = 0; y < image2d_y; y += 2)
+            for (var x = 0; x < image2d_x; x++)
+            {
+                var xc = x - image2d_x / 2;
+                var zc = y - image2d_y / 2;
+                var yc = -(double)(image2d.GetPixel(x, y).ToArgb() & 0xff) / 256 * 4;
+                double[] xyz = { xc, yc, zc, 1 };
+                xyz = vectorProduct(xyz, T);
+                coord[count] = xyz;
+                count++;
+            }
+
+        var image3d_x = 256;
+        var image3d_y = image3d_x * 9 / 16;
+        var image3d = new Bitmap(image3d_x, image3d_y);
+        var fgcolor = Color.White;
+        var bgcolor = Color.Black;
+        using (var g = Graphics.FromImage(image3d))
+        {
+            g.Clear(bgcolor);
+            count = 0;
+            var scale = 1.75 - (double)image2d_x / 400;
+            for (var y = 0; y < image2d_y; y += 2)
+                for (var x = 0; x < image2d_x; x++)
+                {
+                    if (x > 0)
+                    {
+                        var x0 = coord[count - 1][0] * scale + image3d_x / 2;
+                        var y0 = coord[count - 1][1] * scale + image3d_y / 2;
+                        var x1 = coord[count][0] * scale + image3d_x / 2;
+                        var y1 = coord[count][1] * scale + image3d_y / 2;
+                        g.DrawLine(new Pen(fgcolor), (float)x0, (float)y0, (float)x1, (float)y1);
+                    }
+
+                    count++;
+                }
+        }
+
+        return image3d;
+    }
 }

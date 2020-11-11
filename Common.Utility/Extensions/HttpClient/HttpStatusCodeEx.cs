@@ -4,8 +4,6 @@ namespace Common.Utility.Extensions.HttpClient
 {
     public static class HttpStatusCodeEx
     {
-        #region Public Methods
-
         /// <summary>
         /// 将Http状态码翻译为对应的中文
         /// </summary>
@@ -142,7 +140,5 @@ namespace Common.Utility.Extensions.HttpClient
                     return "未知Http状态";
             }
         }
-
-        #endregion Public Methods
     }
 }

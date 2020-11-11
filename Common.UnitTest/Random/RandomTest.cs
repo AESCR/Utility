@@ -9,9 +9,9 @@ namespace Common.UnitTest.Random
         [TestMethod]
         public void RandomAProxy()
         {
-            RandomProxy randomProxy=new RandomProxy();
-           var x=  randomProxy.GetRandomIp("中国");
-           var x2=  randomProxy.GetRandomIps("中国");
+            RandomProxy randomProxy = new RandomProxy();
+            var x = randomProxy.GetRandomIp("中国");
+            var x2 = randomProxy.GetRandomIps("中国");
         }
     }
 }

@@ -10,8 +10,6 @@ namespace Common.Utility
     /// </summary>
     public class RSACryption
     {
-        #region Public Methods
-
         //��ȡHash������
         public bool GetHash(string m_strSource, ref byte[] HashData)
         {
@@ -279,7 +277,5 @@ namespace Common.Utility
 
             return true;
         }
-
-        #endregion Public Methods
     }
 }

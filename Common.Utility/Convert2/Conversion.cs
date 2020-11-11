@@ -17,8 +17,6 @@ namespace Common.Utility.Convert2
     /// </summary>
     public sealed class Conversion
     {
-        #region Public Methods
-
         /// <summary>
         /// BinaryFormatter反序列化
         /// </summary>
@@ -555,7 +553,5 @@ namespace Common.Utility.Convert2
                 return sb.ToString();
             }
         }
-
-        #endregion Public Methods
     }
 }

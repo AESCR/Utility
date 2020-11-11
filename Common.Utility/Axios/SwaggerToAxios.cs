@@ -1,16 +1,14 @@
-﻿using System;
+﻿using Common.Utility.Extensions.HttpClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
-using Common.Utility.Extensions.HttpClient;
 
 namespace Common.Utility.Axios
 {
     public class AxiosDocument
     {
-        #region Public Properties
-
         /// <summary>
         /// 文件路径
         /// </summary>
@@ -47,14 +45,10 @@ namespace Common.Utility.Axios
         /// 请求类型
         /// </summary>
         public string Type { get; set; }
-
-        #endregion Public Properties
     }
 
     public class SwaggerToAxios
     {
-        #region Private Fields
-
         private Dictionary<string, List<AxiosDocument>> dicResult;
 
         private string instance = @"
@@ -116,10 +110,6 @@ $method$($param$){
     return axios.$type$('$url$', config);
 },";
 
-        #endregion Private Fields
-
-        #region Private Methods
-
         // config.params = { '$key$': value }
         private SwaggerRequestMethod GetRequest(SwaggerRequest swaggerRequest, AxiosDocument axios)
         {
@@ -150,10 +140,6 @@ $method$($param$){
             }
             return null;
         }
-
-        #endregion Private Methods
-
-        #region Public Methods
 
         public SwaggerToAxios ReadSwagger(string httpPath)
         {
@@ -253,7 +239,5 @@ $method$($param$){
             fileBytes.Add("instance.js", Encoding.UTF8.GetBytes(instance));
             return fileBytes;
         }
-
-        #endregion Public Methods
     }
 }

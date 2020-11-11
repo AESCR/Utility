@@ -6,8 +6,6 @@ namespace Common.Utility.Extensions.HttpClient
 {
     public static class HttpClientHandlerEx
     {
-        #region Public Methods
-
         /// <summary>
         /// Use Default
         /// </summary>
@@ -34,7 +32,5 @@ namespace Common.Utility.Extensions.HttpClient
             httpClientHandler.Proxy = wp;
             return httpClientHandler;
         }
-
-        #endregion Public Methods
     }
 }

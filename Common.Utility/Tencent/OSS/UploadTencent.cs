@@ -5,16 +5,10 @@ namespace Common.Utility.Tencent.OSS
 {
     public class UploadTencent
     {
-        #region Private Fields
-
         private string appid;
         private string bucket;
         private string region;
         private string secretKey;
-
-        #endregion Private Fields
-
-        #region Public Constructors
 
         public UploadTencent(string appid, string region, string secretId, string secretKey, string bucket, bool https = true, bool showLogs = true)
         {
@@ -25,15 +19,7 @@ namespace Common.Utility.Tencent.OSS
             this.appid = appid;
         }
 
-        #endregion Public Constructors
-
-        #region Private Properties
-
         private CosXmlServer2 CosXmlServer { get; set; }
-
-        #endregion Private Properties
-
-        #region Public Methods
 
         /// <summary>
         /// 删除文件
@@ -104,7 +90,5 @@ namespace Common.Utility.Tencent.OSS
             }
             return true;
         }
-
-        #endregion Public Methods
     }
 }

@@ -2,8 +2,6 @@
 {
     public class OAuthClientFactory
     {
-        #region Public Methods
-
         public static IOAuthClient GetOAuthClient(string clientId, string clientSecret, string callbackUrl, AuthType oAuthClientType)
         {
             IOAuthClient authToken = null;
@@ -19,7 +17,5 @@
             }
             return authToken;
         }
-
-        #endregion Public Methods
     }
 }

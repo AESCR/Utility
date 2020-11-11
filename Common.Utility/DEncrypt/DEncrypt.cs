@@ -9,8 +9,6 @@ namespace Common.Utility
     /// </summary>
     public class DEncrypt
     {
-        #region Public Methods
-
         /// <summary>
         /// 使用缺省密钥字符串解密string
         /// </summary>
@@ -136,7 +134,5 @@ namespace Common.Utility
             hashmd5 = null;
             return keyhash;
         }
-
-        #endregion Public Methods
     }
 }

@@ -12,16 +12,10 @@ namespace Common.Utility
     /// </summary>
     public class MySecurity
     {
-        #region Private Fields
-
         private readonly string key; //默认密钥
         private byte[] sIV;
 
         private byte[] sKey;
-
-        #endregion Private Fields
-
-        #region Public Constructors
 
         /// <summary>
         /// 初始化安全类
@@ -31,10 +25,6 @@ namespace Common.Utility
             ///默认密码
             key = "0123456789";
         }
-
-        #endregion Public Constructors
-
-        #region Public Methods
 
         /// <summary>
         /// Base64解密
@@ -413,7 +403,5 @@ namespace Common.Utility
             ms.Close();
             return ret.ToString();
         }
-
-        #endregion Public Methods
     }
 }

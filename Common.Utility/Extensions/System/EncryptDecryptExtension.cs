@@ -10,8 +10,6 @@ namespace Common.Utility.Extensions
     /// </summary>
     public static class EncryptDecryptExtension
     {
-        #region Base64加密解密
-
         /// <summary>
         /// Base64解密
         /// </summary>
@@ -54,9 +52,59 @@ namespace Common.Utility.Extensions
             return Convert.ToBase64String(encode.GetBytes(input));
         }
 
-        #endregion Base64加密解密
+        /// <summary>
+        /// 3DES解密
+        /// </summary>
+        /// <param name="str"> </param>
+        /// <param name="key"> 必须16位 </param>
+        /// <returns> </returns>
+        public static string DES3Decrypt(this string str, string key)
+        {
+            if (key?.Length != 16)
+                throw new ArgumentNullException("DES3Decrypt的Key必须为16位");
+            if (string.IsNullOrWhiteSpace(str))
+                return string.Empty;
 
-        #region DES加密解密
+            byte[] inputArray = Convert.FromBase64String(str);
+            var tripleDES = TripleDES.Create();
+            var byteKey = Encoding.UTF8.GetBytes(key);
+            byte[] allKey = new byte[24];
+            Buffer.BlockCopy(byteKey, 0, allKey, 0, 16);
+            Buffer.BlockCopy(byteKey, 0, allKey, 16, 8);
+            tripleDES.Key = allKey;
+            tripleDES.Mode = CipherMode.ECB;
+            tripleDES.Padding = PaddingMode.PKCS7;
+            ICryptoTransform cTransform = tripleDES.CreateDecryptor();
+            byte[] resultArray = cTransform.TransformFinalBlock(inputArray, 0, inputArray.Length);
+            return Encoding.UTF8.GetString(resultArray);
+        }
+
+        /// <summary>
+        /// 3DES加密
+        /// </summary>
+        /// <param name="str"> </param>
+        /// <param name="key"> 必须16位 </param>
+        /// <returns> </returns>
+        public static string DES3Encrypt(this string str, string key)
+        {
+            if (key?.Length != 16)
+                throw new ArgumentNullException("DES3Encrypt的Key必须为16位");
+            if (string.IsNullOrWhiteSpace(str))
+                return string.Empty;
+
+            byte[] inputArray = Encoding.UTF8.GetBytes(str);
+            var tripleDES = TripleDES.Create();
+            var byteKey = Encoding.UTF8.GetBytes(key);
+            byte[] allKey = new byte[24];
+            Buffer.BlockCopy(byteKey, 0, allKey, 0, 16);
+            Buffer.BlockCopy(byteKey, 0, allKey, 16, 8);
+            tripleDES.Key = allKey;
+            tripleDES.Mode = CipherMode.ECB;
+            tripleDES.Padding = PaddingMode.PKCS7;
+            ICryptoTransform cTransform = tripleDES.CreateEncryptor();
+            byte[] resultArray = cTransform.TransformFinalBlock(inputArray, 0, inputArray.Length);
+            return Convert.ToBase64String(resultArray, 0, resultArray.Length);
+        }
 
         /// <summary>
         /// DES解密
@@ -111,10 +159,6 @@ namespace Common.Utility.Extensions
             sw.Flush();
             return Convert.ToBase64String(ms.GetBuffer(), 0, (int)ms.Length);
         }
-
-        #endregion DES加密解密
-
-        #region MD5加密
 
         /// <summary>
         /// MD5加密
@@ -192,65 +236,5 @@ namespace Common.Utility.Extensions
             result = result.Replace("-", "");
             return result;
         }
-
-        #endregion MD5加密
-
-        #region 3DES 加密解密
-
-        /// <summary>
-        /// 3DES解密
-        /// </summary>
-        /// <param name="str"> </param>
-        /// <param name="key"> 必须16位 </param>
-        /// <returns> </returns>
-        public static string DES3Decrypt(this string str, string key)
-        {
-            if (key?.Length != 16)
-                throw new ArgumentNullException("DES3Decrypt的Key必须为16位");
-            if (string.IsNullOrWhiteSpace(str))
-                return string.Empty;
-
-            byte[] inputArray = Convert.FromBase64String(str);
-            var tripleDES = TripleDES.Create();
-            var byteKey = Encoding.UTF8.GetBytes(key);
-            byte[] allKey = new byte[24];
-            Buffer.BlockCopy(byteKey, 0, allKey, 0, 16);
-            Buffer.BlockCopy(byteKey, 0, allKey, 16, 8);
-            tripleDES.Key = allKey;
-            tripleDES.Mode = CipherMode.ECB;
-            tripleDES.Padding = PaddingMode.PKCS7;
-            ICryptoTransform cTransform = tripleDES.CreateDecryptor();
-            byte[] resultArray = cTransform.TransformFinalBlock(inputArray, 0, inputArray.Length);
-            return Encoding.UTF8.GetString(resultArray);
-        }
-
-        /// <summary>
-        /// 3DES加密
-        /// </summary>
-        /// <param name="str"> </param>
-        /// <param name="key"> 必须16位 </param>
-        /// <returns> </returns>
-        public static string DES3Encrypt(this string str, string key)
-        {
-            if (key?.Length != 16)
-                throw new ArgumentNullException("DES3Encrypt的Key必须为16位");
-            if (string.IsNullOrWhiteSpace(str))
-                return string.Empty;
-
-            byte[] inputArray = Encoding.UTF8.GetBytes(str);
-            var tripleDES = TripleDES.Create();
-            var byteKey = Encoding.UTF8.GetBytes(key);
-            byte[] allKey = new byte[24];
-            Buffer.BlockCopy(byteKey, 0, allKey, 0, 16);
-            Buffer.BlockCopy(byteKey, 0, allKey, 16, 8);
-            tripleDES.Key = allKey;
-            tripleDES.Mode = CipherMode.ECB;
-            tripleDES.Padding = PaddingMode.PKCS7;
-            ICryptoTransform cTransform = tripleDES.CreateEncryptor();
-            byte[] resultArray = cTransform.TransformFinalBlock(inputArray, 0, inputArray.Length);
-            return Convert.ToBase64String(resultArray, 0, resultArray.Length);
-        }
-
-        #endregion 3DES 加密解密
     }
 }

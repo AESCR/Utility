@@ -10,16 +10,10 @@ namespace Common.Utility
     /// </summary>
     public class Encrypt
     {
-        #region Private Fields
-
         private static readonly byte[] arrDESIV = { 55, 103, 246, 79, 36, 99, 167, 3 };
 
         //��Կ
         private static readonly byte[] arrDESKey = { 42, 16, 93, 156, 78, 4, 218, 32 };
-
-        #endregion Private Fields
-
-        #region Public Methods
 
         /// <summary>
         /// ���ܡ�
@@ -76,7 +70,5 @@ namespace Common.Utility
 
             return ret.PadLeft(32, '0');
         }
-
-        #endregion Public Methods
     }
 }

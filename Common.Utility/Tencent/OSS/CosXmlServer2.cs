@@ -16,8 +16,6 @@ namespace Common.Utility.Tencent.OSS
 {
     public class CosXmlServer2
     {
-        #region Private Fields
-
         private readonly string _bucket = String.Empty;
 
         private readonly CosXmlConfig _config = null;
@@ -31,10 +29,6 @@ namespace Common.Utility.Tencent.OSS
         /// 提供设置密钥信息接口。
         /// </summary>
         private readonly QCloudCredentialProvider _qcloud = null;
-
-        #endregion Private Fields
-
-        #region Public Constructors
 
         /// <summary>
         /// 实例化 COS API 服务接口。
@@ -100,10 +94,6 @@ namespace Common.Utility.Tencent.OSS
             this._bucket = bucket;
         }
 
-        #endregion Public Constructors
-
-        #region Public Delegates
-
         /// <summary>
         /// 下载更新进度回调
         /// </summary>
@@ -121,10 +111,6 @@ namespace Common.Utility.Tencent.OSS
         public delegate void PutProgress(long completed, long total);
 
         public delegate void PutSuccess(CosResult CosResult);
-
-        #endregion Public Delegates
-
-        #region Public Methods
 
         /// <summary>
         /// 创建存储桶
@@ -769,7 +755,5 @@ namespace Common.Utility.Tencent.OSS
                 return null;
             }
         }
-
-        #endregion Public Methods
     }
 }

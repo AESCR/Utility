@@ -5,7 +5,17 @@ namespace Common.Utility.Extensions.System
 {
     public static class StringExtension
     {
-        #region Public Methods
+        /// <summary>
+        /// Bytes转String
+        /// </summary>
+        /// <param name="byteArray"> </param>
+        /// <returns> </returns>
+        public static string BytesToString(this byte[] byteArray)
+        {
+            if (byteArray == null)
+                throw new ArgumentNullException(nameof(byteArray));
+            return Encoding.Default.GetString(byteArray);
+        }
 
         /// <summary>
         /// 添加判断添加
@@ -135,22 +145,6 @@ namespace Common.Utility.Extensions.System
             return str.Substring(len);
         }
 
-        #endregion Public Methods
-
-        #region 类型转换
-
-        /// <summary>
-        /// Bytes转String
-        /// </summary>
-        /// <param name="byteArray"> </param>
-        /// <returns> </returns>
-        public static string BytesToString(this byte[] byteArray)
-        {
-            if (byteArray == null)
-                throw new ArgumentNullException(nameof(byteArray));
-            return Encoding.Default.GetString(byteArray);
-        }
-
         public static bool ToBoolean(this string str)
         {
             if (str == null)
@@ -249,8 +243,5 @@ namespace Common.Utility.Extensions.System
                 throw new ArgumentNullException(nameof(str));
             return Convert.ToInt32(str);
         }
-
-        #endregion 类型转换
-
     }
 }

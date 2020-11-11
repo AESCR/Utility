@@ -27,8 +27,6 @@ namespace Common.Utility.Utils
     /// </summary>
     public sealed class QueryUtils
     {
-        #region 网络信息查询
-
         /// <summary>
         /// ip归属地查询
         /// </summary>
@@ -58,10 +56,6 @@ namespace Common.Utility.Utils
                 }
             }
         }
-
-        #endregion 网络信息查询
-
-        #region 主机信息查询
 
         /// <summary>
         /// 指定类型的端口是否已经被使用了
@@ -94,7 +88,5 @@ namespace Common.Utility.Utils
             properties = null;
             return flag;
         }
-
-        #endregion 主机信息查询
     }
 }

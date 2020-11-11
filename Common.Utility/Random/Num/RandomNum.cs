@@ -5,49 +5,12 @@ namespace Common.Utility.Random.Num
 {
     public class RandomNum
     {
-        #region Public Methods
-
         private readonly System.Random _ra;
 
         public RandomNum()
         {
             _ra = new System.Random();
         }
-
-        /// <summary>
-        /// 获取一个随机数
-        /// </summary>
-        /// <param name="minValue"> </param>
-        /// <param name="maxValue"> </param>
-        /// <returns> </returns>
-        public int GetRandomNum(int minValue, int maxValue)
-        {
-            return _ra.Next(minValue, maxValue);
-        }
-
-        /// <summary>
-        /// 获取一组随机数 不重复
-        /// </summary>
-        /// <param name="num"> 随机数个数 </param>
-        /// <param name="minValue"> 最小值 </param>
-        /// <param name="maxValue"> 最大值 </param>
-        /// <returns> </returns>
-        public int[] GetRandomNums(int num, int minValue, int maxValue)
-        {
-            System.Random ra = new System.Random(unchecked((int)DateTime.Now.Ticks));
-            int[] arrNum = new int[num];
-            int tmp = 0;
-            for (int i = 0; i <= num - 1;)
-            {
-                tmp = ra.Next(minValue, maxValue); //随机取数
-                arrNum[i] = GetNum(arrNum, tmp, minValue, maxValue, ra); //取出值赋到数组中
-            }
-            return arrNum;
-        }
-
-        #endregion Public Methods
-
-        #region Private Methods
 
         private int GetNum(int[] arrNum, int tmp, int minValue, int maxValue, System.Random ra)
         {
@@ -69,7 +32,7 @@ namespace Common.Utility.Random.Num
         /// </summary>
         /// <returns> The check code number. </returns>
         /// <param name="codeCount"> Code count. Max 10 </param>
-        public string GenerateCheckCodeNum(int codeCount=10)
+        public string GenerateCheckCodeNum(int codeCount = 10)
         {
             codeCount = codeCount > 10 ? 10 : codeCount; // unable to return unique number list longer than 10
             int[] arrInt = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
@@ -129,6 +92,37 @@ namespace Common.Utility.Random.Num
         }
 
         /// <summary>
+        /// 获取一个随机数
+        /// </summary>
+        /// <param name="minValue"> </param>
+        /// <param name="maxValue"> </param>
+        /// <returns> </returns>
+        public int GetRandomNum(int minValue, int maxValue)
+        {
+            return _ra.Next(minValue, maxValue);
+        }
+
+        /// <summary>
+        /// 获取一组随机数 不重复
+        /// </summary>
+        /// <param name="num"> 随机数个数 </param>
+        /// <param name="minValue"> 最小值 </param>
+        /// <param name="maxValue"> 最大值 </param>
+        /// <returns> </returns>
+        public int[] GetRandomNums(int num, int minValue, int maxValue)
+        {
+            System.Random ra = new System.Random(unchecked((int)DateTime.Now.Ticks));
+            int[] arrNum = new int[num];
+            int tmp = 0;
+            for (int i = 0; i <= num - 1;)
+            {
+                tmp = ra.Next(minValue, maxValue); //随机取数
+                arrNum[i] = GetNum(arrNum, tmp, minValue, maxValue, ra); //取出值赋到数组中
+            }
+            return arrNum;
+        }
+
+        /// <summary>
         /// 随机字符串
         /// </summary>
         /// <param name="stringLength"> </param>
@@ -144,7 +138,5 @@ namespace Common.Utility.Random.Num
             }
             return returnValue;
         }
-
-        #endregion Private Methods
     }
 }

@@ -4,7 +4,15 @@ namespace Common.Utility.Extensions.System
 {
     public static class DateTimeExtension
     {
-        #region Public Methods
+        /// <summary>
+        /// 获取时间戳
+        /// </summary>
+        /// <returns> </returns>
+        public static string GetTimeStamp(this DateTime time)
+        {
+            TimeSpan ts = time - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            return Convert.ToInt64(ts.TotalSeconds).ToString();
+        }
 
         /// <summary>
         /// 获取格式化时间字符串 HH:mm:ss
@@ -57,15 +65,6 @@ namespace Common.Utility.Extensions.System
             }
         }
 
-        /// <summary>
-        /// 获取时间戳
-        /// </summary>
-        /// <returns></returns>
-        public static string GetTimeStamp(this DateTime time)
-        {
-            TimeSpan ts = time - new DateTime(1970, 1, 1, 0, 0, 0, 0);
-            return Convert.ToInt64(ts.TotalSeconds).ToString();
-        }
         /*
                 /// <summary>
                 /// 获取格式化时间字符串 yyyy-MM-dd HH:mm:ss
@@ -87,6 +86,5 @@ namespace Common.Utility.Extensions.System
                     return time.ToString("yyyy/MM/dd HH:mm:ss");
                 }
         */
-        #endregion Public Methods
     }
 }

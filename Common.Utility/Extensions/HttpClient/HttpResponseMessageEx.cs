@@ -8,8 +8,6 @@ namespace Common.Utility.Extensions.HttpClient
 {
     public static class HttpResponseMessageEx
     {
-        #region Public Methods
-
         public static T ReadModel<T>(this HttpResponseMessage httpResponse, out bool succeed) where T : class
         {
             succeed = false;
@@ -38,7 +36,6 @@ namespace Common.Utility.Extensions.HttpClient
             HttpResponseMessage httpResponse;
             try
             {
-
                 httpResponse = httpResponseTask.Result;
             }
             catch
@@ -49,7 +46,7 @@ namespace Common.Utility.Extensions.HttpClient
             return ReadModel<T>(httpResponse, out succeed);
         }
 
-        public static string ReadString(this HttpResponseMessage httpResponse,out bool succeed)
+        public static string ReadString(this HttpResponseMessage httpResponse, out bool succeed)
         {
             succeed = false;
             var statusText = httpResponse.StatusCode.ToChsText();
@@ -70,7 +67,6 @@ namespace Common.Utility.Extensions.HttpClient
                 succeed = false;
                 return statusText;
             }
-           
         }
 
         public static string ReadString(this Task<HttpResponseMessage> httpResponseTask, out bool succeed)
@@ -78,17 +74,14 @@ namespace Common.Utility.Extensions.HttpClient
             HttpResponseMessage httpResponse;
             try
             {
-
-                 httpResponse = httpResponseTask.Result;
+                httpResponse = httpResponseTask.Result;
             }
-            catch 
+            catch
             {
                 succeed = false;
                 return String.Empty;
             }
             return ReadString(httpResponse, out succeed);
         }
-
-        #endregion Public Methods
     }
 }

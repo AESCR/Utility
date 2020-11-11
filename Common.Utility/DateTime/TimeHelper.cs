@@ -6,8 +6,6 @@ namespace ToolBox.Time
 {
     public static class DateTimeUtility
     {
-        #region Public Methods
-
         /// <summary>
         /// 比较计算年季是否大于当前年季
         /// </summary>
@@ -338,8 +336,6 @@ namespace ToolBox.Time
             return 0;
             //错误返回值0
         }
-
-        #endregion Public Methods
     }
 
     /// <summary>
@@ -347,8 +343,6 @@ namespace ToolBox.Time
     /// </summary>
     public class TimeHelper
     {
-        #region Public Methods
-
         public static string DateDiff(DateTime DateTime1, DateTime DateTime2)
         {
             string dateDiff = null;
@@ -542,7 +536,5 @@ namespace ToolBox.Time
 
             return GetFormatDate(DateTime.Now, separator);
         }
-
-        #endregion Public Methods
     }
 }

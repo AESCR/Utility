@@ -8,8 +8,6 @@ namespace Common.Utility.Extensions.AutoMapper
 {
     public static class AutoMapperExtension
     {
-        #region Public Methods
-
         /// <summary>
         /// 将List转换为Datatable
         /// </summary>
@@ -39,7 +37,5 @@ namespace Common.Utility.Extensions.AutoMapper
             }
             return dt;
         }
-
-        #endregion Public Methods
     }
 }

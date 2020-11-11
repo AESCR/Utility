@@ -5,13 +5,86 @@ namespace Common.Utility
 {
     public class BarCodeToHTML
     {
-        #region Public Methods
+        private static string ean13(char c, char type)
+        {
+            switch (type)
+            {
+                case 'A':
+                    {
+                        switch (c)
+                        {
+                            case '0': return "0001101";
+                            case '1': return "0011001";
+                            case '2': return "0010011";
+                            case '3': return "0111101"; //011101
+                            case '4': return "0100011";
+                            case '5': return "0110001";
+                            case '6': return "0101111";
+                            case '7': return "0111011";
+                            case '8': return "0110111";
+                            case '9': return "0001011";
+                            default: return "Error!";
+                        }
+                    }
+                case 'B':
+                    {
+                        switch (c)
+                        {
+                            case '0': return "0100111";
+                            case '1': return "0110011";
+                            case '2': return "0011011";
+                            case '3': return "0100001";
+                            case '4': return "0011101";
+                            case '5': return "0111001";
+                            case '6': return "0000101"; //000101
+                            case '7': return "0010001";
+                            case '8': return "0001001";
+                            case '9': return "0010111";
+                            default: return "Error!";
+                        }
+                    }
+                case 'C':
+                    {
+                        switch (c)
+                        {
+                            case '0': return "1110010";
+                            case '1': return "1100110";
+                            case '2': return "1101100";
+                            case '3': return "1000010";
+                            case '4': return "1011100";
+                            case '5': return "1001110";
+                            case '6': return "1010000";
+                            case '7': return "1000100";
+                            case '8': return "1001000";
+                            case '9': return "1110100";
+                            default: return "Error!";
+                        }
+                    }
+                default: return "Error!";
+            }
+        }
+
+        private static string ean13type(char c)
+        {
+            switch (c)
+            {
+                case '0': return "AAAAAA";
+                case '1': return "AABABB";
+                case '2': return "AABBAB";
+                case '3': return "AABBBA";
+                case '4': return "ABAABB";
+                case '5': return "ABBAAB";
+                case '6': return "ABBBAA"; //中国
+                case '7': return "ABABAB";
+                case '8': return "ABABBA";
+                case '9': return "ABBABA";
+                default: return "Error!";
+            }
+        }
 
         public static string get39(string s, int width, int height)
         {
             var ht = new Hashtable();
-
-            #region 39码 12位
 
             ht.Add('A', "110101001011");
             ht.Add('B', "101101001011");
@@ -58,10 +131,6 @@ namespace Common.Utility
             ht.Add('.', "110010101101");
             ht.Add(' ', "100110101101");
 
-            #endregion 39码 12位
-
-            #region 39码 9位
-
             //ht.Add('0', "000110100");
             //ht.Add('1', "100100001");
             //ht.Add('2', "001100001");
@@ -106,8 +175,6 @@ namespace Common.Utility
             //ht.Add('/', "010100010");
             //ht.Add('+', "010001010");
             //ht.Add('%', "000101010");
-
-            #endregion 39码 9位
 
             s = "*" + s.ToUpper() + "*";
 
@@ -158,8 +225,6 @@ namespace Common.Utility
         {
             var ht = new Hashtable();
 
-            #region 39码 12位
-
             ht.Add('A', "110101001011");
             ht.Add('B', "101101001011");
             ht.Add('C', "110110100101");
@@ -205,10 +270,6 @@ namespace Common.Utility
             ht.Add('.', "110010101101");
             ht.Add(' ', "100110101101");
 
-            #endregion 39码 12位
-
-            #region 39码 9位
-
             //ht.Add('0', "000110100");
             //ht.Add('1', "100100001");
             //ht.Add('2', "001100001");
@@ -253,8 +314,6 @@ namespace Common.Utility
             //ht.Add('/', "010100010");
             //ht.Add('+', "010001010");
             //ht.Add('%', "000101010");
-
-            #endregion 39码 9位
 
             s = "*" + s.ToUpper() + "*";
 
@@ -472,88 +531,5 @@ namespace Common.Utility
             return "<div style=\"background:#FFFFFF;padding:0px;font-size:" + width * 10 + "px;font-family:'楷体';\">" +
                    result_html + "</div>";
         }
-
-        #endregion Public Methods
-
-        #region Private Methods
-
-        private static string ean13(char c, char type)
-        {
-            switch (type)
-            {
-                case 'A':
-                    {
-                        switch (c)
-                        {
-                            case '0': return "0001101";
-                            case '1': return "0011001";
-                            case '2': return "0010011";
-                            case '3': return "0111101"; //011101
-                            case '4': return "0100011";
-                            case '5': return "0110001";
-                            case '6': return "0101111";
-                            case '7': return "0111011";
-                            case '8': return "0110111";
-                            case '9': return "0001011";
-                            default: return "Error!";
-                        }
-                    }
-                case 'B':
-                    {
-                        switch (c)
-                        {
-                            case '0': return "0100111";
-                            case '1': return "0110011";
-                            case '2': return "0011011";
-                            case '3': return "0100001";
-                            case '4': return "0011101";
-                            case '5': return "0111001";
-                            case '6': return "0000101"; //000101
-                            case '7': return "0010001";
-                            case '8': return "0001001";
-                            case '9': return "0010111";
-                            default: return "Error!";
-                        }
-                    }
-                case 'C':
-                    {
-                        switch (c)
-                        {
-                            case '0': return "1110010";
-                            case '1': return "1100110";
-                            case '2': return "1101100";
-                            case '3': return "1000010";
-                            case '4': return "1011100";
-                            case '5': return "1001110";
-                            case '6': return "1010000";
-                            case '7': return "1000100";
-                            case '8': return "1001000";
-                            case '9': return "1110100";
-                            default: return "Error!";
-                        }
-                    }
-                default: return "Error!";
-            }
-        }
-
-        private static string ean13type(char c)
-        {
-            switch (c)
-            {
-                case '0': return "AAAAAA";
-                case '1': return "AABABB";
-                case '2': return "AABBAB";
-                case '3': return "AABBBA";
-                case '4': return "ABAABB";
-                case '5': return "ABBAAB";
-                case '6': return "ABBBAA"; //中国
-                case '7': return "ABABAB";
-                case '8': return "ABABBA";
-                case '9': return "ABBABA";
-                default: return "Error!";
-            }
-        }
-
-        #endregion Private Methods
     }
 }

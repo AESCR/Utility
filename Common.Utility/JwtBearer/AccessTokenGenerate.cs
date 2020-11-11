@@ -10,15 +10,9 @@ namespace Common.Utility.JwtBearer
 {
     public class AccessTokenGenerate : IAccessTokenGenerate
     {
-        #region Private Fields
-
         private readonly AccessTokenOptions _options;
         private readonly TokenValidationParameters _validationParameters;
         private JwtSecurityTokenHandler _tokenHandler;
-
-        #endregion Private Fields
-
-        #region Public Constructors
 
         public AccessTokenGenerate(AccessTokenOptions options)
         {
@@ -36,10 +30,6 @@ namespace Common.Utility.JwtBearer
                 RequireExpirationTime = true
             };
         }
-
-        #endregion Public Constructors
-
-        #region Private Methods
 
         private JwtSecurityToken GetJwtSecurityToken(IEnumerable<Claim> claims)
         {
@@ -59,10 +49,6 @@ namespace Common.Utility.JwtBearer
             );
             return jwt;
         }
-
-        #endregion Private Methods
-
-        #region Public Methods
 
         /// <summary>
         /// 生成Token
@@ -128,7 +114,5 @@ namespace Common.Utility.JwtBearer
                 return false;
             }
         }
-
-        #endregion Public Methods
     }
 }

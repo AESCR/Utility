@@ -6,22 +6,23 @@ using System.Text;
 /// </summary>
 public class INIFile
 {
-    #region Public Fields
-
     public string path;
-
-    #endregion Public Fields
-
-    #region Public Constructors
 
     public INIFile(string INIPath)
     {
         path = INIPath;
     }
 
-    #endregion Public Constructors
+    [DllImport("kernel32")]
+    private static extern int GetPrivateProfileString(string section, string key, string def, StringBuilder retVal,
+            int size, string filePath);
 
-    #region Public Methods
+    [DllImport("kernel32")]
+    private static extern int GetPrivateProfileString(string section, string key, string defVal, byte[] retVal,
+            int size, string filePath);
+
+    [DllImport("kernel32")]
+    private static extern long WritePrivateProfileString(string section, string key, string val, string filePath);
 
     /// <summary>
     /// 删除ini文件下所有段落
@@ -70,21 +71,4 @@ public class INIFile
     {
         WritePrivateProfileString(Section, Key, Value, path);
     }
-
-    #endregion Public Methods
-
-    #region Private Methods
-
-    [DllImport("kernel32")]
-    private static extern int GetPrivateProfileString(string section, string key, string def, StringBuilder retVal,
-        int size, string filePath);
-
-    [DllImport("kernel32")]
-    private static extern int GetPrivateProfileString(string section, string key, string defVal, byte[] retVal,
-        int size, string filePath);
-
-    [DllImport("kernel32")]
-    private static extern long WritePrivateProfileString(string section, string key, string val, string filePath);
-
-    #endregion Private Methods
 }

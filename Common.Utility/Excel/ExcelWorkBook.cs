@@ -12,22 +12,12 @@ namespace Common.Utility.Excel
 {
     public class ExcelWorkBook : IExcelWorkBook
     {
-        #region Private Fields
-
         private ExcelSetting _setting;
-
-        #endregion Private Fields
-
-        #region Public Constructors
 
         public ExcelWorkBook(ExcelSetting setting)
         {
             _setting = setting;
         }
-
-        #endregion Public Constructors
-
-        #region Public Methods
 
         public DataTable ReadExcel(Stream stream, bool xlsx)
         {
@@ -78,8 +68,6 @@ namespace Common.Utility.Excel
             var format = workbook.CreateDataFormat();
             dateStyle.DataFormat = format.GetFormat("yyyy-MM-dd");
 
-            #region 取得每列的列宽（最大宽度）
-
             var arrColWidth = new int[dtSource.Columns.Count];
             foreach (DataColumn item in dtSource.Columns)
                 arrColWidth[item.Ordinal] = Encoding.UTF8.GetBytes(item.ColumnName).Length;
@@ -90,19 +78,13 @@ namespace Common.Utility.Excel
                     if (intTemp > arrColWidth[j]) arrColWidth[j] = intTemp;
                 }
 
-            #endregion 取得每列的列宽（最大宽度）
-
             var rowIndex = 0;
 
             foreach (DataRow row in dtSource.Rows)
             {
-                #region 新建表，填充表头，填充列头，样式
-
                 if (rowIndex == 65535 || rowIndex == 0)
                 {
                     if (rowIndex != 0) sheet = workbook.CreateSheet();
-
-                    #region 表头及样式
 
                     if (!string.IsNullOrWhiteSpace(_setting.strHeaderText))
                     {
@@ -123,10 +105,6 @@ namespace Common.Utility.Excel
                         }
                         rowIndex++;
                     }
-
-                    #endregion 表头及样式
-
-                    #region 列头及样式
 
                     if (_setting.isColumnWritten)
                     {
@@ -149,13 +127,7 @@ namespace Common.Utility.Excel
 
                         rowIndex++;
                     }
-
-                    #endregion 列头及样式
                 }
-
-                #endregion 新建表，填充表头，填充列头，样式
-
-                #region 填充内容
 
                 var contentStyle = workbook.CreateCellStyle();
                 contentStyle.Alignment = HorizontalAlignment.Left;
@@ -213,8 +185,6 @@ namespace Common.Utility.Excel
                     }
                 }
 
-                #endregion 填充内容
-
                 rowIndex++;
             }
             using (MemoryStream ms = new MemoryStream())
@@ -225,7 +195,5 @@ namespace Common.Utility.Excel
                 return ms.ToArray();
             }
         }
-
-        #endregion Public Methods
     }
 }

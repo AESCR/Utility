@@ -1,24 +1,18 @@
-using System;
-using System.Collections.Generic;
 using Common.Utility.Autofac;
 using Common.Utility.Memory.Model;
 using CSRedis;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 
 namespace Common.Utility.Memory.Redis
 {
     public class RedisCache : IRedisCache, IScopedDependency
     {
-        #region Private Fields
-
         private readonly MemoryOptions _memoryOptions;
         private readonly RedisClient _redisClient;
 
-        #endregion Private Fields
-
-        #region Public Constructors
-
-        public RedisCache(string host="127.0.0.1",int port=6379,int dbIndex=0,string password="")
+        public RedisCache(string host = "127.0.0.1", int port = 6379, int dbIndex = 0, string password = "")
         {
             _redisClient = new RedisClient(host, port);
             if (!string.IsNullOrWhiteSpace(password))
@@ -29,10 +23,11 @@ namespace Common.Utility.Memory.Redis
                     _redisClient.Select(dbIndex);
                 };
             }
-            _redisClient.ReconnectAttempts =3;//失败后重试3次
+            _redisClient.ReconnectAttempts = 3;//失败后重试3次
             _redisClient.ReconnectWait = 200;//在抛出异常之前，连接将在200ms之间重试3次
             _redisClient.Connect(3000);
         }
+
         public RedisCache(MemoryOptions options)
         {
             _redisClient = new RedisClient(options.Host, options.Port);
@@ -50,11 +45,18 @@ namespace Common.Utility.Memory.Redis
             _memoryOptions = options;
         }
 
+        ~RedisCache()
+        {
+            Dispose(false);
+        }
+
         public bool IsConnect => _redisClient.IsConnected;
 
-        #endregion Public Constructors
-
-        #region Private Methods
+        /// <summary>
+        /// 服务是否启动
+        /// </summary>
+        /// <returns> </returns>
+        public bool Launch => _redisClient.Ping().ToLower() == "ok";
 
         private T DeserializeObject<T>(string value)
         {
@@ -89,9 +91,17 @@ namespace Common.Utility.Memory.Redis
             return val.ToLower() == "ok";
         }
 
-        #endregion Private Methods
-
-        #region Public Methods
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_redisClient.IsConnected)
+                {
+                    _redisClient.Quit();
+                }
+                _redisClient?.Dispose();
+            }
+        }
 
         /// <summary>
         /// 添加缓存 字符串
@@ -175,6 +185,7 @@ namespace Common.Utility.Memory.Redis
             _redisClient.ExpireAsync(key, timeSpan);
             return stringOk(result);
         }
+
         public bool AddHash<T>(string key, Dictionary<string, T> dic)
         {
             if (string.IsNullOrWhiteSpace(key)) return false;
@@ -188,7 +199,6 @@ namespace Common.Utility.Memory.Redis
             var result = _redisClient.HMSet(key, kJson);
             return stringOk(result);
         }
-
 
         public bool AddHash<T>(string key, string field, T t)
         {
@@ -431,6 +441,12 @@ namespace Common.Utility.Memory.Redis
             return DelSortedSet(key, new List<T>() { members });
         }
 
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
         /// <summary>
         /// 是否存在
         /// </summary>
@@ -575,6 +591,25 @@ namespace Common.Utility.Memory.Redis
             return _redisClient.ZRange(key, start, len, true);
         }
 
+        /// <summary>
+        /// 发布消息到频道
+        /// </summary>
+        /// <param name="name"> 频道名称 </param>
+        /// <param name="message"> 消息 </param>
+        /// <returns> </returns>
+        public long Publish(string name, string message)
+        {
+            return _redisClient.Publish(name, message);
+        }
+
+        /// <summary>
+        /// 退订所有给定模式的频道。
+        /// </summary>
+        public void PUnsubscribe(params string[] channelPatterns)
+        {
+            _redisClient.PUnsubscribe(channelPatterns);
+        }
+
         public bool Remove(string key)
         {
             return Del(key);
@@ -609,45 +644,6 @@ namespace Common.Utility.Memory.Redis
         }
 
         /// <summary>
-        /// 切换数据库
-        /// </summary>
-        /// <param name="index"> </param>
-        /// <returns> </returns>
-        public bool SwitchDb(int index)
-        {
-            return _redisClient.Select(index) == "Ok";
-        }
-
-        #endregion Public Methods
-
-        #region 发布与订阅
-
-        /// <summary>
-        /// 服务是否启动
-        /// </summary>
-        /// <returns> </returns>
-        public bool Launch => _redisClient.Ping().ToLower() == "ok";
-
-        /// <summary>
-        /// 发布消息到频道
-        /// </summary>
-        /// <param name="name"> 频道名称 </param>
-        /// <param name="message"> 消息 </param>
-        /// <returns> </returns>
-        public long Publish(string name, string message)
-        {
-            return _redisClient.Publish(name, message);
-        }
-
-        /// <summary>
-        /// 退订所有给定模式的频道。
-        /// </summary>
-        public void PUnsubscribe(params string[] channelPatterns)
-        {
-            _redisClient.PUnsubscribe(channelPatterns);
-        }
-
-        /// <summary>
         /// 订阅频道
         /// </summary>
         /// <param name="name"> 频道名称 </param>
@@ -657,45 +653,22 @@ namespace Common.Utility.Memory.Redis
         }
 
         /// <summary>
+        /// 切换数据库
+        /// </summary>
+        /// <param name="index"> </param>
+        /// <returns> </returns>
+        public bool SwitchDb(int index)
+        {
+            return _redisClient.Select(index) == "Ok";
+        }
+
+        /// <summary>
         /// 指退订给定的频道。
         /// </summary>
         /// <param name="name"> 频道名称 </param>
         public void Unsubscribe(params string[] name)
         {
             _redisClient.Unsubscribe(name);
-        }
-
-        #endregion 发布与订阅
-
-        #region Private Destructors
-
-        ~RedisCache()
-        {
-            Dispose(false);
-        }
-
-        #endregion Private Destructors
-
-        #region Protected Methods
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_redisClient.IsConnected)
-                {
-                    _redisClient.Quit();
-                }
-                _redisClient?.Dispose();
-            }
-        }
-
-        #endregion Protected Methods
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
         }
     }
 }

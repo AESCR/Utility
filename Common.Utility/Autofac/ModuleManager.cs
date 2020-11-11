@@ -7,29 +7,15 @@ namespace Common.Utility.Autofac
 {
     public class ModuleManager
     {
-        #region Public Constructors
-
         public ModuleManager()
         {
             ContainerBuilder = new ContainerBuilder();
         }
 
-        #endregion Public Constructors
-
-        #region Private Properties
-
         private static Type StartupType { get; set; }
-
-        #endregion Private Properties
-
-        #region Public Properties
 
         public IContainer Container { get; private set; }
         public ContainerBuilder ContainerBuilder { get; private set; }
-
-        #endregion Public Properties
-
-        #region Public Methods
 
         public static ModuleManager Create<TModule>() where TModule : AppModule
         {
@@ -52,7 +38,5 @@ namespace Common.Utility.Autofac
             }
             Container = ContainerBuilder.Build();
         }
-
-        #endregion Public Methods
     }
 }

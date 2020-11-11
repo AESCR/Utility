@@ -15,17 +15,11 @@ namespace Common.Utility.JwtBearer
 
     public static class RSA
     {
-        #region Private Fields
-
         //encoded OID sequence for  PKCS #1 rsaEncryption szOID_RSA_RSA = "1.2.840.113549.1.1.1"
         private static readonly byte[] SeqOID =
             {0x30, 0x0D, 0x06, 0x09, 0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x01, 0x05, 0x00};
 
         private static byte[] Seq = new byte[15];
-
-        #endregion Private Fields
-
-        #region Private Methods
 
         private static bool CompareBytearrays(byte[] a, byte[] b)
         {
@@ -145,10 +139,6 @@ namespace Common.Utility.JwtBearer
                 return PKCSType.PKCS_1_2048;
             throw new ArgumentException("此私钥证书标准不支持");
         }
-
-        #endregion Private Methods
-
-        #region Public Methods
 
         /// <summary>
         /// 验证签名
@@ -368,7 +358,5 @@ namespace Common.Utility.JwtBearer
             var cipherBytes = rsa.SignData(contentBytes, hashAlgorithm, RSASignaturePadding.Pkcs1);
             return Convert.ToBase64String(cipherBytes);
         }
-
-        #endregion Public Methods
     }
 }

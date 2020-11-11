@@ -1,31 +1,39 @@
-﻿using System;
-using Common.Utility.Autofac;
+﻿using Common.Utility.Autofac;
 using Common.Utility.Extensions.HttpClient;
-using Common.Utility.Utils;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Net;
-using System.Net.Http;
-using Common.Utility.HttpRequest;
 using Common.Utility.Memory;
 using Common.Utility.Memory.Cache;
 using Common.Utility.Memory.Model;
 using Common.Utility.Random.Num;
 using Common.Utility.SystemExtensions;
+using Common.Utility.Utils;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Net;
+using System.Net.Http;
 
 namespace Common.Utility.Random.Proxy
 {
+    public enum CountryEnum
+    {
+        [Description("中国")]
+        China,
+
+        [Description("日本")]
+        Japanese,
+
+        [Description("美国")]
+        America,
+
+        All,
+    }
+
     /// <summary>
     /// 代理IP
     /// </summary>
     public class ProxyIp
     {
-        public string WebProxyUrl => $"{Protocol}://{Ip}:{Port}";
-
-        #region Public Properties
-
         /// <summary>
         /// 匿名度
         /// </summary>
@@ -91,44 +99,30 @@ namespace Common.Utility.Random.Proxy
         [JsonProperty("validated_at")]
         public string ValidatedAt { get; set; }
 
-        #endregion Public Properties
+        public string WebProxyUrl => $"{Protocol}://{Ip}:{Port}";
     }
 
     public class ProxyResponse
     {
-        #region Public Properties
-
         public int Code { get; set; }
         public ProxyIp Data { get; set; }
         public string Msg { get; set; }
-
-        #endregion Public Properties
     }
 
     public class ProxysResponse
     {
-        #region Public Classes
+        public int Code { get; set; }
+
+        public ProxyListIP Data { get; set; }
+
+        public string Msg { get; set; }
 
         public class ProxyListIP
         {
-            #region Public Properties
-
             [JsonProperty("current_page")] public string CurrentPage { get; set; }
 
             public List<ProxyIp> Data { get; set; }
-
-            #endregion Public Properties
         }
-
-        #endregion Public Classes
-
-        #region Public Properties
-
-        public int Code { get; set; }
-        public ProxyListIP Data { get; set; }
-        public string Msg { get; set; }
-
-        #endregion Public Properties
     }
 
     /// <summary>
@@ -136,15 +130,10 @@ namespace Common.Utility.Random.Proxy
     /// </summary>
     public class RandomProxy : ISingletonDependency
     {
-        #region Private Fields
-
         private readonly HttpClient httpClient;
         private readonly IMemoryCache memory;
-        private readonly RandomNum random;
         private readonly int minutes;
-        #endregion Private Fields
-
-        #region Public Constructors
+        private readonly RandomNum random;
 
         public RandomProxy(int minutes = 1)
         {
@@ -159,15 +148,37 @@ namespace Common.Utility.Random.Proxy
                 ClientCertificateOptions = ClientCertificateOption.Automatic
             };
             httpClient = new HttpClient(handler);
-            memory=new MemoryCache2();
-            random=new RandomNum();
-            
+            memory = new MemoryCache2();
+            random = new RandomNum();
         }
 
-        #endregion Public Constructors
-        #region Public Methods
+        private List<ProxyIp> GetRandomIps(CountryEnum country = CountryEnum.China)
+        {
+            var url = "https://ip.jiangxianli.com/api/proxy_ips";
+            var param = new Dictionary<string, string>();
+            if (country != CountryEnum.All)
+            {
+                param.Add("country", country.ToDescription());
+                url = url + "?" + HttpUtils.ParamsToUrl(param);
+            }
+            var json = httpClient.DoGet(url).ReadString(out _);
+            if (string.IsNullOrEmpty(json) == false)
+            {
+                var josnData = JsonConvert.DeserializeObject<ProxysResponse>(json);
+                if (josnData != null && josnData.Code == 0)
+                {
+                    memory.Add(MemoryEnum.Proxy.GetMemoryKey(), josnData.Data.Data, TimeSpan.FromMinutes(minutes));
+                    if (country != CountryEnum.All)
+                    {
+                        memory.Add(MemoryEnum.Proxy.GetMemoryKey(country.GetEnumName()), josnData.Data.Data, TimeSpan.FromMinutes(minutes));
+                    }
+                    return josnData.Data.Data;
+                }
+            }
+            throw new Exception("https://ip.jiangxianli.com not allow");
+        }
 
-        public ProxyIp GetRandomIp(bool cache=true)
+        public ProxyIp GetRandomIp(bool cache = true)
         {
             if (memory.Exists(MemoryEnum.Proxy.GetMemoryKey()))
             {
@@ -186,7 +197,6 @@ namespace Common.Utility.Random.Proxy
                     var rint = random.GetRandomInt(0, proxys.Count);
                     return proxys[rint];
                 }
-
             }
             else
             {
@@ -200,18 +210,17 @@ namespace Common.Utility.Random.Proxy
                         return josnData.Data;
                     }
                 }
-
             }
             throw new Exception("https://ip.jiangxianli.com not allow");
         }
 
         public ProxyIp GetRandomIp(CountryEnum country)
         {
-            List<ProxyIp> proxys=new List<ProxyIp>();
+            List<ProxyIp> proxys = new List<ProxyIp>();
             int rint = 0;
             if (memory.Exists(MemoryEnum.Proxy.GetMemoryKey(country.GetEnumName())))
             {
-                 proxys = memory.Get<List<ProxyIp>>(MemoryEnum.Proxy.GetMemoryKey(country.GetEnumName()));
+                proxys = memory.Get<List<ProxyIp>>(MemoryEnum.Proxy.GetMemoryKey(country.GetEnumName()));
                 if (proxys.Count > 0)
                 {
                     rint = random.GetRandomInt(0, proxys.Count);
@@ -227,43 +236,5 @@ namespace Common.Utility.Random.Proxy
             }
             throw new Exception("https://ip.jiangxianli.com not allow");
         }
-        private List<ProxyIp> GetRandomIps(CountryEnum country=CountryEnum.China)
-        {
-            var url = "https://ip.jiangxianli.com/api/proxy_ips";
-            var param = new Dictionary<string, string>();
-            if (country != CountryEnum.All)
-            {
-                param.Add("country", country.ToDescription());
-                url = url + "?" + HttpUtils.ParamsToUrl(param);
-            }
-            var json = httpClient.DoGet(url).ReadString(out _);
-            if (string.IsNullOrEmpty(json) == false)
-            {
-                var josnData = JsonConvert.DeserializeObject<ProxysResponse>(json);
-                if (josnData != null && josnData.Code == 0)
-                {
-                    memory.Add(MemoryEnum.Proxy.GetMemoryKey(), josnData.Data.Data,TimeSpan.FromMinutes(minutes));
-                    if (country!= CountryEnum.All)
-                    {
-                        memory.Add(MemoryEnum.Proxy.GetMemoryKey(country.GetEnumName()), josnData.Data.Data, TimeSpan.FromMinutes(minutes));
-                    }
-                    return josnData.Data.Data;
-                }
-            }
-            throw new  Exception("https://ip.jiangxianli.com not allow");
-        }
-
-     
-        #endregion Public Methods
-    }
-    public enum CountryEnum
-    {
-        [Description("中国")]
-        China,
-        [Description("日本")]
-        Japanese,
-        [Description("美国")]
-        America,
-        All,
     }
 }

@@ -8,8 +8,6 @@ namespace Common.Utility
     /// </summary>
     public class EcanConvertToCh
     {
-        #region Private Fields
-
         //定义拼音数组
         private static readonly string[] getName =
         {
@@ -85,10 +83,6 @@ namespace Common.Utility
             -10815, -10800, -10790, -10780, -10764, -10587, -10544, -10533, -10519, -10331, -10329, -10328,
             -10322, -10315, -10309, -10307, -10296, -10281, -10274, -10270, -10262, -10260, -10256, -10254
         };
-
-        #endregion Private Fields
-
-        #region Public Methods
 
         /// <summary>
         /// 汉字转换成全拼的拼音
@@ -177,7 +171,5 @@ namespace Common.Utility
 
             return pystr; //返回获取到的汉字拼音
         }
-
-        #endregion Public Methods
     }
 }

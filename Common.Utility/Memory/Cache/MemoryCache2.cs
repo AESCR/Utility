@@ -1,22 +1,16 @@
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace Common.Utility.Memory.Cache
 {
     public class MemoryCache2 : IMemoryCache2
     {
-        #region Private Fields
-
         /// <summary>
         /// MemoryCache 缓存
         /// </summary>
         private readonly Microsoft.Extensions.Caching.Memory.IMemoryCache _cache;
-
-        #endregion Private Fields
-
-        #region Public Constructors
 
         /// <summary>
         /// 构造器注入 IMemoryCache
@@ -26,10 +20,6 @@ namespace Common.Utility.Memory.Cache
             var options = new MemoryCacheOptions();
             _cache = new MemoryCache(options);
         }
-
-        #endregion Public Constructors
-
-        #region Public Methods
 
         /// <summary>
         /// 添加缓存
@@ -265,7 +255,5 @@ namespace Common.Utility.Memory.Cache
 
             return Add(key, value, expiresIn, isSliding);
         }
-
-        #endregion Public Methods
     }
 }

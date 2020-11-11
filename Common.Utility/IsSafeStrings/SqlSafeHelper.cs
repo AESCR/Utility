@@ -5,8 +5,6 @@ namespace Common.Utility.IsSafeStrings
 {
     public static class SqlSafeHelper
     {
-        #region Public Methods
-
         /// <summary>
         /// 检测是否存在与数据库相关的词
         /// </summary>
@@ -140,7 +138,5 @@ namespace Common.Utility.IsSafeStrings
             _ = ReplaceBadWord(ref str);
             return str;
         }
-
-        #endregion Public Methods
     }
 }

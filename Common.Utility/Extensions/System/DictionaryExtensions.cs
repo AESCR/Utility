@@ -6,8 +6,6 @@ namespace Common.Utility.Extensions.System
 {
     public static class DictionaryExtensions
     {
-        #region Public Methods
-
         public static T ChangeType<T>(this Dictionary<string, object> dic, string key, bool isNullDefault = true) where T : class
         {
             if (!dic.ContainsKey(key))
@@ -207,7 +205,5 @@ namespace Common.Utility.Extensions.System
             }
             return keyValuePairs;
         }
-
-        #endregion Public Methods
     }
 }

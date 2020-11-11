@@ -8,8 +8,6 @@ namespace Common.Utility.Autofac
 {
     public static class InjectHelper
     {
-        #region Public Methods
-
         /// <summary>
         /// 自动注入
         /// </summary>
@@ -29,8 +27,6 @@ namespace Common.Utility.Autofac
             var releaseClass = types
                 .Where(t => t.GetInterfaces().Contains(typeof(IRelease)) && t.IsClass)
                 .ToList();
-
-            #region ISingletonDependency （单例）
 
             //获取标记了ISingletonDependency接口的接口
             var singletonInterfaceDependency = types
@@ -78,10 +74,6 @@ namespace Common.Utility.Autofac
                 }
             }
 
-            #endregion ISingletonDependency （单例）
-
-            #region ITransientDependency（每次实例）
-
             //获取标记了ITransientDependency接口的接口
             var transientInterfaceDependency = types
                    .Where(t => t.GetInterfaces().Contains(typeof(ITransientDependency)))
@@ -123,10 +115,6 @@ namespace Common.Utility.Autofac
                     });
                 }
             }
-
-            #endregion ITransientDependency（每次实例）
-
-            #region IScopedDependency（线程内唯一）
 
             //获取标记了IScopedDependency接口的接口
             var scopedInterfaceDependency = types
@@ -170,10 +158,6 @@ namespace Common.Utility.Autofac
                     });
                 }
             }
-
-            #endregion IScopedDependency（线程内唯一）
         }
-
-        #endregion Public Methods
     }
 }

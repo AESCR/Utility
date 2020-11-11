@@ -4,8 +4,6 @@ namespace Common.Utility.Convert2
 {
     public class ConvertNumber
     {
-        #region Public Methods
-
         /// <summary>
         /// 字节(B)转可读大小
         /// </summary>
@@ -69,7 +67,5 @@ namespace Common.Utility.Convert2
         {
             return Math.Round(number, position);
         }
-
-        #endregion Public Methods
     }
 }
