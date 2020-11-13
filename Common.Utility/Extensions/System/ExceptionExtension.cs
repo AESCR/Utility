@@ -25,7 +25,7 @@ namespace Common.Utility.SystemExtensions
         /// - System.TypeInitializationException
         /// - Microsoft.PowerApps.CoreFramework.MonitoredException marked as Fatal.
         /// </summary>
-        public static bool IsFatal(this Exception exception)
+        public static bool IsFatal(this System.Exception exception)
         {
             while (exception != null)
             {
@@ -85,7 +85,7 @@ namespace Common.Utility.SystemExtensions
         /// <param name="ex"> origin exception </param>
         /// <param name="depth"> depth </param>
         /// <returns> inner exception </returns>
-        public static Exception Unwrap(this Exception ex, int depth = 16)
+        public static System.Exception Unwrap(this System.Exception ex, int depth = 16)
         {
             if (ex is null)
                 return null;
