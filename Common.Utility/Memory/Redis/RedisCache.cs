@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Common.Utility.Memory.Redis
 {
-    public class RedisCache : IRedisCache, IScopedDependency
+    public class RedisCache 
     {
         private readonly MemoryOptions _memoryOptions;
         private readonly RedisClient _redisClient;

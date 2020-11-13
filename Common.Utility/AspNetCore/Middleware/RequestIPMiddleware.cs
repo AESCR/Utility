@@ -94,30 +94,28 @@ namespace Common.Utility.Middleware
 
         public async Task Invoke(HttpContext context)
         {
-            var ip = context.Connection.RemoteIpAddress.MapToIPv4().ToString();
-            if (_memory.Exists(MemoryEnum.BlackIps.GetMemoryKey()))
+            if (context.Connection.RemoteIpAddress != null)
             {
-                string[] blackish;
-                if (_memory.IsRedis)
+                var ip = context.Connection.RemoteIpAddress.MapToIPv4().ToString();
+                if (_memory.Exists(MemoryEnum.BlackIps.GetMemoryKey()))
                 {
-                    IRedisCache redis = (IRedisCache)_memory;
-                    blackish = redis.GetCollection(MemoryEnum.BlackIps.GetMemoryKey());
-                }
-                else
-                {
-                    blackish = _memory.Get<string[]>(MemoryEnum.BlackIps.GetMemoryKey());
-                }
-                if (blackish != null && blackish.Contains(ip))
-                {
-                    //拒绝
-                    context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-                    var response = ResponseUtils.GetResponseByCode((int)SysCode.IPAccessDenied);
-                    var json = JsonConvert.SerializeObject(response);
-                    byte[] data = Encoding.UTF8.GetBytes(json);
-                    context.Response.ContentType = "application/json";
-                    context.Response.ContentLength = data.Length;
-                    await context.Response.Body.WriteAsync(data, 0, data.Length);
-                    return;
+                    string[] blackish;
+                    if (_memory.IsRedis)
+                    {
+                        IRedisCache redis = (IRedisCache)_memory;
+                        blackish = redis.GetCollection(MemoryEnum.BlackIps.GetMemoryKey());
+                    }
+                    else
+                    {
+                        blackish = _memory.Get<string[]>(MemoryEnum.BlackIps.GetMemoryKey());
+                    }
+                    if (blackish != null && blackish.Contains(ip))
+                    {
+                        //拒绝
+                        context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                        await context.Response.Body.WriteAsync(Encoding.UTF8.GetBytes("IP拒绝访问"));
+                        return;
+                    }
                 }
             }
             await _next.Invoke(context);

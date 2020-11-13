@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace Common.Utility.IsSafeStrings
 {
-    public static class SqlSafeHelper
+    public static class SqlSafeUtils
     {
         /// <summary>
         /// 检测是否存在与数据库相关的词

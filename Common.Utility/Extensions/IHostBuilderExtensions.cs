@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
-namespace Common.Utility.Extensions.Asp.NetCore
+namespace Common.Utility.Extensions
 {
     public static class HostBuilderExtensions
     {
