@@ -1,7 +1,9 @@
+using Autofac.Extensions.DependencyInjection;
 using Common.Utility.Extensions.Asp.NetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog.Web;
 
 namespace Common.WebApi
 {
@@ -15,6 +17,7 @@ namespace Common.WebApi
         private static IHostBuilder CreateHostBuilder(string[] args)
         {
             var hostBuilder = Host.CreateDefaultBuilder(args)
+                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureJson("ratelimit.json")
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
@@ -27,7 +30,7 @@ namespace Common.WebApi
 #endif
 
                             logging.SetMinimumLevel(LogLevel.Trace); //设置最小的日志级别
-                        });
+                        }).UseNLog();
                 });
             return hostBuilder;
         }
