@@ -1,15 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="index.html" />
       <None Remove="Logger\nlog.config" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="AspectCore.Extensions.Autofac" Version="2.1.0" />
+      <EmbeddedResource Include="AspNetCore\MiniProfiler\index.html" />
+    </ItemGroup>
+
+    <ItemGroup>
       <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
       <PackageReference Include="Autofac.Extras.DynamicProxy" Version="6.0.0" />
       <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
@@ -19,6 +23,8 @@
       <PackageReference Include="HtmlSanitizer" Version="5.0.355" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0" />
       <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+      <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.2.1" />
+      <PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="4.2.1" />
       <PackageReference Include="MongoDB.Driver" Version="2.11.4" />
       <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
       <PackageReference Include="NLog.Web.AspNetCore" Version="4.9.3" />

@@ -27,19 +27,4 @@
       <PackageReference Include="Tencent.QCloud.Cos.Sdk" Version="5.4.13" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Compile Update="AutoMapperExtensions\Resource1.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Resource1.resx</DependentUpon>
-      </Compile>
-    </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Update="AutoMapperExtensions\Resource1.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-    </ItemGroup>
-
 </Project>

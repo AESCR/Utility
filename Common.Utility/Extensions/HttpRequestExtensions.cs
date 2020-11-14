@@ -9,7 +9,7 @@ namespace Common.Utility.Extensions
     /// <summary>
     /// HttpRequest  扩展
     /// </summary>
-    public static class HttpRequestExtension
+    public static class HttpRequestExtensions
     {
         private const string NullIpAddress = "::1";
         /// <summary>

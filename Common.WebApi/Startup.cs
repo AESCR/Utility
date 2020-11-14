@@ -1,34 +1,51 @@
+
 using Autofac;
+using Common.Utility.Autofac;
+using Common.Utility.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Newtonsoft.Json.Serialization;
+using System;
+using Autofac.Extensions.DependencyInjection;
+using Common.Utility.AOP;
+using Common.Utility.AspNetCore.MiniProfiler;
+using Common.Utility.AspNetCore.Swagger;
+using Microsoft.AspNetCore.Http;
+using Ulink.Common.Model;
 
 namespace Common.WebApi
 {
-    public class Startup
+    public class Startup :AutofacContainer
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
-            Configuration = configuration;
+            System.Console.WriteLine($"Current State: {env.EnvironmentName}");
+            JsonConfigure.Init(configuration);
         }
-
-        public IConfiguration Configuration { get; }
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
+            app.UseRouting();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
 
-        /// <summary>
-        /// AutoFac注入
-        /// </summary>
-        /// <param name="builder"> </param>
-        public void ConfigureContainer(ContainerBuilder builder)
+        // Development环境下执行的ConfigureServices方法
+        public void ConfigureDevelopmentServices(IServiceCollection services)
         {
+            services.AddSwaggerGenSetup();
+            ConfigureServices(services);
+        }
+
+        // Development环境下执行的Configure方法
+        public void ConfigureDevelopment(IApplicationBuilder app)
+        {
+            app.UseSwaggerUi();
+            Configure(app);
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -39,8 +56,8 @@ namespace Common.WebApi
                     //路由前缀
                     o.UseCentralRoutePrefix(new RouteAttribute("api"));
                     o.RespectBrowserAcceptHeader = true; //浏览器和内容协商
-                    GlobalFilters.AddFilter(o.Filters);
                 })
+                .AddControllersAsServices()
                 .AddNewtonsoftJson(options =>
                 {
                     //Microsoft.AspNetCore.Mvc.NewtonsoftJson
@@ -53,6 +70,11 @@ namespace Common.WebApi
 
             // 关闭netcore自动处理参数校验机制
             services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
+        }
+
+        public override void AutoInject(ContainerBuilder builder)
+        {
+            builder.RegisterServices("Common.Service");
         }
     }
 }

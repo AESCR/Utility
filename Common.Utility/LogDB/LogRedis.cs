@@ -1,10 +1,10 @@
-﻿using Autofac;
+﻿using System;
+using System.Reflection;
+using System.Threading.Tasks;
+using Autofac;
 using Common.Utility.Autofac;
 using Common.Utility.Memory.Model;
 using Common.Utility.Memory.Redis;
-using System;
-using System.Reflection;
-using System.Threading.Tasks;
 using ToolBox.Time;
 
 namespace Common.Utility.LogDb
@@ -16,12 +16,13 @@ namespace Common.Utility.LogDb
             var opt = new LogRedisgOptions();
             option(opt);
             @this.RegisterType<LogRedis>().AsImplementedInterfaces()
-                .SingleInstance().WithParameter(new TypedParameter(typeof(LogRedisgOptions), opt)); ;
+                .SingleInstance().WithParameter(new TypedParameter(typeof(LogRedisgOptions), opt));
+            ;
         }
     }
 
     /// <summary>
-    /// 写入Redis日志
+    ///     写入Redis日志
     /// </summary>
     public class LogRedis : ISingletonDependency
     {
@@ -31,10 +32,7 @@ namespace Common.Utility.LogDb
         public LogRedis(LogRedisgOptions options)
         {
             _logName = "logs-" + Assembly.GetExecutingAssembly().GetName().Name?.ToLower();
-            if (!string.IsNullOrWhiteSpace(options.LogName))
-            {
-                _logName = options.LogName;
-            }
+            if (!string.IsNullOrWhiteSpace(options.LogName)) _logName = options.LogName;
             redisCache = new RedisCache(options);
             redisCache.SwitchDb(options.DbIndex);
         }
@@ -65,7 +63,7 @@ namespace Common.Utility.LogDb
     }
 
     /// <summary>
-    /// 日志Redis配置
+    ///     日志Redis配置
     /// </summary>
     public class LogRedisgOptions : MemoryOptions
     {

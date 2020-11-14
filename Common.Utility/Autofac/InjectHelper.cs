@@ -49,7 +49,7 @@ namespace Common.Utility.Autofac
                     {
                         builder.OnRelease(e =>
                         {
-                            (e as IRelease).Dispose();
+                            (e as IRelease)?.Dispose();
                         });
                     }
                 }
@@ -69,7 +69,7 @@ namespace Common.Utility.Autofac
                 {
                     builder.OnRelease(e =>
                     {
-                        (e as IRelease).Dispose();
+                        (e as IRelease)?.Dispose();
                     });
                 }
             }
@@ -92,7 +92,7 @@ namespace Common.Utility.Autofac
                     {
                         builder.OnRelease(e =>
                         {
-                            (e as IRelease).Dispose();
+                            (e as IRelease)?.Dispose();
                         });
                     }
                 }
@@ -111,7 +111,7 @@ namespace Common.Utility.Autofac
                 {
                     builder.OnRelease(e =>
                     {
-                        (e as IRelease).Dispose();
+                        (e as IRelease)?.Dispose();
                     });
                 }
             }
@@ -132,7 +132,7 @@ namespace Common.Utility.Autofac
                     {
                         builder = builder.OnRelease(e =>
                         {
-                            (e as IRelease).Dispose();
+                            (e as IRelease)?.Dispose();
                         });
                     }
                     if (autoInterceptorClass.Any(t => t == type) && interceptedType != null)
@@ -154,7 +154,7 @@ namespace Common.Utility.Autofac
                 {
                     builder.OnRelease(e =>
                     {
-                        (e as IRelease).Dispose();
+                        (e as IRelease)?.Dispose();
                     });
                 }
             }

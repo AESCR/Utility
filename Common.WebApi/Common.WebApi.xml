@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Common.WebApi</name>
+    </assembly>
+    <members>
+        <member name="T:Ulink.Core.WebAPI.Controllers.Error.TestController">
+            <summary>
+                错误测试
+            </summary>
+        </member>
+        <member name="M:Ulink.Core.WebAPI.Controllers.Error.TestController.ErrorTest">
+            <summary>
+            错误测试
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

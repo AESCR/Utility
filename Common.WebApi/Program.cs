@@ -1,5 +1,5 @@
 using Autofac.Extensions.DependencyInjection;
-using Common.Utility.Extensions.Asp.NetCore;
+using Common.Utility.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
