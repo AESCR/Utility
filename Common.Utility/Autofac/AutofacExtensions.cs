@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 using Autofac;
 using Autofac.Builder;
 using Autofac.Extras.DynamicProxy;
 using Autofac.Features.Scanning;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Utilities;
 
-namespace Common.Utility.Extensions
+namespace Common.Utility.Autofac
 {
     public static class AutofacExtensions
     {
@@ -32,6 +31,15 @@ namespace Common.Utility.Extensions
             return @this.RegisterAssemblyTypes(Assembly.GetEntryAssembly())
                 .Where(t => controllerBaseType.IsAssignableFrom(t) && t != controllerBaseType)
                 .PropertiesAutowired();
+        }
+        /// <summary>
+        /// 控制器属性注入
+        /// </summary>
+        /// <param name="services"></param>
+        public static void ReplaceController(this IServiceCollection services)
+        {
+            services.Replace(ServiceDescriptor
+                .Transient<IControllerActivator, ServiceBasedControllerActivator>());
         }
         #endregion Public Methods
     }

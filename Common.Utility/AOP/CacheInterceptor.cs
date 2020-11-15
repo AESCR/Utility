@@ -1,27 +1,30 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Castle.DynamicProxy;
+using Common.Utility.Autofac;
+using Common.Utility.Memory.Cache;
 
 namespace Common.Utility.AOP
 {
     /// <summary>
     /// 
     /// </summary>
-    public class CacheInterceptor : IInterceptor
+    public class CacheInterceptor : AutofacInterceptor, ISingletonDependency
     {
-        private readonly Dictionary<string, object> _cacheDict = new Dictionary<string, object>();
-
-        public  void  Intercept(IInvocation invocation)
+        private readonly IMemoryCache2 memory=new MemoryCache2();
+        public override void AutofacIntercept(IInvocation invocation)
         {
             var name = invocation.Proxy.ToString();
-            var keyName = invocation.Method.Name + "_" + string.Join("_", invocation.Arguments);
-            if (_cacheDict.ContainsKey(keyName))
+            var keyName = name + invocation.Method.Name + "_" + string.Join("_", invocation.Arguments);
+            if (memory.Exists(keyName))
             {
-                invocation.ReturnValue = _cacheDict[keyName];
+                invocation.ReturnValue = memory.Get(keyName);
                 return;
             }
             invocation.Proceed();
-            _cacheDict[keyName] = "cache:" + invocation.ReturnValue;
+            memory.Add(keyName, invocation.ReturnValue, TimeSpan.FromSeconds(10), true);
         }
+
     }
 }

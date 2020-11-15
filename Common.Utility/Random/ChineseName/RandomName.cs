@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using Common.Utility.Autofac;
 
 namespace Common.Utility.Random.ChineseName
 {
-    public class RandomName
+    public class RandomName: ISingletonDependency
     {
         /// <summary>
         /// 姓氏列表

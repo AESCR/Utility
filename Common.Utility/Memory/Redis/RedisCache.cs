@@ -9,27 +9,21 @@ namespace Common.Utility.Memory.Redis
 {
     public class RedisCache : IRedisCache
     {
-        private readonly MemoryOptions _memoryOptions;
         private readonly RedisClient _redisClient;
 
-        public RedisCache(string host = "127.0.0.1", int port = 6379, int dbIndex = 0, string password = "")
+        public RedisCache(Action<MemoryOptions> optionAction=null)
         {
-            _redisClient = new RedisClient(host, port);
-            if (!string.IsNullOrWhiteSpace(password))
+            var options = new MemoryOptions
             {
-                _redisClient.Connected += (s, e) =>
-                {
-                    _redisClient.Auth(password);
-                    _redisClient.Select(dbIndex);
-                };
-            }
-            _redisClient.ReconnectAttempts = 3;//失败后重试3次
-            _redisClient.ReconnectWait = 200;//在抛出异常之前，连接将在200ms之间重试3次
-            _redisClient.Connect(3000);
-        }
-
-        public RedisCache(MemoryOptions options)
-        {
+                UseRedis = false,
+                Host = "127.0.0.1",
+                DbIndex = 0,
+                Password = "",
+                Port = 6379,
+                ReconnectAttempts = 3,
+                ReconnectWait = 200
+            };
+            optionAction?.Invoke(options);
             _redisClient = new RedisClient(options.Host, options.Port);
             if (!string.IsNullOrWhiteSpace(options.Password))
             {
@@ -42,7 +36,6 @@ namespace Common.Utility.Memory.Redis
             _redisClient.ReconnectAttempts = options.ReconnectAttempts;//失败后重试3次
             _redisClient.ReconnectWait = options.ReconnectWait;//在抛出异常之前，连接将在200ms之间重试3次
             _redisClient.Connect(options.Timeout);
-            _memoryOptions = options;
         }
 
         ~RedisCache()

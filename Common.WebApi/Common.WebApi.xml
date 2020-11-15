@@ -15,5 +15,20 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Common.WebApi.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        </member>
+        <member name="M:Common.WebApi.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            This method gets called by the runtime. Use this method to add services to the container.
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:Common.WebApi.Startup.AutoInject(Autofac.ContainerBuilder)">
+            <summary>
+            Autofac自动注入
+            </summary>
+            <param name="builder"></param>
+        </member>
     </members>
 </doc>

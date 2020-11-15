@@ -33,7 +33,10 @@ namespace Common.Utility.LogDb
         {
             _logName = "logs-" + Assembly.GetExecutingAssembly().GetName().Name?.ToLower();
             if (!string.IsNullOrWhiteSpace(options.LogName)) _logName = options.LogName;
-            redisCache = new RedisCache(options);
+            redisCache = new RedisCache((o) =>
+            {
+                o = options;
+            });
             redisCache.SwitchDb(options.DbIndex);
         }
 

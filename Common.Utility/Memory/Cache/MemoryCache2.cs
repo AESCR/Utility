@@ -2,15 +2,17 @@ using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Common.Utility.Autofac;
 
 namespace Common.Utility.Memory.Cache
 {
-    public class MemoryCache2 : IMemoryCache2
+    public class MemoryCache2 :  IMemoryCache2
     {
+
         /// <summary>
         /// MemoryCache 缓存
         /// </summary>
-        private readonly Microsoft.Extensions.Caching.Memory.IMemoryCache _cache;
+        private  Microsoft.Extensions.Caching.Memory.IMemoryCache _cache;
 
         /// <summary>
         /// 构造器注入 IMemoryCache
@@ -20,7 +22,6 @@ namespace Common.Utility.Memory.Cache
             var options = new MemoryCacheOptions();
             _cache = new MemoryCache(options);
         }
-
         /// <summary>
         /// 添加缓存
         /// </summary>
@@ -130,7 +131,16 @@ namespace Common.Utility.Memory.Cache
             if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
             return (T)_cache.Get(key);
         }
-
+        /// <summary>
+        /// 获取缓存
+        /// </summary>
+        /// <param name="key"> 缓存Key </param>
+        /// <returns> </returns>
+        public object Get(string key)
+        {
+            if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
+            return _cache.Get(key);
+        }
         /// <summary>
         /// 获取缓存集合
         /// </summary>

@@ -1,9 +1,10 @@
 using System;
 using System.Linq;
+using Common.Utility.Autofac;
 
 namespace Common.Utility.Random.Num
 {
-    public class RandomNum
+    public class RandomNum: ISingletonDependency
     {
         private readonly System.Random _ra;
 

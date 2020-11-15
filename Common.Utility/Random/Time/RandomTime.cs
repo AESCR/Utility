@@ -1,8 +1,9 @@
 using System;
+using Common.Utility.Autofac;
 
 namespace Common.Utility.Random.Time
 {
-    public class RandomTime
+    public class RandomTime: ISingletonDependency
     {
         /// <summary>
         /// 得到随机日期

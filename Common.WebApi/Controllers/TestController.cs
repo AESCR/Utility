@@ -5,6 +5,7 @@ using Common.Service;
 using Common.Utility.AOP;
 using Common.Utility.CustomException;
 using Common.Utility.HttpResponse;
+using Common.Utility.Memory.Cache;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ulink.Core.WebAPI.Controllers.Error
@@ -17,6 +18,7 @@ namespace Ulink.Core.WebAPI.Controllers.Error
     public class TestController : ControllerBase
     {
         public ITestService TestService { get; set; }
+        public IMemoryCache2 MemoryCache2 { get; set; }
         /// <summary>
         /// 错误测试
         /// </summary>
@@ -39,7 +41,12 @@ namespace Ulink.Core.WebAPI.Controllers.Error
         [HttpPost]
         public async Task<IActionResult> OkTest()
         {
-            return Ok();
+            return Ok(TestService.TestOk());
+        }
+        [HttpPost("/TestNoCacheOk")]
+        public async Task<IActionResult> TestNoCacheOk()
+        {
+            return Ok(TestService.TestNoCacheOk());
         }
     }
 }

@@ -2,6 +2,9 @@
 
 namespace Common.Utility.Autofac
 {
+    /// <summary>
+    /// 依赖模块
+    /// </summary>
     public class DependsOnAttribute : Attribute
     {
         public DependsOnAttribute(params Type[] dependedModuleTypes)

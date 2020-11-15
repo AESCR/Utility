@@ -1,7 +1,14 @@
 ﻿using Common.Utility.Extensions.HttpClient;
 using Common.Utility.HttpRequest;
 using System;
+using System.Linq;
+using System.Reflection;
+using Autofac;
+using Common.Service;
+using Common.Utility.AOP;
+using Common.Utility.Autofac;
 using Common.Utility.Utils;
+using NPOI.SS.Formula.Functions;
 
 namespace Common.Console2
 {
@@ -9,15 +16,10 @@ namespace Common.Console2
     {
         private static void Main(string[] args)
         {
-            string str = "I am {Name},Age is {Age}";
-            var x=  RegexUtils.RegexValue(str, @"{\w+}");
-            HttpClient2 httpClient2 = new HttpClient2(randomProxy: true);
-            string url = "http://httpbin.org/get";
-            while (true)
-            {
-                var res = httpClient2.GetAsync(url).ReadString(out var statusText);
-                Console.WriteLine(res);
-            }
+            var s = Assembly.Load("Common.Service");
+            var t = typeof(TestService).Assembly;
+            
+            var x= Assembly.Load("Common.Service").GetCustomAttributes<DependsOnAttribute>();
         }
     }
 }
