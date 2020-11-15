@@ -29,7 +29,7 @@ namespace Ulink.Core.WebAPI.Controllers.Error
         {
             try
             {
-                TestService.TestEroor();
+                await TestService.TestEroor();
             }
             catch (Exception e)
             {
@@ -41,12 +41,12 @@ namespace Ulink.Core.WebAPI.Controllers.Error
         [HttpPost]
         public async Task<IActionResult> OkTest()
         {
-            return Ok(TestService.TestOk());
+            return Ok(await TestService.TestOk());
         }
         [HttpPost("/TestNoCacheOk")]
         public async Task<IActionResult> TestNoCacheOk()
         {
-            return Ok(TestService.TestNoCacheOk());
+            return Ok(await TestService.TestNoCacheOk());
         }
     }
 }

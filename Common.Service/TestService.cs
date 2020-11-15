@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Autofac.Extras.DynamicProxy;
 using Common.Utility.AOP;
 using Common.Utility.Autofac;
@@ -10,27 +12,38 @@ namespace Common.Service
 {
     public interface ITestService: ISingletonDependency, IAutoInterceptor
     {
-        string TestOk();
-        string TestEroor();
+     
+        Task<string> TestOk();
         [NoIntercept]
-        string TestNoCacheOk();
+        Task<string> TestEroor();
+        [NoIntercept(typeof(CacheInterceptor))]
+        Task<string> TestNoCacheOk();
     }
     public class TestService :  ITestService
     {
         public RandomName randomName { get; set; }
-        public string TestOk()
+        public Task<string> TestOk()
         {
-           return randomName.GetRandomName();
+            return Task.Run(() =>
+            {
+                return randomName.GetRandomName();
+            });
         }
-        public string TestNoCacheOk()
+        public Task<string> TestNoCacheOk()
         {
-            return randomName.GetRandomName();
+            return Task.Run(() =>
+            {
+                return randomName.GetRandomName();
+            });
         }
-        public string TestEroor()
+        public Task<string> TestEroor()
         {
-            int x = 0;
-            var y = 2 / x;
-            return "error";
+            return Task.Run(() =>
+            {
+                int x = 0;
+                var y = 2 / x;
+                return "error";
+            });
         }
     }
 }
