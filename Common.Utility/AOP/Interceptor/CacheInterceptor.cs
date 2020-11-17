@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using Castle.DynamicProxy;
 using Common.Utility.Autofac;
 using Common.Utility.Memory.Cache;
 
-namespace Common.Utility.AOP
+namespace Common.Utility.AOP.Interceptor
 {
     /// <summary>
     /// [Intercept(typeof(CacheInterceptor))]
@@ -23,18 +21,18 @@ namespace Common.Utility.AOP
 
     public class CacheAsyncInterceptor : AutofacAsyncInterceptor, ISingletonDependency
     {
-        private readonly IMemoryCache2 memory = new MemoryCache2();
+        private readonly IMemoryCache2 _memory = new MemoryCache2();
         public override void SyncIntercept(IInvocation invocation)
         {
             var name = invocation.Proxy.ToString();
             var keyName = name + invocation.Method.Name + "_" + string.Join("_", invocation.Arguments);
-            if (memory.Exists(keyName))
+            if (_memory.Exists(keyName))
             {
-                invocation.ReturnValue = memory.Get(keyName);
+                invocation.ReturnValue = _memory.Get(keyName);
                 return;
             }
             invocation.Proceed();
-            memory.Add(keyName, invocation.ReturnValue, TimeSpan.FromSeconds(10), true);
+            _memory.Add(keyName, invocation.ReturnValue, TimeSpan.FromSeconds(10), true);
         }
 
         public override void AsynIntercept(IInvocation invocation)
@@ -45,21 +43,20 @@ namespace Common.Utility.AOP
         public override void AsynInterceptResult<TResult>(IInvocation invocation)
         {
             invocation.ReturnValue = InternalInterceptAsynchronous<TResult>(invocation);
-            Console.WriteLine(1111);
         }
         private async Task<TResult> InternalInterceptAsynchronous<TResult>(IInvocation invocation)
         {
             var name = invocation.Proxy.ToString();
             var keyName = name + invocation.Method.Name + "_" + string.Join("_", invocation.Arguments);
-            if (memory.Exists(keyName))
+            if (_memory.Exists(keyName))
             {
-                invocation.ReturnValue = memory.Get(keyName);
+                invocation.ReturnValue = _memory.Get(keyName);
                 return await Task.FromResult((TResult)invocation.ReturnValue);
             }
             invocation.Proceed();
             var task = (Task<TResult>)invocation.ReturnValue;
             TResult result = await task;
-            memory.Add(keyName, result, TimeSpan.FromSeconds(10), true);
+            _memory.Add(keyName, result, TimeSpan.FromSeconds(10), true);
             //记录日志
             Console.WriteLine($"{invocation.Method.Name} 已执行，返回结果：{result}");
             return result;

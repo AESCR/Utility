@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Reflection;
+using Microsoft.AspNetCore.ResponseCompression;
 using Ulink.Common.Model;
 
 namespace Common.Utility.Autofac
@@ -40,9 +41,17 @@ namespace Common.Utility.Autofac
         /// 程序配置
         /// </summary>
         /// <param name="app"></param>
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, bool first = true)
         {
-           
+            if (first)
+            {
+                app.UseExceptionHandler("/error"); //自定义异常页面
+                app.UseResponseCompression();
+                app.UseCors(builder => builder.WithOrigins(JsonConfigure.Settings.Cors)
+                    .AllowAnyHeader().AllowAnyMethod()); //跨域
+                app.UseHsts();
+                app.UseHttpsRedirection();
+            }
             LifetimeScope = app.ApplicationServices.GetAutofacRoot();
             AppConfigure(app);
         }
@@ -64,8 +73,9 @@ namespace Common.Utility.Autofac
         /// <param name="app"> </param>
         public void ConfigureDevelopment(IApplicationBuilder app)
         {
+            app.UseDeveloperExceptionPage();
             app.UseSwaggerUi();
-            Configure(app);
+            Configure(app,false);
         }
 
         /// <summary>
@@ -74,6 +84,9 @@ namespace Common.Utility.Autofac
         /// <param name="services"> </param>
         public void ConfigureDevelopmentServices(IServiceCollection services)
         {
+
+            //文件系统
+            //services.AddDirectoryBrowser();
             services.AddSwaggerGenSetup();
             ConfigureServices(services);
         }
@@ -88,6 +101,13 @@ namespace Common.Utility.Autofac
             services.ReplaceController(); //控制器属性注入 替换规则
             // 关闭netcore自动处理参数校验机制
             services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
+            //响应压缩
+            services.AddResponseCompression(options =>
+                {
+                    options.Providers.Add<BrotliCompressionProvider>();
+                    options.Providers.Add<GzipCompressionProvider>();
+                }
+            );
             InjectServices(services);
         }
     }

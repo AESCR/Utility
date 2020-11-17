@@ -4,6 +4,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Autofac.Core;
+using Autofac.Extras.DynamicProxy;
 using Castle.Core.Internal;
 using Castle.DynamicProxy;
 
@@ -32,7 +34,7 @@ namespace Common.Utility.AOP
 
        
     }
-    public abstract class AutofacInterceptor : IInterceptor
+    public abstract class AutofacInterceptor : InterceptMethodAttribute, IInterceptor
     {
         public abstract void SyncIntercept(IInvocation invocation);
         public void Intercept(IInvocation invocation)
@@ -57,13 +59,22 @@ namespace Common.Utility.AOP
         /// <returns></returns>
         public static bool IsIntercept(this IInvocation invocation,object @this)
         {
+            var x= invocation.InvocationTarget.GetType().GetCustomAttributes();
             var noAttr = invocation.Method.GetCustomAttribute<NoInterceptAttribute>();
-            if (noAttr == null) return true;
-            if (noAttr.InterceptTypes.Length != 0)
+            if (noAttr!=null&& noAttr.InterceptTypes.Length==0)
+            {
+                return false;//全部不拦截
+            }
+            if (noAttr != null && noAttr.InterceptTypes.Length != 0)
             {
                 return !noAttr.InterceptTypes.Contains(@this.GetType());
             }
-            return false;
+            var attrs=invocation.Method.GetCustomAttribute<InterceptMethodAttribute>();
+            if (attrs!=null)//指定拦截方法
+            {
+                return attrs.InterceptTypes.Contains(@this.GetType());
+            }
+            return true;
 
         }
     }
