@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Autofac.Extras.DynamicProxy;
 using Common.Utility.AOP;
+using Common.Utility.AOP.Interceptor;
 using Common.Utility.Autofac;
 using Common.Utility.Random.ChineseName;
 

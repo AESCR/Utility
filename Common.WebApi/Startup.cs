@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Reflection;
+using Common.Utility.AOP.Interceptor;
 
 namespace Common.WebApi
 {

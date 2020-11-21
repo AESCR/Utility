@@ -36,14 +36,14 @@ namespace Common.Utility.Autofac
         {
             return LifetimeScope;
         }
-
+        public  bool IsProduction { get; set; }=true;
         /// <summary>
         /// 程序配置
         /// </summary>
         /// <param name="app"></param>
-        public void Configure(IApplicationBuilder app, bool first = true)
+        public void Configure(IApplicationBuilder app)
         {
-            if (first)
+            if (IsProduction)
             {
                 app.UseExceptionHandler("/error"); //自定义异常页面
                 app.UseResponseCompression();
@@ -75,7 +75,7 @@ namespace Common.Utility.Autofac
         {
             app.UseDeveloperExceptionPage();
             app.UseSwaggerUi();
-            Configure(app,false);
+            Configure(app);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Common.Utility.Autofac
         /// <param name="services"> </param>
         public void ConfigureDevelopmentServices(IServiceCollection services)
         {
-
+            IsProduction = false;
             //文件系统
             //services.AddDirectoryBrowser();
             services.AddSwaggerGenSetup();

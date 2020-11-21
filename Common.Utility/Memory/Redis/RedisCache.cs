@@ -11,6 +11,22 @@ namespace Common.Utility.Memory.Redis
     {
         private readonly RedisClient _redisClient;
 
+        public RedisCache(MemoryOptions options=null)
+        {
+            options ??= new MemoryOptions();
+            _redisClient = new RedisClient(options.Host, options.Port);
+            if (!string.IsNullOrWhiteSpace(options.Password))
+            {
+                _redisClient.Connected += (s, e) =>
+                {
+                    _redisClient.Auth(options.Password);
+                    _redisClient.Select(options.DbIndex);
+                };
+            }
+            _redisClient.ReconnectAttempts = options.ReconnectAttempts;//失败后重试3次
+            _redisClient.ReconnectWait = options.ReconnectWait;//在抛出异常之前，连接将在200ms之间重试3次
+            _redisClient.Connect(options.Timeout);
+        }
         public RedisCache(Action<MemoryOptions> optionAction=null)
         {
             var options = new MemoryOptions

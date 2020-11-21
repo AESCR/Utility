@@ -3,6 +3,7 @@ using System.Net;
 using System.Text;
 using Common.Utility.HttpResponse;
 using Common.Utility.Json;
+using Common.Utility.Utils;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Common.Utility.AspNetCore.Filter
@@ -20,7 +21,7 @@ namespace Common.Utility.AspNetCore.Filter
                 .ToList();
             context.HttpContext.Response.StatusCode = (int) HttpStatusCode.OK;
             ResponseResult responseResult = new ResponseResult {Data = result, Type = ResponseEnum.Validation};
-            context.HttpContext.Response.Body.Write(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(responseResult)));
+            context.HttpContext.Response.Body.Write(Encoding.UTF8.GetBytes(ConvertUtils.SerializeObject(responseResult)));
         }
 
         #endregion Public Methods
