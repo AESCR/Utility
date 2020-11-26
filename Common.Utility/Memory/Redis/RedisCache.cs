@@ -10,6 +10,7 @@ namespace Common.Utility.Memory.Redis
     public class RedisCache : IRedisCache
     {
         private readonly RedisClient _redisClient;
+        private MemoryOptions option;
 
         public RedisCache(MemoryOptions options=null)
         {
@@ -25,7 +26,28 @@ namespace Common.Utility.Memory.Redis
             }
             _redisClient.ReconnectAttempts = options.ReconnectAttempts;//失败后重试3次
             _redisClient.ReconnectWait = options.ReconnectWait;//在抛出异常之前，连接将在200ms之间重试3次
-            _redisClient.Connect(options.Timeout);
+            option = options;
+        }
+
+        private void OpenConnect()
+        {
+            if (_redisClient.IsConnected != false)
+            {
+                return;
+            };
+            var result=false;
+            try
+            {
+                 result = _redisClient.Connect(option.Timeout);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("redis Connect error!",e);
+            }
+            if (result == false)
+            {
+                throw new Exception("redis Connect return false!");
+            }
         }
         public RedisCache(Action<MemoryOptions> optionAction=null)
         {
@@ -51,16 +73,13 @@ namespace Common.Utility.Memory.Redis
             }
             _redisClient.ReconnectAttempts = options.ReconnectAttempts;//失败后重试3次
             _redisClient.ReconnectWait = options.ReconnectWait;//在抛出异常之前，连接将在200ms之间重试3次
-            _redisClient.Connect(options.Timeout);
+            option = options;
         }
 
         ~RedisCache()
         {
             Dispose(false);
         }
-
-        public bool IsConnect => _redisClient.IsConnected;
-
         /// <summary>
         /// 服务是否启动
         /// </summary>
@@ -122,6 +141,7 @@ namespace Common.Utility.Memory.Redis
         /// <returns> </returns>
         public bool Add<T>(string key, T val, TimeSpan timeSpan, bool isOverride)
         {
+            OpenConnect();
             if (string.IsNullOrWhiteSpace(key)) return false;
             if (val == null) return false;
             var str = SerializeObject(val);
@@ -141,6 +161,7 @@ namespace Common.Utility.Memory.Redis
         /// <returns> </returns>
         public bool Add<T>(string key, T val)
         {
+            OpenConnect();
             if (string.IsNullOrWhiteSpace(key)) return false;
             if (val == null) return false;
             var str = SerializeObject(val);
@@ -156,6 +177,7 @@ namespace Common.Utility.Memory.Redis
         /// <returns> </returns>
         public bool Add<T>(string key, T val, bool isOverride)
         {
+            OpenConnect();
             if (string.IsNullOrWhiteSpace(key)) return false;
             if (val == null) return false;
             var str = SerializeObject(val);
@@ -182,6 +204,7 @@ namespace Common.Utility.Memory.Redis
         /// <returns> </returns>
         public bool AddHash<T>(string key, Dictionary<string, T> dic, TimeSpan timeSpan)
         {
+            OpenConnect();
             if (string.IsNullOrWhiteSpace(key)) return false;
             if (dic == null) return false;
             Dictionary<string, object> kJson = new Dictionary<string, object>();
@@ -197,6 +220,7 @@ namespace Common.Utility.Memory.Redis
 
         public bool AddHash<T>(string key, Dictionary<string, T> dic)
         {
+            OpenConnect();
             if (string.IsNullOrWhiteSpace(key)) return false;
             if (dic == null) return false;
             Dictionary<string, object> kJson = new Dictionary<string, object>();
@@ -211,6 +235,7 @@ namespace Common.Utility.Memory.Redis
 
         public bool AddHash<T>(string key, string field, T t)
         {
+            OpenConnect();
             if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(field)) return false;
             var json = SerializeObject(t);
             var result = _redisClient.HSet(key, field, json);
@@ -225,6 +250,7 @@ namespace Common.Utility.Memory.Redis
         /// <returns> </returns>
         public long AddList<T>(string key, List<T> list)
         {
+            OpenConnect();
             if (string.IsNullOrWhiteSpace(key)) return 0;
             if (list == null) return 0;
             var str = GetString(list);
@@ -240,6 +266,7 @@ namespace Common.Utility.Memory.Redis
         /// <returns> </returns>
         public long AddList<T>(string key, T val)
         {
+            OpenConnect();
             if (string.IsNullOrWhiteSpace(key)) return 0;
             if (val == null) return 0;
             var str = SerializeObject(val);
@@ -285,6 +312,7 @@ namespace Common.Utility.Memory.Redis
         /// <returns> </returns>
         public long AddSet<T>(string key, T obj)
         {
+            OpenConnect();
             if (string.IsNullOrWhiteSpace(key)) return 0;
             var str = SerializeObject(obj);
             return _redisClient.SAdd(key, str);
@@ -298,6 +326,7 @@ namespace Common.Utility.Memory.Redis
         /// <returns> </returns>
         public long AddSet<T>(string key, List<T> list)
         {
+            OpenConnect();
             if (string.IsNullOrWhiteSpace(key)) return 0;
             if (list == null) return 0;
             var str = GetString(list);
@@ -327,6 +356,7 @@ namespace Common.Utility.Memory.Redis
         /// <returns> </returns>
         public long AddSortedSet(string key, double score, string val)
         {
+            OpenConnect();
             if (string.IsNullOrWhiteSpace(key)) return 0;
             Tuple<double, string> obj = new Tuple<double, string>(score, val);
             var lg = _redisClient.ZAdd(key, obj);
@@ -342,6 +372,7 @@ namespace Common.Utility.Memory.Redis
         /// <returns> </returns>
         public long AddSortedSet<T>(string key, double[] score, List<T> list)
         {
+            OpenConnect();
             if (string.IsNullOrWhiteSpace(key)) return 0;
             Tuple<double, string>[] obj = new Tuple<double, string>[score.Length];
             string[] str = GetString(list);
@@ -388,6 +419,7 @@ namespace Common.Utility.Memory.Redis
         /// <returns> </returns>
         public bool Del(string key)
         {
+            OpenConnect();
             return _redisClient.Del(key) > 0;
         }
 
@@ -399,6 +431,7 @@ namespace Common.Utility.Memory.Redis
         /// <returns> </returns>
         public long DelList<T>(string key, T val)
         {
+            OpenConnect();
             string str = SerializeObject(val);
             return _redisClient.LRem(key, 0, str);
         }
@@ -423,6 +456,7 @@ namespace Common.Utility.Memory.Redis
         /// <returns> </returns>
         public long DelSet<T>(string key, T members)
         {
+            OpenConnect();
             string str = SerializeObject(members);
             return _redisClient.SRem(key, str);
         }
@@ -435,6 +469,7 @@ namespace Common.Utility.Memory.Redis
         /// <returns> </returns>
         public long DelSortedSet<T>(string key, List<T> members)
         {
+            OpenConnect();
             string[] str = GetString(members);
             return _redisClient.ZRem(key, str);
         }
@@ -463,11 +498,13 @@ namespace Common.Utility.Memory.Redis
         /// <returns> </returns>
         public bool Exists(string key)
         {
+            OpenConnect();
             return _redisClient.Exists(key);
         }
 
         public bool Expire(string key, TimeSpan timeSpan)
         {
+            OpenConnect();
             return _redisClient.Expire(key, timeSpan);
         }
 
@@ -491,6 +528,7 @@ namespace Common.Utility.Memory.Redis
         /// <returns> </returns>
         public string Get(string key, string field)
         {
+            OpenConnect();
             return _redisClient.HGet(key, field);
         }
 
@@ -502,6 +540,7 @@ namespace Common.Utility.Memory.Redis
         /// <returns> </returns>
         public string[] Get(string key, string[] field)
         {
+            OpenConnect();
             return _redisClient.HMGet(key, field);
         }
 
@@ -543,6 +582,7 @@ namespace Common.Utility.Memory.Redis
         /// <returns> </returns>
         public string[] GetLRange(string key, long start = 0, long len = -1)
         {
+            OpenConnect();
             if (len < 0)
             {
                 len = _redisClient.LLen(key) - 1;
@@ -557,6 +597,7 @@ namespace Common.Utility.Memory.Redis
         /// <returns> </returns>
         public string[] GetRange(string key)
         {
+            OpenConnect();
             return _redisClient.SMembers(key);
         }
 
@@ -567,6 +608,7 @@ namespace Common.Utility.Memory.Redis
         /// <returns> </returns>
         public string GetString(string key)
         {
+            OpenConnect();
             return _redisClient.Get(key);
         }
 
@@ -593,6 +635,7 @@ namespace Common.Utility.Memory.Redis
         /// <returns> </returns>
         public string[] GetZRange(string key, long start = 0, long len = -1)
         {
+            OpenConnect();
             if (len < 0)
             {
                 len = _redisClient.ZCard(key) - 1;
@@ -608,6 +651,7 @@ namespace Common.Utility.Memory.Redis
         /// <returns> </returns>
         public long Publish(string name, string message)
         {
+            OpenConnect();
             return _redisClient.Publish(name, message);
         }
 
@@ -616,6 +660,7 @@ namespace Common.Utility.Memory.Redis
         /// </summary>
         public void PUnsubscribe(params string[] channelPatterns)
         {
+            OpenConnect();
             _redisClient.PUnsubscribe(channelPatterns);
         }
 
@@ -633,6 +678,7 @@ namespace Common.Utility.Memory.Redis
         /// <returns> </returns>
         public bool Replace<T>(string key, T obj, TimeSpan timeSpan)
         {
+            OpenConnect();
             var str = SerializeObject(obj);
             var result = _redisClient.Set(key, str, timeSpan, RedisExistence.Xx);
             return stringOk(result);
@@ -647,6 +693,7 @@ namespace Common.Utility.Memory.Redis
         /// <returns> </returns>
         public bool Replace<T>(string key, T obj)
         {
+            OpenConnect();
             var str = SerializeObject(obj);
             var result = _redisClient.Set(key, str, null, RedisExistence.Xx);
             return stringOk(result);
@@ -658,6 +705,7 @@ namespace Common.Utility.Memory.Redis
         /// <param name="name"> 频道名称 </param>
         public void Subscribe(params string[] name)
         {
+            OpenConnect();
             _redisClient.Subscribe(name);
         }
 
@@ -677,6 +725,7 @@ namespace Common.Utility.Memory.Redis
         /// <param name="name"> 频道名称 </param>
         public void Unsubscribe(params string[] name)
         {
+            OpenConnect();
             _redisClient.Unsubscribe(name);
         }
     }

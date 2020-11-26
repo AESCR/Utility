@@ -7,7 +7,6 @@ namespace Common.Utility.Memory.Redis
 {
     public interface IRedisCache : IMemoryCache,IDisposable
     {
-        bool IsConnect { get; }
         bool Launch { get; }
 
         bool Add<T>(string key, T val, TimeSpan timeSpan, bool isOverride);
