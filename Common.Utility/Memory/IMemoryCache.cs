@@ -34,11 +34,11 @@ namespace Common.Utility.Memory
 
     public static class CacheExtensions
     {
-        public static void RegisterCache(this ContainerBuilder @this, Action<MemoryOptions> option=null)
+        /*public static void RegisterCache(this ContainerBuilder @this, Action<MemoryOptions> option=null)
         {
             //内存注入
             /* @this.RegisterType<Microsoft.Extensions.Caching.Memory.MemoryCache>().AsImplementedInterfaces()
-                 .SingleInstance();*/
+                 .SingleInstance();#1#
             @this.RegisterType<MemoryCache2>().AsImplementedInterfaces().SingleInstance();
             var opt = new MemoryOptions();
             if (option == null) return;
@@ -49,13 +49,14 @@ namespace Common.Utility.Memory
             {
                 redis.PreserveExistingDefaults(); //非默认值。
             }
-        }
+        }*/
         public static void RegisterRedis(this ContainerBuilder @this, Action<MemoryOptions> option)
         {
             var opt = new MemoryOptions();
             option(opt);
             var redis = @this.Register((c, p) =>
-                new RedisCache(option)).AsImplementedInterfaces();
+                    new RedisCache(option)).AsImplementedInterfaces().PropertiesAutowired().InstancePerLifetimeScope()
+                .OnRelease(e => (e as IDisposable)?.Dispose());
             if (opt.UseRedis == false)
             {
                 redis.PreserveExistingDefaults(); //非默认值。

@@ -5,7 +5,7 @@ using Common.Utility.Autofac;
 
 namespace Common.Utility.Memory.Redis
 {
-    public interface IRedisCache : IMemoryCache,IDisposable
+    public interface IRedisCache : IMemoryCache, IScopedDependency, IRelease
     {
         bool Launch { get; }
 
