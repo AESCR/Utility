@@ -16,38 +16,42 @@ namespace Common.Utility.Code
         /// 导入库文件
         /// </summary>
         /// <param name="references"></param>
-        ICodeTemplate ImportReferences(List<string> references);
+        ICodeTemplate ImportReferences(params string[] references);
         /// <summary>
         /// 导入命名空间
         /// </summary>
-        ICodeTemplate ImportNamespace(List<string> name);
+        ICodeTemplate ImportNamespace(params string[] name);
         /// <summary>
         /// 设置类命名空间
         /// </summary>
         /// <param name="name"></param>
         ICodeTemplate SetNamespace(string name);
+
         /// <summary>
         /// 添加属性
         /// </summary>
-        /// <param name="property"></param>
         /// <returns></returns>
-        ICodeTemplate AddProperty(params string[] property);
+        ICodeTemplate SetProperty(string typeName,string propertyName);
+
         /// <summary>
         /// 添加无参数的方法
         /// </summary>
         /// <param name="methodName"></param>
+        /// <param name="returnType"></param>
+        /// <param name="parameterTypes"></param>
         /// <returns></returns>
-        ICodeTemplate AddMthod<T>(string methodName);
+        ICodeTemplate SetInterfaceMethod(string methodName, string returnType, params string[] parameterTypes);
+
         /// <summary>
         /// 添加类型 
         /// </summary>
         /// <param name="className">类名</param>
         /// <param name="inheritors">继承的类名</param>
+        /// <param name="isInterface"></param>
         /// <returns></returns>
-        ICodeTemplate AddClass(string className,params string[] inheritors);
-        /// <summary>
-        /// 查询定位输入流位置
-        /// </summary>
-        void Reposition();
+        ICodeTemplate SetClass(string className,bool isInterface=false,params string[] inheritors);
+
+
+        void Save(string path);
     }
 }
