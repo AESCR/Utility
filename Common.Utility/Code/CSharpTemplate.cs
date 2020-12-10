@@ -40,14 +40,15 @@ namespace Common.Utility.Code
             codeBuilder.AppendLine();
             codeBuilder.AppendLine($"namespace {name}");
             codeBuilder.AppendLine("{");
-            codeBuilder.AppendLine(" ");
+            codeBuilder.AppendLine();
             codeBuilder.AppendLine("}");
             return this;
         }
 
         public ICodeTemplate SetProperty(string typeName,string propertyName)
         {
-            string temp = $"{Environment.NewLine}\t\tpublic {typeName} {propertyName.First().ToString().ToUpper() + propertyName.Substring(1)}"+"{get;set;} ";
+            string temp ="\t\t";
+            temp+= $"public {typeName} {propertyName.First().ToString().ToUpper() + propertyName.Substring(1)}"+"{get;set;} ";
             var tabIndex= codeBuilder.ToString().LastIndexOf($" ", StringComparison.Ordinal);
             codeBuilder.Insert(tabIndex+1, temp);
             return this;
@@ -76,7 +77,6 @@ namespace Common.Utility.Code
 
         public ICodeTemplate SetClass(string className, bool isInterface=false,params string[] inheritors)
         {
-            
             string temp = String.Empty;
             if (isInterface)
             {
